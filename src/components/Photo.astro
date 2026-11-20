@@ -23,6 +23,6 @@ const widths = [...new Set([480, 720, 960, 1200, p.src.width].filter((w) => w <=
 const r = (p.src.width / p.src.height).toFixed(4);
 ---
 <figure class:list={['ph', cls, { fit: maxh }]} style={`--ratio:${p.src.width} / ${p.src.height};--r:${r}${maxh ? `;--maxh:${maxh}` : ''}`}>
-  <Picture src={p.src} alt={p.alt[lang]} widths={widths} sizes={sizes} formats={['avif', 'webp']} fallbackFormat="jpg" quality={88}
+  <Picture src={p.src} alt={p.alt[lang]} widths={widths} sizes={sizes} formats={['avif', 'webp']} fallbackFormat="jpg" quality={74}
     loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} decoding="async" />
 </figure>

@@ -174,7 +174,7 @@ const year = new Date().getFullYear();
           if (!sessionStorage.getItem('bm-intro') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
             d.classList.add('has-intro');
             sessionStorage.setItem('bm-intro', '1');
-            setTimeout(function () { d.classList.remove('has-intro'); }, 3100);
+            setTimeout(function () { d.classList.remove('has-intro'); }, 1700);
           }
         } catch (e) {}
       })();
@@ -323,7 +323,7 @@ const year = new Date().getFullYear();
               }
             }
           },
-          { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+          { rootMargin: '0px 0px 15% 0px', threshold: 0 },
         );
         items.forEach((el) => io.observe(el));
       }
@@ -351,7 +351,8 @@ const year = new Date().getFullYear();
           lastY = y;
         }
       };
-      addEventListener('scroll', onScroll, { passive: true });
+      let ticking = false;
+      addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { onScroll(); ticking = false; }); } }, { passive: true });
       onScroll();
 
       // ---- Menu mobile ----

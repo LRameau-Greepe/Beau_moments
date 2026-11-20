@@ -4,7 +4,6 @@ import Base from '../layouts/Base.astro';
 import Photo from '../components/Photo.astro';
 import Logo from '../components/Logo.astro';
 import { site, abs } from '../lib/site';
-import { getPhoto } from '../lib/photos';
 import { pagePath, allLangs } from '../i18n/routes';
 import { t } from '../i18n/ui';
 import type { Lang } from '../i18n/locales';
@@ -12,8 +11,6 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = t(lang);
 const a = s.about;
-// Rapport largeur/hauteur des deux portraits : les cartes prennent cette largeur, les photos ont la même hauteur
-const ratio = (k: 'bert-serving' | 'aude-with-guests') => (getPhoto(k).src.width / getPhoto(k).src.height).toFixed(4);
 const ld = [{
   '@type': 'AboutPage',
   url: abs(pagePath('about', lang)),
@@ -52,16 +49,21 @@ const ld = [{
   </section>
 
   <section class="section bg-2">
-    <div class="wrap duo">
-      <div data-reveal style={`--r:${ratio('bert-serving')}`}>
-        <Photo name="bert-serving" lang={lang} sizes="(min-width: 760px) 36vw, 100vw" />
-        <h3>{a.bertTitle}</h3>
-        <p>{a.bert}</p>
+    <!-- Bert puis Aude : photo et texte côte à côte, en alternance ; les deux textes ont la même largeur -->
+    <div class="wrap g12 split person">
+      <div class="split-media" style="--col:1 / span 5"><Photo name="bert-serving" lang={lang} maxh="80svh" sizes="(min-width: 900px) 36vw, 100vw" /></div>
+      <div class="split-text" style="--col:7 / span 5">
+        <p class="label" data-reveal>Chef</p>
+        <h2 data-split>{a.bertTitle}</h2>
+        <p class="lead" data-reveal>{a.bert}</p>
       </div>
-      <div data-reveal style={`--d:.1s;--r:${ratio('aude-with-guests')}`}>
-        <Photo name="aude-with-guests" lang={lang} sizes="(min-width: 760px) 60vw, 100vw" />
-        <h3>{a.audeTitle}</h3>
-        <p>{a.aude}</p>
+    </div>
+    <div class="wrap g12 split reverse person">
+      <div class="split-media" style="--col:6 / span 7"><Photo name="aude-with-guests" lang={lang} sizes="(min-width: 900px) 52vw, 100vw" /></div>
+      <div class="split-text" style="--col:1 / span 5">
+        <p class="label" data-reveal>{lang === 'nl' ? 'Gastvrouw' : lang === 'fr' ? 'Hôtesse' : 'Host'}</p>
+        <h2 data-split>{a.audeTitle}</h2>
+        <p class="lead" data-reveal>{a.aude}</p>
       </div>
     </div>
   </section>

@@ -44,7 +44,7 @@ const chapters: { id: string; title: string; lead: string; photos: PhotoKey[]; l
 const all = chapters.flatMap((c) => c.photos);
 const full = Object.fromEntries(await Promise.all(all.map(async (k) => {
   const src = getPhoto(k).src;
-  const img = await getImage({ src, width: Math.min(1300, src.width), format: 'webp', quality: 88 });
+  const img = await getImage({ src, width: Math.min(1300, src.width), format: 'webp', quality: 80 });
   return [k, img.src];
 })));
 const ratio = (k: PhotoKey) => (getPhoto(k).src.width / getPhoto(k).src.height).toFixed(4);
