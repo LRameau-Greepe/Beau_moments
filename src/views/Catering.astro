@@ -55,7 +55,7 @@ const ld = [
         <div><p class="label" data-reveal><span class="n">01</span> {c.typesLabel}</p><h2>{c.typesTitle}</h2></div>
         <p class="lead" data-reveal>{s.home.cateringText}</p>
       </div>
-      <div class="grid-4">
+      <div class="grid-4 formulas">
         {eventTypes.map((e, i) => (
           <a class="type-card" href={eventPath(e.key, lang)} data-reveal style={`--d:${i * 0.08}s`}>
             <Photo name={e.hero} lang={lang} sizes="(min-width: 1320px) 310px, (min-width: 960px) 23vw, 50vw" />

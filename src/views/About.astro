@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Photo from '../components/Photo.astro';
 import Logo from '../components/Logo.astro';
 import { site, abs } from '../lib/site';
+import { getPhoto } from '../lib/photos';
 import { pagePath, allLangs } from '../i18n/routes';
 import { t } from '../i18n/ui';
 import type { Lang } from '../i18n/locales';
@@ -11,6 +12,8 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = t(lang);
 const a = s.about;
+// Rapport largeur/hauteur des deux portraits : les cartes prennent cette largeur, les photos ont la même hauteur
+const ratio = (k: 'bert-serving' | 'aude-with-guests') => (getPhoto(k).src.width / getPhoto(k).src.height).toFixed(4);
 const ld = [{
   '@type': 'AboutPage',
   url: abs(pagePath('about', lang)),
@@ -50,16 +53,13 @@ const ld = [{
 
   <section class="section bg-2">
     <div class="wrap duo">
-      <div data-reveal>
-        <Photo name="bert-serving" lang={lang} sizes="(min-width: 760px) 45vw, 100vw" />
+      <div data-reveal style={`--r:${ratio('bert-serving')}`}>
+        <Photo name="bert-serving" lang={lang} sizes="(min-width: 760px) 36vw, 100vw" />
         <h3>{a.bertTitle}</h3>
         <p>{a.bert}</p>
       </div>
-      <div data-reveal style="--d:.1s">
-        <div style="display:grid;gap:calc(var(--gap) / 2);margin-bottom:1.75rem">
-          <Photo name="aude-at-work" lang={lang} sizes="(min-width: 760px) 45vw, 100vw" class="no-mb" />
-          <Photo name="aude-with-guests" lang={lang} sizes="(min-width: 760px) 45vw, 100vw" class="no-mb" />
-        </div>
+      <div data-reveal style={`--d:.1s;--r:${ratio('aude-with-guests')}`}>
+        <Photo name="aude-with-guests" lang={lang} sizes="(min-width: 760px) 60vw, 100vw" />
         <h3>{a.audeTitle}</h3>
         <p>{a.aude}</p>
       </div>

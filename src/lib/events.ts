@@ -49,7 +49,7 @@ export const eventTypes: EventType[] = [
         name: 'Chef privé à domicile',
         short: 'Un dîner gastronomique à votre propre table : nous cuisinons, servons et laissons votre cuisine impeccable.',
         title: 'Un dîner gastronomique, tout simplement chez vous.',
-        metaTitle: 'Chef privé à domicile — Maldegem, Bruges & Gand | BEAU MOMENTS',
+        metaTitle: 'Chef privé à domicile, Bruges & Gand — BEAU MOMENTS',
         metaDesc: 'Bert cuisine, Aude sert : un dîner gastronomique privé chez vous, cuisine française raffinée, service à table et cuisine rangée après le repas.',
         lead: 'Bert cuisine chez vous, Aude s’occupe de la table et du service. Vous profitez de vos invités — et à la fin, votre cuisine est impeccable.',
         body: [

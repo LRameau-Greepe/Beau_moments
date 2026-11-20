@@ -382,7 +382,7 @@ const en: UI = {
     book: 'Enquire', menu: 'Menu', close: 'Close', skip: 'Skip to content', language: 'Language',
   },
   meta: {
-    homeTitle: 'BEAU MOMENTS — catering & private dining in Maldegem',
+    homeTitle: 'BEAU MOMENTS — private chef & catering near Bruges, Belgium',
     homeDesc: 'BEAU MOMENTS is the catering and private dining of chef Bert and host Aude in Maldegem, Belgium: private chef at home, parties, weddings, corporate events and weekly takeaway.',
     cateringTitle: 'Catering near Bruges & Ghent — BEAU MOMENTS',
     cateringDesc: 'Bespoke catering by BEAU MOMENTS: private chef at home, parties, receptions, weddings and corporate events, with service, laid tables and flowers.',

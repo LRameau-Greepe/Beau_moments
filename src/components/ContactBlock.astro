@@ -28,7 +28,8 @@ const ig = site.social.instagram;
     <dd>
       <p class="muted">{s.atelier.contactText}</p>
       {site.contacts.map((c) => <p>{c.name} · <a href={tel(c.phone)}>{c.phone}</a></p>)}
-      <p><a href={mailHref}>{site.email}</a> · <a href={ig.url} target="_blank" rel="noopener">@{ig.handle}</a></p>
+      <p><a href={mailHref}>{site.email}</a></p>
+      <p><a href={ig.url} target="_blank" rel="noopener">@{ig.handle}</a></p>
     </dd>
   </div>
 </dl>
