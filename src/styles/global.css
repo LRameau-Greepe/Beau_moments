@@ -830,3 +830,36 @@ a[href^="tel:"], a[href^="mailto:"] { white-space: nowrap; }
 .story-rest p:last-child { margin-bottom: 0; }
 @media (max-width: 860px) { .story-intro, .story-rest { grid-column: 1 / -1; } }
 .hero-text h1.about-title { font-size: clamp(2.4rem, 1.4rem + 2.6vw, 4rem); line-height: 1.08; }
+
+/* Catering : photos des formules en pleine largeur de carte */
+.formulas .ph { width: 100%; margin-bottom: 1.1rem; }
+.formulas .type-card h3 { margin-bottom: 0.35rem; }
+.formulas .type-card p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+/* Catering : « Zo werken we » avec une photo à gauche, étapes en 2 × 2 */
+.process-split { align-items: center; row-gap: 2.5rem; }
+.process-photo { grid-column: 1 / span 4; }
+.process-split .steps { grid-column: 6 / span 7; grid-template-columns: 1fr 1fr; row-gap: 2rem; }
+@media (max-width: 860px) { .process-photo, .process-split .steps { grid-column: 1 / -1; } }
+@media (max-width: 560px) { .process-split .steps { grid-template-columns: 1fr; } }
+/* Galerie : 4 photos carrées par rangée (plus grandes) */
+.g-flow { --gh: calc((min(100vw - 2 * var(--gutter) - 1rem, var(--wrap)) - 3 * var(--gg)) / 4); }
+@media (max-width: 860px) { .g-flow { --gh: calc((100vw - 2 * var(--gutter) - var(--gg)) / 2); } }
+/* Case Instagram : le texte reste toujours dans la case */
+.g-more { overflow: hidden; padding: clamp(1rem, 2vw, 1.75rem); gap: 0.9rem; }
+.g-more .logo { width: 2.5rem; }
+.g-more span:not(.link) { font-size: clamp(1.05rem, 0.9rem + 0.5vw, 1.35rem); }
+.g-more .link { font-size: 0.6rem; letter-spacing: 0.1em; max-width: 100%; overflow-wrap: anywhere; text-align: center; }
+.g-more .link::after { display: none; }
+:root { --ph-max: min(72svh, 44rem); }
+
+/* ---------- En-têtes de page statiques (pas d'animation sous l'écran de chargement) ---------- */
+.hero h1 .line > span, .hero .rise, .page-head .rise, .hero-media .ph picture { animation: none !important; }
+.js .hero .ph img, .js .page-head .ph img { opacity: 1; transition: none; }
+.has-intro { --intro-delay: 0s; }
+/* Galerie : petite marge pour les photos presque carrées (ex. 1440×1434) */
+.g-flow { --gh: calc((min(100vw - 2 * var(--gutter) - 1rem, var(--wrap)) - 3 * var(--gg) - 6px) / 4); }
+@media (max-width: 860px) { .g-flow { --gh: calc((100vw - 2 * var(--gutter) - var(--gg) - 4px) / 2); } }
+/* Catering : cartes des formules plus compactes en hauteur */
+.formulas .type-card p { margin-bottom: 0; }
+.formulas .ph { margin-bottom: 0.9rem; }
+.formulas .type-card h3 { font-size: clamp(1.4rem, 1.2rem + 0.6vw, 1.85rem); }

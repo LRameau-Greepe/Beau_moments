@@ -4,7 +4,6 @@
 import Base from '../layouts/Base.astro';
 import Photo from '../components/Photo.astro';
 import Faq from '../components/Faq.astro';
-import Icon from '../components/Icon.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import Sketch from '../components/Sketch.astro';
 import { eventTypes } from '../lib/events';
@@ -61,7 +60,6 @@ const ld = [
             <Photo name={e.hero} lang={lang} sizes="(min-width: 1320px) 310px, (min-width: 960px) 23vw, 50vw" />
             <h3>{e.copy[lang].name}</h3>
             <p>{e.copy[lang].short}</p>
-            <span class="link">{s.common.moreInfo}</span>
           </a>
         ))}
       </div>
@@ -85,28 +83,16 @@ const ld = [
       <div class="section-head">
         <div><p class="label" data-reveal><span class="n">03</span> {c.processLabel}</p><h2>{c.processTitle}</h2></div>
       </div>
-      <ol class="steps">
-        {c.process.map((p, i) => <li data-reveal style={`--d:${i * 0.1}s`}><h3>{p.title}</h3><p>{p.text}</p></li>)}
-      </ol>
+      <div class="g12 process-split">
+        <div class="process-photo"><Photo name="chef-plating" lang={lang} maxh="min(54svh, 28rem)" sizes="(min-width: 900px) 30vw, 100vw" /></div>
+        <ol class="steps">
+          {c.process.map((p, i) => <li data-reveal style={`--d:${i * 0.1}s`}><h3>{p.title}</h3><p>{p.text}</p></li>)}
+        </ol>
+      </div>
     </div>
   </section>
 
-  <section class="wrap section">
-    <ul class="type-list" style="margin-top:0">
-      {eventTypes.map((ty, i) => (
-        <li data-reveal style={`--d:${i * 0.08}s`}>
-          <a class="type-row" href={eventPath(ty.key, lang)}>
-            <span class="tr-n">{String(i + 1).padStart(2, '0')}</span>
-            <h3>{ty.copy[lang].name}</h3>
-            <p>{ty.copy[lang].short}</p>
-            <span class="tr-arrow" aria-hidden="true"><Icon name="arrow" /></span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </section>
-
-  <section class="wrap section g12 faq-grid" style="padding-top:0">
+  <section class="wrap section g12 faq-grid">
     <div><p class="label" data-reveal><span class="n">04</span> {s.common.faq}</p><h2 data-split>{c.faqTitle}</h2></div>
     <Faq items={c.faq} />
   </section>

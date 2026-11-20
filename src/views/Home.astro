@@ -19,7 +19,7 @@ const { lang } = Astro.props;
 const s = t(lang);
 const h = s.home;
 const L = Lx(lang);
-const gallery: PhotoKey[] = ['table-candles', 'appetizers', 'scallops', 'table-flowers', 'flowers'];
+const gallery: PhotoKey[] = ['table-candles', 'appetizers', 'scallops', 'table-flowers'];
 const g4 = '(min-width: 1320px) 310px, (min-width: 960px) 23vw, 50vw';
 const menu = s.takeaway.past[0];
 ---
@@ -90,8 +90,8 @@ const menu = s.takeaway.past[0];
   <section class="section">
     <div class="wrap g12 split">
       <div class="split-media pair" style="--col:1 / span 6">
+        <Photo name="atelier-facade" lang={lang} sizes="(min-width: 900px) 24vw, 50vw" />
         <Photo name="atelier-dining-room" lang={lang} sizes="(min-width: 900px) 24vw, 50vw" />
-        <Photo name="atelier-candles" lang={lang} sizes="(min-width: 900px) 24vw, 50vw" />
       </div>
       <div class="split-text" style="--col:8 / span 5">
         <p class="label" data-reveal><span class="n">03</span> Private dining</p>
@@ -156,9 +156,9 @@ const menu = s.takeaway.past[0];
         <div><p class="label" data-reveal><span class="n">06</span> {s.nav.gallery} · Instagram</p><h2>{h.galleryTitle}</h2></div>
         <p class="lead" data-reveal>{h.galleryLead}</p>
       </div>
-      <div class="strip-5">
+      <div class="grid-4">
         {gallery.map((k, i) => (
-          <a href={pagePath('gallery', lang)} data-reveal style={`--d:${(i % 5) * 0.06}s`}><Photo name={k} lang={lang} sizes="(min-width: 960px) 19vw, 50vw" /></a>
+          <a href={pagePath('gallery', lang)} data-reveal style={`--d:${i * 0.06}s`}><Photo name={k} lang={lang} sizes={g4} /></a>
         ))}
       </div>
       <p data-reveal class="section-foot"><a class="btn" href={pagePath('gallery', lang)}>{h.galleryAll}</a></p>

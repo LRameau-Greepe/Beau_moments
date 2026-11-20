@@ -307,7 +307,7 @@ const year = new Date().getFullYear();
         walk(el);
         el.classList.add('is-split');
       };
-      const splits = [...document.querySelectorAll<HTMLElement>('main h1:not(.no-split), .section-head h2, [data-split], .quote blockquote')];
+      const splits = [...document.querySelectorAll<HTMLElement>('.section-head h2, [data-split], .quote blockquote')];
       splits.forEach(splitWords);
 
       // ---- Apparitions au défilement (textes, titres, photos) ----
