@@ -866,3 +866,15 @@ a[href^="tel:"], a[href^="mailto:"] { white-space: nowrap; }
 
 .rv-note { font-size: 0.8rem; margin: 1rem 0 0; }
 .quote blockquote { max-width: 38ch; text-wrap: balance; }
+
+/* ---------- Photos ×1,3 ---------- */
+/* Galerie : 3 photos carrées par rangée (hauteur commune ≈ 1,35 × l'ancienne) */
+.g-flow { --gh: calc((min(100vw - 2 * var(--gutter) - 1rem, var(--wrap)) - 2 * var(--gg) - 6px) / 3); }
+@media (max-width: 860px) { .g-flow { --gh: calc((100vw - 2 * var(--gutter) - var(--gg) - 4px) / 2); } }
+/* Téléphone : une photo par ligne, pleine largeur */
+@media (max-width: 600px) { .g-flow > * { width: 100%; } .g-flow .g-more { height: auto; } }
+/* Photos à côté d'un texte : un peu plus hautes */
+:root { --ph-max: min(78svh, 48rem); }
+/* Trio de l'accueil : pas de troisième photo masquée sur tablette */
+@media (max-width: 760px) { .trio { grid-template-columns: 1fr; } .trio > :last-child { display: block; } }
+.head-side { display: grid; gap: 1rem; justify-items: start; max-width: 34rem; } .head-side .lead { margin: 0; }

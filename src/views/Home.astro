@@ -19,8 +19,8 @@ const { lang } = Astro.props;
 const s = t(lang);
 const h = s.home;
 const L = Lx(lang);
-const gallery: PhotoKey[] = ['table-candles', 'appetizers', 'scallops', 'table-flowers'];
-const g4 = '(min-width: 1320px) 310px, (min-width: 960px) 23vw, 50vw';
+const gallery: PhotoKey[] = ['table-candles', 'appetizers', 'scallops'];
+const g3 = '(min-width: 1320px) 430px, (min-width: 760px) 32vw, 50vw';
 const menu = s.takeaway.past[0];
 ---
 <Base lang={lang} title={s.meta.homeTitle} description={s.meta.homeDesc} alternates={allLangs((l) => pagePath('home', l))} ogPhoto="table-room" hideCta>
@@ -51,10 +51,10 @@ const menu = s.takeaway.past[0];
         <div><p class="label" data-reveal><span class="n">01</span> Chef Bert</p><h2>{h.dishesTitle}</h2></div>
         <p class="lead" data-reveal>{h.dishesLead}</p>
       </div>
-      <div class="grid-4">
-        {dishes.slice(0, 4).map((d, i) => (
+      <div class="trio">
+        {dishes.slice(0, 3).map((d, i) => (
           <a class="dish" href={pagePath('gallery', lang)} data-reveal style={`--d:${i * 0.08}s`}>
-            <Photo name={d.photo} lang={lang} sizes={g4} />
+            <Photo name={d.photo} lang={lang} sizes={g3} />
             <h3>{d.name[lang]}</h3>
             <p>{d.notes[lang]}</p>
           </a>
@@ -154,14 +154,13 @@ const menu = s.takeaway.past[0];
     <div class="wrap">
       <div class="section-head">
         <div><p class="label" data-reveal><span class="n">06</span> {s.nav.gallery} · Instagram</p><h2>{h.galleryTitle}</h2></div>
-        <p class="lead" data-reveal>{h.galleryLead}</p>
+        <div class="head-side" data-reveal><p class="lead">{h.galleryLead}</p><a class="link" href={pagePath('gallery', lang)}>{h.galleryAll}</a></div>
       </div>
-      <div class="grid-4">
+      <div class="trio">
         {gallery.map((k, i) => (
-          <a href={pagePath('gallery', lang)} data-reveal style={`--d:${i * 0.06}s`}><Photo name={k} lang={lang} sizes={g4} /></a>
+          <a href={pagePath('gallery', lang)} data-reveal style={`--d:${i * 0.06}s`}><Photo name={k} lang={lang} sizes={g3} /></a>
         ))}
       </div>
-      <p data-reveal class="section-foot"><a class="btn" href={pagePath('gallery', lang)}>{h.galleryAll}</a></p>
     </div>
   </section>
 
