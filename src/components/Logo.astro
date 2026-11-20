@@ -1,0 +1,13 @@
+---
+// Monogramme BEAU MOMENTS (logo du compte Instagram) : « BA » dans un double cercle.
+// Couleur : currentColor. Les cercles se dessinent lors de l'intro (classes .ring, .mono).
+interface Props { class?: string; title?: string }
+const { class: cls, title } = Astro.props;
+---
+<svg class:list={['logo', cls]} viewBox="0 0 120 120" role={title ? 'img' : undefined}
+  aria-label={title} aria-hidden={title ? undefined : 'true'} focusable="false">
+  <circle class="ring ring-1" cx="60" cy="60" r="57" fill="none" stroke="currentColor" stroke-width="2.2" pathLength="1" />
+  <circle class="ring ring-2" cx="60" cy="60" r="50.5" fill="none" stroke="currentColor" stroke-width="0.9" opacity="0.55" pathLength="1" />
+  <text class="mono" x="60" y="61" text-anchor="middle" dominant-baseline="central" fill="currentColor"
+    font-family="'Cormorant Garamond', Garamond, 'Times New Roman', serif" font-size="46" font-weight="400" letter-spacing="1">BA</text>
+</svg>

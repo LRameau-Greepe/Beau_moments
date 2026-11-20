@@ -1,0 +1,28 @@
+---
+// Photo optimisée (AVIF/WebP, plusieurs tailles), toujours affichée ENTIÈRE :
+// le cadre prend exactement les proportions de la photo, rien n'est recadré.
+// « maxh » limite la hauteur (ex. « 70svh ») : la largeur se réduit alors en proportion.
+// La photo apparaît en fondu seulement une fois chargée (jamais de cadre vide qui s'anime).
+import { Picture } from 'astro:assets';
+import { getPhoto, type PhotoKey } from '../lib/photos';
+import type { Lang } from '../i18n/locales';
+interface Props {
+  name: PhotoKey;
+  lang: Lang;
+  /** Largeur d'affichage, pour que le navigateur choisisse un fichier assez grand (jamais agrandi) */
+  sizes?: string;
+  class?: string;
+  eager?: boolean;
+  /** Hauteur maximale (CSS), la photo garde ses proportions */
+  maxh?: string;
+}
+const { name, lang, sizes = '100vw', class: cls, eager = false, maxh } = Astro.props;
+const p = getPhoto(name);
+// Tailles générées : jusqu'à la pleine résolution de l'original
+const widths = [...new Set([480, 720, 960, 1200, p.src.width].filter((w) => w <= p.src.width))];
+const r = (p.src.width / p.src.height).toFixed(4);
+---
+<figure class:list={['ph', cls, { fit: maxh }]} style={`--ratio:${p.src.width} / ${p.src.height};--r:${r}${maxh ? `;--maxh:${maxh}` : ''}`}>
+  <Picture src={p.src} alt={p.alt[lang]} widths={widths} sizes={sizes} formats={['avif', 'webp']} fallbackFormat="jpg" quality={88}
+    loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} decoding="async" />
+</figure>

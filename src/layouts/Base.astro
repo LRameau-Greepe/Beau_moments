@@ -1,0 +1,370 @@
+---
+// Gabarit HTML commun : référencement (hreflang, données structurées), intro (le monogramme BA
+// se dessine), en-tête (logo, menu, langues), bandeau final, pied de page
+// et animations (apparitions, titres mot à mot, photos qui se révèlent).
+import '@fontsource/cormorant-garamond/300.css';
+import '@fontsource/cormorant-garamond/300-italic.css';
+import '@fontsource/cormorant-garamond/400.css';
+import '@fontsource/cormorant-garamond/400-italic.css';
+import '@fontsource-variable/jost';
+import '../styles/global.css';
+import Logo from '../components/Logo.astro';
+import Wordmark from '../components/Wordmark.astro';
+import { getImage } from 'astro:assets';
+import { site, abs, tel, mailHref } from '../lib/site';
+import { getPhoto, type PhotoKey } from '../lib/photos';
+import { eventTypes } from '../lib/events';
+import { langs, localeInfo, defaultLang, type Lang } from '../i18n/locales';
+import { pagePath, eventPath, allLangs } from '../i18n/routes';
+import { t } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  /** Adresse de cette page dans chaque langue (balises hreflang + sélecteur de langue) */
+  alternates?: Record<Lang, string>;
+  noindex?: boolean;
+  /** Données structurées supplémentaires */
+  extraLd?: Record<string, unknown>[];
+  /** Photo du site utilisée comme image de partage */
+  ogPhoto?: PhotoKey;
+  /** Fil d'Ariane (l'accueil est ajouté automatiquement) */
+  breadcrumbs?: { name: string; path: string }[];
+  /** Masquer le bandeau « demande » en bas de page */
+  hideCta?: boolean;
+  /** Section active du menu */
+  section?: 'catering' | 'atelier' | 'takeaway' | 'gallery' | 'about';
+}
+const { lang, title, description, alternates, noindex = false, extraLd = [], ogPhoto, breadcrumbs = [], hideCta = false, section } = Astro.props;
+const s = t(lang);
+const L = localeInfo[lang];
+const ig = site.social.instagram;
+const alts = alternates ?? allLangs((l) => pagePath('home', l));
+
+// Titre : au-delà de ~62 caractères, Google le coupe ; on raccourcit la signature.
+const pageTitle = title.length > 62 ? title.replace(/ — BEAU MOMENTS.*$/, ' | BEAU MOMENTS') : title;
+// Image de partage 1200×630, recadrée sur le point d'intérêt de la photo
+const sharePhoto = getPhoto(ogPhoto ?? 'table-room');
+const shareImg = await getImage({ src: sharePhoto.src, width: 1200, height: 630, fit: 'cover', position: 'attention', format: 'jpg' });
+const shareUrl = abs(shareImg.src);
+// Description : Google en affiche ~160 caractères ; au-delà, on coupe proprement sur un mot.
+const metaDesc = description.length > 160 ? description.slice(0, 158).replace(/[\s,;:—–-]+[^\s]*$/, '') + '…' : description;
+const canonical = abs(Astro.url.pathname);
+const crumbs = [{ name: s.nav.home, path: pagePath('home', lang) }, ...breadcrumbs];
+
+const ld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'FoodEstablishment',
+      '@id': `${site.siteUrl}/#business`,
+      name: site.name,
+      alternateName: [site.fullName, 'Beau Moments catering', 'Beau Moments Maldegem'],
+      description: s.meta.homeDesc,
+      slogan: site.tagline,
+      url: abs(pagePath('home', lang)),
+      image: shareUrl,
+      logo: abs('/assets/img/icon-512.png'),
+      telephone: site.phone,
+      email: site.email,
+      servesCuisine: ['French', 'Belgian', 'Catering', 'Private dining'],
+      acceptsReservations: true,
+      founder: [{ '@type': 'Person', name: 'Bert', jobTitle: 'Chef' }, { '@type': 'Person', name: 'Aude' }],
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: site.address.street,
+        addressLocality: site.address.city,
+        addressRegion: site.address.region,
+        postalCode: site.address.postalCode,
+        addressCountry: site.address.country,
+      },
+      hasMap: site.mapUrl,
+      areaServed: ['Maldegem', 'Meetjesland', 'Brugge', 'Gent', 'Oost-Vlaanderen', 'West-Vlaanderen'].map((name) => ({ '@type': 'Place', name })),
+      sameAs: [ig.url],
+      makesOffer: eventTypes.map((e) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: e.copy[lang].name, url: abs(eventPath(e.key, lang)) },
+      })),
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${site.siteUrl}/#site`,
+      url: `${site.siteUrl}/`,
+      name: site.name,
+      alternateName: site.fullName,
+      inLanguage: langs.map((l) => localeInfo[l].html),
+      publisher: { '@id': `${site.siteUrl}/#business` },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${canonical}#page`,
+      url: canonical,
+      name: pageTitle,
+      description: metaDesc,
+      inLanguage: L.html,
+      isPartOf: { '@id': `${site.siteUrl}/#site` },
+      about: { '@id': `${site.siteUrl}/#business` },
+      primaryImageOfPage: { '@type': 'ImageObject', url: shareUrl },
+      ...(crumbs.length > 1 ? { breadcrumb: { '@id': `${canonical}#breadcrumb` } } : {}),
+    },
+    ...(crumbs.length > 1
+      ? [{
+          '@type': 'BreadcrumbList',
+          '@id': `${canonical}#breadcrumb`,
+          itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: abs(c.path) })),
+        }]
+      : []),
+    ...extraLd,
+  ],
+};
+
+const nav = [
+  { key: 'catering', href: pagePath('catering', lang), label: s.nav.catering },
+  { key: 'atelier', href: pagePath('atelier', lang), label: s.nav.atelier },
+  { key: 'takeaway', href: pagePath('takeaway', lang), label: s.nav.takeaway },
+  { key: 'gallery', href: pagePath('gallery', lang), label: s.nav.gallery },
+  { key: 'about', href: pagePath('about', lang), label: s.nav.about },
+];
+const enquire = `${pagePath('catering', lang)}#aanvraag`;
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang={L.html}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={metaDesc} />
+    <link rel="canonical" href={canonical} />
+    {!noindex && langs.map((l) => <link rel="alternate" hreflang={l} href={abs(alts[l])} />)}
+    {!noindex && <link rel="alternate" hreflang="x-default" href={abs(alts[defaultLang])} />}
+    <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/assets/img/favicon-48.png" type="image/png" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png" />
+    <meta name="theme-color" content="#f5f0ea" />
+    <meta name="robots" content={noindex ? 'noindex' : 'index, follow, max-image-preview:large'} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={L.og} />
+    {langs.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={localeInfo[l].og} />)}
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={metaDesc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={shareUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={sharePhoto.alt[lang]} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={metaDesc} />
+    <meta name="twitter:image" content={shareUrl} />
+    <meta name="geo.region" content="BE-VOV" />
+    <meta name="geo.placename" content="Maldegem" />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
+    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+    <!-- Animations seulement si JavaScript tourne (sinon tout reste visible).
+         Intro : une seule fois par session, jamais si l'utilisateur limite les animations. -->
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        try {
+          if (!sessionStorage.getItem('bm-intro') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            d.classList.add('has-intro');
+            sessionStorage.setItem('bm-intro', '1');
+            setTimeout(function () { d.classList.remove('has-intro'); }, 3100);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="intro" aria-hidden="true">
+      <Logo />
+      <span class="intro-city">Catering &amp; private dining</span>
+    </div>
+
+    <a class="skip" href="#main">{s.nav.skip}</a>
+    <header class="site-header" data-header>
+      <div class="topband">
+        <div class="wrap topband-inner">
+          <a href={site.mapUrl} target="_blank" rel="noopener">{s.band.place}</a>
+          <span class="tb-hours">{s.band.motto}</span>
+          <a class="tb-events" href={pagePath('takeaway', lang)}>{s.band.takeaway}</a>
+        </div>
+      </div>
+      <div class="wrap bar">
+        <a class="brand" href={pagePath('home', lang)} aria-label={`BEAU MOMENTS — ${s.nav.home}`}>
+          <Logo />
+          <Wordmark />
+        </a>
+        <nav id="site-nav" class="site-nav" aria-label="Main">
+          <ul>
+            {nav.map((l, i) => (
+              <li><a href={l.href} style={`--i:${i}`} aria-current={section === l.key ? 'page' : undefined}>{l.label}</a></li>
+            ))}
+            <li class="nav-cta"><a class="btn btn-solid" href={enquire}>{s.nav.book}</a></li>
+          </ul>
+          <div class="nav-foot">
+            <nav class="lang" aria-label={s.nav.language}>
+              {langs.map((l) => <a href={alts[l]} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>{localeInfo[l].short}</a>)}
+            </nav>
+            <a href={ig.url} target="_blank" rel="noopener">@{ig.handle}</a>
+          </div>
+        </nav>
+        <nav class="lang" aria-label={s.nav.language}>
+          {langs.map((l) => (
+            <a href={alts[l]} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} title={localeInfo[l].name}>{localeInfo[l].short}</a>
+          ))}
+        </nav>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+          <span data-open={s.nav.menu} data-close={s.nav.close}>{s.nav.menu}</span><i aria-hidden="true"></i>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    {!hideCta && (
+      <section class="cta section" aria-labelledby="cta-title">
+        <div class="wrap">
+          <Logo />
+          <p class="label center" data-reveal>{s.cta.label}</p>
+          <h2 id="cta-title" data-split>{s.cta.title}</h2>
+          <p data-reveal>{s.cta.text}</p>
+          <p data-reveal><a class="btn btn-solid" href={enquire}>{s.cta.button}</a></p>
+        </div>
+      </section>
+    )}
+
+    <footer class="site-footer">
+      <div class="wrap g12 footer-top">
+        <div class="footer-brand">
+          <Logo title="BEAU MOMENTS" />
+          <p>{s.footer.tagline}</p>
+        </div>
+        <div class="footer-col">
+          <h2>{s.footer.explore}</h2>
+          <ul>
+            <li><a href={pagePath('home', lang)}>{s.nav.home}</a></li>
+            {nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>{s.footer.catering}</h2>
+          <ul>
+            {eventTypes.map((e) => <li><a href={eventPath(e.key, lang)}>{e.copy[lang].name}</a></li>)}
+          </ul>
+        </div>
+        <div class="footer-col wide">
+          <h2>{s.footer.contact}</h2>
+          <p>BEAU MOMENTS · {site.address.street}<br />{site.address.postalCode} {site.address.city}</p>
+          {site.contacts.map((c) => <p>{c.name} · <a href={tel(c.phone)}>{c.phone}</a></p>)}
+          <p><a href={mailHref}>{site.email}</a></p>
+          <p><a href={ig.url} target="_blank" rel="noopener">@{ig.handle}</a></p>
+        </div>
+      </div>
+      <div class="wrap footer-bottom">
+        <span>© {year} BEAU MOMENTS · Maldegem · {site.motto}</span>
+        <nav class="lang" aria-label={s.nav.language}>
+          {langs.map((l) => <a href={alts[l]} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>{localeInfo[l].name}</a>)}
+        </nav>
+      </div>
+    </footer>
+
+    <script>
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // ---- Titres : découpage en mots pour une apparition ligne par ligne ----
+      const splitWords = (el: HTMLElement) => {
+        let n = 0;
+        const walk = (node: Node) => {
+          for (const child of [...node.childNodes]) {
+            if (child.nodeType === Node.TEXT_NODE) {
+              const frag = document.createDocumentFragment();
+              for (const part of (child.textContent ?? '').split(/(\s+)/)) {
+                if (!part) continue;
+                if (/^\s+$/.test(part)) { frag.append(' '); continue; }
+                const w = document.createElement('span');
+                w.className = 'w';
+                const inner = document.createElement('span');
+                inner.textContent = part;
+                inner.style.setProperty('--wi', String(n++));
+                w.append(inner);
+                frag.append(w);
+              }
+              child.replaceWith(frag);
+            } else if (child.nodeType === Node.ELEMENT_NODE) {
+              walk(child);
+            }
+          }
+        };
+        walk(el);
+        el.classList.add('is-split');
+      };
+      const splits = [...document.querySelectorAll<HTMLElement>('main h1:not(.no-split), .section-head h2, [data-split], .quote blockquote')];
+      splits.forEach(splitWords);
+
+      // ---- Apparitions au défilement (textes, titres, photos) ----
+      const items = [...document.querySelectorAll<HTMLElement>('[data-reveal]'), ...splits];
+      if (still || !('IntersectionObserver' in window)) {
+        items.forEach((el) => el.classList.add('is-in'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-in');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+        );
+        items.forEach((el) => io.observe(el));
+      }
+
+      // ---- Photos : fondu seulement une fois l'image chargée ----
+      document.querySelectorAll<HTMLImageElement>('figure.ph img').forEach((img) => {
+        const fig = img.closest('figure')!;
+        const done = () => fig.classList.add('loaded');
+        if (img.complete && img.naturalWidth) done();
+        else { img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true }); }
+      });
+
+      // ---- En-tête : fond après défilement, masqué en descendant ----
+      const header = document.querySelector<HTMLElement>('[data-header]');
+      let lastY = scrollY;
+      const onScroll = () => {
+        const y = scrollY;
+        header?.classList.toggle('is-scrolled', y > 24);
+        const d = y - lastY;
+        if (y < 320 || document.body.classList.contains('nav-open')) {
+          header?.classList.remove('is-hidden');
+          lastY = y;
+        } else if (Math.abs(d) > 6) {
+          header?.classList.toggle('is-hidden', d > 0);
+          lastY = y;
+        }
+      };
+      addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // ---- Menu mobile ----
+      const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+      const toggleText = toggle?.querySelector<HTMLElement>('span');
+      const setOpen = (open: boolean) => {
+        toggle?.setAttribute('aria-expanded', String(open));
+        document.body.classList.toggle('nav-open', open);
+        if (toggleText) toggleText.textContent = (open ? toggleText.dataset.close : toggleText.dataset.open) ?? '';
+      };
+      toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+      addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
+      document.querySelectorAll('#site-nav a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+    </script>
+  </body>
+</html>

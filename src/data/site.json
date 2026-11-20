@@ -1,0 +1,25 @@
+{
+  "siteUrl": "https://www.beau-moments.be",
+  "name": "BEAU MOMENTS",
+  "fullName": "BEAU MOMENTS — catering & private dining",
+  "tagline": "Passie op het bord, service met een hart.",
+  "motto": "We breathe your event",
+  "email": "info@beau-moments.be",
+  "phone": "+32 468 19 66 44",
+  "contacts": [
+    { "name": "Aude", "phone": "+32 468 19 66 44" },
+    { "name": "Bert", "phone": "+32 476 70 61 86" }
+  ],
+  "address": {
+    "street": "Industrielaan 3/C1",
+    "postalCode": "9990",
+    "city": "Maldegem",
+    "region": "Oost-Vlaanderen",
+    "country": "BE"
+  },
+  "mapUrl": "https://www.google.com/maps/search/?api=1&query=Industrielaan+3+9990+Maldegem",
+  "privateDining": { "min": 8, "max": 18 },
+  "social": {
+    "instagram": { "handle": "beau_moments_catering", "url": "https://www.instagram.com/beau_moments_catering/" }
+  }
+}

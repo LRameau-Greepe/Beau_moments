@@ -1,0 +1,272 @@
+---
+// Accueil : les sections suivent le menu principal (gerechten, catering, atelier, afhaal, over ons, galerij),
+// puis les avis des clients et la citation. Les photos d'une même rangée ont les mêmes proportions.
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Logo from '../components/Logo.astro';
+import Icon from '../components/Icon.astro';
+import ContactBlock from '../components/ContactBlock.astro';
+import { eventTypes } from '../lib/events';
+import { dishes } from '../lib/dishes';
+import { reviews, reviewsPost } from '../lib/reviews';
+import { type PhotoKey } from '../lib/photos';
+import { site, telHref } from '../lib/site';
+import { pagePath, eventPath, allLangs } from '../i18n/routes';
+import { t } from '../i18n/ui';
+import { L as Lx, type Lang } from '../i18n/locales';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = t(lang);
+const h = s.home;
+const L = Lx(lang);
+const gallery: PhotoKey[] = ['table-candles', 'appetizers', 'waiter-tray', 'flowers', 'scallops', 'table-flowers', 'tartelettes', 'apron-field'];
+const g4 = '(min-width: 1320px) 310px, (min-width: 960px) 23vw, 50vw';
+const menu = s.takeaway.past[0];
+---
+<Base lang={lang} title={s.meta.homeTitle} description={s.meta.homeDesc} alternates={allLangs((l) => pagePath('home', l))} ogPhoto="table-room" hideCta>
+  <section class="hero">
+    <div class="wrap g12">
+      <div class="hero-text">
+        <p class="label rise" style="--d:.1s">{h.eyebrow}</p>
+        <h1 class="no-split">
+          <span class="line"><span style="--d:.2s">{h.heroLine1}</span></span>
+          <span class="line"><span style="--d:.34s">{h.heroLine2}</span></span>
+        </h1>
+        <p class="lead rise" style="--d:.55s">{h.heroLead}</p>
+        <p class="actions rise" style="--d:.7s">
+          <a class="btn btn-solid" href={`${pagePath('catering', lang)}#aanvraag`}>{h.ctaPrimary}</a>
+          <a class="link" href={pagePath('catering', lang)}>{h.ctaSecondary}</a>
+        </p>
+      </div>
+      <div class="hero-media">
+        <Photo name="caviar-dish" lang={lang} eager maxh="calc(100svh - var(--header-h) - 5rem)" sizes="(min-width: 860px) 640px, 100vw" />
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 · Op het bord -->
+  <section class="section bg-2">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="label" data-reveal><span class="n">01</span> Chef Bert</p><h2>{h.dishesTitle}</h2></div>
+        <p class="lead" data-reveal>{h.dishesLead}</p>
+      </div>
+      <div class="grid-4">
+        {dishes.slice(0, 4).map((d, i) => (
+          <a class="dish" href={pagePath('gallery', lang)} data-reveal style={`--d:${i * 0.08}s`}>
+            <Photo name={d.photo} lang={lang} sizes={g4} />
+            <h3>{d.name[lang]}</h3>
+            <p>{d.notes[lang]}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · Catering -->
+  <section class="section bg-sand">
+    <div class="wrap">
+      <div class="g12 split">
+        <div class="split-media" style="--col:1 / span 5"><Photo name="table-long" lang={lang} sizes="(min-width: 900px) 40vw, 100vw" /></div>
+        <div class="split-text" style="--col:7 / span 6">
+          <p class="label" data-reveal><span class="n">02</span> {s.nav.catering}</p>
+          <h2 data-split style="font-size:clamp(3rem,1.6rem + 4.6vw,6.5rem);line-height:.95">{h.cateringTitle}</h2>
+          <p class="events-lead" data-reveal>{h.cateringKicker}</p>
+          <p class="lead" data-reveal>{h.cateringText}</p>
+          <p class="actions" data-reveal style="margin-top:2.5rem">
+            <a class="btn btn-solid" href={`${pagePath('catering', lang)}#aanvraag`}>{s.catering.cta}</a>
+            <a class="link" href={pagePath('catering', lang)}>{s.common.moreInfo}</a>
+          </p>
+        </div>
+      </div>
+      <ul class="type-list">
+        {eventTypes.map((e, i) => (
+          <li data-reveal style={`--d:${i * 0.08}s`}>
+            <a class="type-row" href={eventPath(e.key, lang)}>
+              <span class="tr-n">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{e.copy[lang].name}</h3>
+              <p>{e.copy[lang].short}</p>
+              <span class="tr-arrow" aria-hidden="true"><Icon name="arrow" /></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 03 · Atelier -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="label" data-reveal><span class="n">03</span> Private dining</p><h2>{h.atelierTitle}</h2></div>
+        <p class="lead" data-reveal>{h.atelierText}</p>
+      </div>
+      <div class="interiors" data-reveal>
+        <Photo name="atelier-dining-room" lang={lang} sizes="(min-width: 1320px) 420px, (min-width: 760px) 32vw, 50vw" />
+        <Photo name="atelier-candles" lang={lang} sizes="(min-width: 1320px) 420px, (min-width: 760px) 32vw, 50vw" />
+        <Photo name="kitchen-beef" lang={lang} sizes="(min-width: 1320px) 420px, (min-width: 760px) 32vw, 50vw" />
+      </div>
+      <div class="g12 visit-faq" style="margin-top:clamp(3.5rem,6vw,5rem)">
+        <div>
+          <p class="label" data-reveal>{s.atelier.detailsLabel}</p>
+          <ContactBlock lang={lang} guests />
+        </div>
+        <div>
+          <p class="label" data-reveal>{s.atelier.introTitle}</p>
+          {s.atelier.intro.map((p) => <p class="lead" data-reveal style="max-width:none">{p}</p>)}
+          <p data-reveal style="margin-top:2rem"><a class="btn" href={pagePath('atelier', lang)}>{L('Ontdek het atelier', 'Découvrir l’atelier', 'Discover the atelier')}</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · Afhaal -->
+  <section class="section bg-2">
+    <div class="wrap g12 split reverse">
+      <div class="split-media" style="--col:7 / span 6">
+        <div class="menu-card" data-reveal>
+          <p class="mc-label">{s.takeaway.pastLabel}</p>
+          <h3>Take away · {menu.date}</h3>
+          <ul>
+            {menu.items.map((it) => (
+              <li><span class="mi-name">{it.name}</span><span class="mi-price">{it.price}</span>{it.note && <span class="mi-note">{it.note}</span>}</li>
+            ))}
+          </ul>
+          <p class="mc-foot">{h.takeawayTitle}</p>
+        </div>
+      </div>
+      <div class="split-text" style="--col:1 / span 5">
+        <p class="label" data-reveal><span class="n">04</span> {s.nav.takeaway}</p>
+        <h2 data-split>{h.takeawayTitle}</h2>
+        <p class="lead" data-reveal>{h.takeawayText}</p>
+        <p class="actions" data-reveal style="margin-top:2.5rem">
+          <a class="btn btn-solid" href={telHref}>{s.takeaway.call}</a>
+          <a class="link" href={pagePath('takeaway', lang)}>{s.common.moreInfo}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · Bert & Aude -->
+  <section class="section">
+    <div class="wrap g12 split">
+      <div class="split-media" style="--col:1 / span 5"><Photo name="bert-and-aude" lang={lang} maxh="85svh" sizes="(min-width: 900px) 40vw, 100vw" /></div>
+      <div class="split-text" style="--col:7 / span 6">
+        <p class="label" data-reveal><span class="n">05</span> {s.nav.about}</p>
+        <h2 data-split>{h.aboutTitle}</h2>
+        <p class="lead" data-reveal>{h.aboutText}</p>
+        <p data-reveal style="margin-top:2.5rem"><a class="btn" href={pagePath('about', lang)}>{h.aboutMore}</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · Galerij -->
+  <section class="section bg-2">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="label" data-reveal><span class="n">06</span> {s.nav.gallery} · @{site.social.instagram.handle}</p><h2>{h.galleryTitle}</h2></div>
+        <p class="lead" data-reveal>{h.galleryLead}</p>
+      </div>
+      <div class="grid-4">
+        {gallery.map((k, i) => (
+          <a href={pagePath('gallery', lang)} data-reveal style={`--d:${(i % 4) * 0.06}s`}><Photo name={k} lang={lang} sizes={g4} /></a>
+        ))}
+      </div>
+      <p data-reveal class="section-foot"><a class="btn" href={pagePath('gallery', lang)}>{h.galleryAll}</a></p>
+    </div>
+  </section>
+
+  <!-- Avis des clients (en néerlandais, langue d'origine) -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="label" data-reveal>{h.reviewsLabel}</p><h2>{h.reviewsTitle}</h2></div>
+        <p class="rating" data-reveal><span class="stars" aria-hidden="true">★★★★★</span></p>
+      </div>
+      <div class="rv-carousel" data-carousel data-reveal>
+        <ul class="rv-track" role="list" aria-label={h.reviewsTitle} tabindex="0">
+          {reviews.map((r) => (
+            <li class="rv-slide">
+              <figure>
+                <blockquote lang="nl">“{r.quote}”</blockquote>
+                <figcaption><span class="stars" aria-label="5/5">★★★★★</span>{r.author} · {h.reviewSource}</figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+        <div class="rv-foot">
+          <div class="rv-progress" aria-hidden="true"><span></span></div>
+          <div class="rv-nav">
+            <button class="rv-btn" type="button" data-prev aria-label={L('Vorige', 'Précédent', 'Previous')}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6" /></svg>
+            </button>
+            <button class="rv-btn" type="button" data-next aria-label={L('Volgende', 'Suivant', 'Next')}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <p data-reveal class="section-foot"><a class="btn" href={reviewsPost} target="_blank" rel="noopener">{h.reviewsAll}</a></p>
+    </div>
+  </section>
+
+  <!-- Citation -->
+  <section class="section quote bg-2"><div class="wrap">
+    <Logo />
+    <blockquote>{h.statement}</blockquote>
+    <cite data-reveal>Bert &amp; Aude · @{site.social.instagram.handle}</cite>
+  </div></section>
+</Base>
+
+<script>
+  // Carrousel des avis : flèches, glisser à la souris, barre de progression (le tactile défile nativement).
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('.rv-track')!;
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const next = root.querySelector<HTMLButtonElement>('[data-next]')!;
+    const bar = root.querySelector<HTMLElement>('.rv-progress span')!;
+    const step = () => {
+      const slide = track.querySelector<HTMLElement>('.rv-slide');
+      return slide ? slide.offsetWidth + parseFloat(getComputedStyle(track).columnGap || '0') : track.clientWidth;
+    };
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      const ratio = track.clientWidth / track.scrollWidth;
+      const pos = max > 0 ? track.scrollLeft / max : 0;
+      bar.style.setProperty('--w', `${ratio * 100}%`);
+      bar.style.setProperty('--x', `${pos * (1 / ratio - 1) * 100}%`);
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= max - 2;
+    };
+    prev.addEventListener('click', () => track.scrollBy({ left: -step() }));
+    next.addEventListener('click', () => track.scrollBy({ left: step() }));
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); track.scrollBy({ left: step() }); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); track.scrollBy({ left: -step() }); }
+    });
+    track.addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    update();
+
+    let down = false, moved = false, startX = 0, startLeft = 0;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      down = true; moved = false; startX = e.clientX; startLeft = track.scrollLeft;
+    });
+    addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) > 5) { moved = true; track.classList.add('is-dragging'); }
+      if (moved) track.scrollLeft = startLeft - dx;
+    });
+    addEventListener('pointerup', () => {
+      if (!down) return;
+      down = false;
+      if (moved) {
+        track.classList.remove('is-dragging');
+        const s = step();
+        track.scrollTo({ left: Math.round(track.scrollLeft / s) * s });
+      }
+    });
+  });
+</script>

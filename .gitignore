@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+.netlify/
+
+# Secrets locaux (clé API Anthropic, etc.)
+.env
+.env.*

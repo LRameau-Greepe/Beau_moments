@@ -1,0 +1,98 @@
+// /llms-full.txt : tout le contenu (anglais) en texte brut pour les assistants IA (complément de /llms.txt).
+import type { APIRoute } from 'astro';
+import { site, abs, addressLine } from '../lib/site';
+import { eventTypes } from '../lib/events';
+import { reviews } from '../lib/reviews';
+import { ui } from '../i18n/ui';
+import { pagePath, eventPath } from '../i18n/routes';
+
+export const GET: APIRoute = () => {
+  const s = ui.en;
+  const parts = [
+    `# ${site.name} — full content`,
+    '',
+    `> ${s.meta.homeDesc}`,
+    '',
+    `Atelier: ${addressLine}, Belgium. Phone: ${site.contacts.map((c) => `${c.name} ${c.phone}`).join(', ')}. Email: ${site.email}. Instagram: ${site.social.instagram.url}`,
+    '',
+    '---',
+    '',
+    '## About Bert & Aude',
+    '',
+    `- URL: ${abs(pagePath('about', 'en'))}`,
+    '',
+    ...s.about.story.flatMap((p) => [p, '']),
+    `### ${s.about.bertTitle}`,
+    '',
+    s.about.bert,
+    '',
+    `### ${s.about.audeTitle}`,
+    '',
+    s.about.aude,
+    '',
+    '---',
+    '',
+    '## Catering',
+    '',
+    `- URL: ${abs(pagePath('catering', 'en'))}`,
+    '',
+    s.catering.lead,
+    '',
+    '### What’s included',
+    '',
+    ...s.catering.included.map((i) => `- **${i.title}**: ${i.text}`),
+    '',
+    '### How we work',
+    '',
+    ...s.catering.process.map((p, i) => `${i + 1}. **${p.title}**: ${p.text}`),
+    '',
+    ...eventTypes.flatMap((e) => {
+      const c = e.copy.en;
+      return [
+        `### ${c.name}`,
+        '',
+        `- URL: ${abs(eventPath(e.key, 'en'))}`,
+        '',
+        c.lead,
+        '',
+        ...c.body.flatMap((p) => [p, '']),
+        ...c.ideas.map((i) => `- **${i.title}**: ${i.text}`),
+        '',
+        ...c.faq.flatMap((f) => [`**${f.q}** ${f.a}`, '']),
+      ];
+    }),
+    '### FAQ',
+    '',
+    ...s.catering.faq.flatMap((f) => [`**${f.q}** ${f.a}`, '']),
+    '---',
+    '',
+    '## The atelier (private dining)',
+    '',
+    `- URL: ${abs(pagePath('atelier', 'en'))}`,
+    '',
+    s.atelier.lead,
+    '',
+    ...s.atelier.intro.flatMap((p) => [p, '']),
+    ...s.atelier.faq.flatMap((f) => [`**${f.q}** ${f.a}`, '']),
+    '---',
+    '',
+    '## Takeaway',
+    '',
+    `- URL: ${abs(pagePath('takeaway', 'en'))}`,
+    '',
+    s.takeaway.lead,
+    '',
+    ...s.takeaway.how.map((h, i) => `${i + 1}. **${h.title}**: ${h.text}`),
+    '',
+    `### ${s.takeaway.pastTitle}`,
+    '',
+    ...s.takeaway.past.flatMap((m) => [`**${m.date}**`, ...m.items.map((it) => `- ${it.name}: ${it.price}${'note' in it && it.note ? ` (${it.note})` : ''}`), '']),
+    '---',
+    '',
+    '## Client reviews (Dutch, original wording)',
+    '',
+    ...reviews.map((r) => `- “${r.quote}” — ${r.author}`),
+    '',
+  ];
+  return new Response(parts.join('\n'), { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+};

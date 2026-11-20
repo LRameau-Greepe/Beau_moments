@@ -1,0 +1,26 @@
+---
+// Page affichée par Netlify quand une adresse n'existe pas (dans les trois langues, néerlandais en premier).
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import { ui } from '../i18n/ui';
+import { langs, localeInfo } from '../i18n/locales';
+import { pagePath } from '../i18n/routes';
+---
+<Base lang="nl" title={ui.nl.meta.notFoundTitle} description={ui.nl.meta.notFoundDesc} noindex hideCta>
+  <section class="nf">
+    <div class="wrap">
+      <Logo />
+      <div class="nf-langs">
+        {langs.map((l) => (
+          <div lang={localeInfo[l].html}>
+            {l === 'nl'
+              ? <h1 class="no-split" style="font-size:clamp(2.4rem,1.6rem + 3vw,4.5rem)">{ui[l].notFound.title}</h1>
+              : <p style="font-family:var(--serif);font-weight:300;font-size:clamp(1.8rem,1.3rem + 1.6vw,2.8rem);line-height:1.1;margin:0 0 .5rem">{ui[l].notFound.title}</p>}
+            <p class="muted">{ui[l].notFound.text}</p>
+            <a class="link" href={pagePath('home', l)}>{ui[l].common.backHome}</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

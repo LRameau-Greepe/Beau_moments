@@ -1,0 +1,66 @@
+---
+// Formulaire de demande BEAU MOMENTS (catering, atelier). Envoyé via Netlify Forms (rien à configurer :
+// Netlify détecte le formulaire au déploiement ; les demandes arrivent dans Netlify > Forms,
+// où l'on peut activer une notification par e-mail).
+import { t } from '../i18n/ui';
+import type { Lang } from '../i18n/locales';
+interface Props { lang: Lang; preset?: number }
+const { lang, preset } = Astro.props;
+const f = t(lang).form;
+---
+<form class="enquiry" name="beau-moments" method="POST" data-netlify="true" netlify-honeypot="company" data-enquiry
+  data-sending={f.sending} data-thanks={f.thanks} data-error={f.error}>
+  <input type="hidden" name="form-name" value="beau-moments" />
+  <input type="hidden" name="language" value={lang} />
+  <p class="hp"><label>Company <input name="company" tabindex="-1" autocomplete="off" /></label></p>
+
+  <div class="field"><label for="f-name">{f.name}</label><input id="f-name" name="name" autocomplete="name" required /></div>
+  <div class="field"><label for="f-email">{f.email}</label><input id="f-email" name="email" type="email" autocomplete="email" required /></div>
+  <div class="field"><label for="f-phone">{f.phone}</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" /></div>
+  <div class="field">
+    <label for="f-type">{f.type}</label>
+    <select id="f-type" name="event-type">
+      {f.typeOptions.map((o, i) => <option selected={preset === i}>{o}</option>)}
+    </select>
+  </div>
+  <div class="field"><label for="f-date">{f.date}</label><input id="f-date" name="date" type="date" /></div>
+  <div class="field"><label for="f-guests">{f.guests}</label><input id="f-guests" name="guests" type="number" min="1" inputmode="numeric" /></div>
+  <div class="field full"><label for="f-place">{f.place}</label><input id="f-place" name="venue" /></div>
+  <div class="field full"><label for="f-msg">{f.message}</label><textarea id="f-msg" name="message" rows="4"></textarea></div>
+  <label class="consent"><input type="checkbox" name="consent" required /> <span>{f.consent}</span></label>
+  <div class="form-foot">
+    <button class="btn btn-solid" type="submit">{f.send}</button>
+    <p class="form-status" role="status" aria-live="polite"></p>
+  </div>
+</form>
+
+<script>
+  // Envoi sans quitter la page (Netlify Forms accepte un POST encodé sur « / »).
+  document.querySelectorAll<HTMLFormElement>('[data-enquiry]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('.form-status')!;
+    const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      const label = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = form.dataset.sending ?? '…';
+      status.className = 'form-status';
+      status.textContent = '';
+      try {
+        const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString();
+        const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        status.classList.add('is-ok');
+        status.textContent = form.dataset.thanks ?? '';
+      } catch {
+        status.classList.add('is-error');
+        status.textContent = form.dataset.error ?? '';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = label;
+      }
+    });
+  });
+</script>
