@@ -50,7 +50,7 @@ const ig = site.social.instagram;
       {k.past.map((m, i) => (
         <div class="menu-card" data-reveal style={`--d:${i * 0.1}s`}>
           <p class="mc-label">BEAU MOMENTS</p>
-          <h3>Take away · {m.date}</h3>
+          <h3>{k.cardTitle} · {m.date}</h3>
           <ul>
             {m.items.map((it) => (
               <li><span class="mi-name">{it.name}</span><span class="mi-price">{it.price}</span>{'note' in it && it.note && <span class="mi-note">{it.note}</span>}</li>

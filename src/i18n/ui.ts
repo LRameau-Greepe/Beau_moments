@@ -5,7 +5,7 @@ import type { Lang } from './locales';
 const nl = {
   nav: {
     home: 'Home', catering: 'Catering', atelier: 'Atelier', takeaway: 'Afhaal', gallery: 'Galerij', about: 'Over ons',
-    book: 'Aanvraag', menu: 'Menu', close: 'Sluiten', skip: 'Naar de inhoud', language: 'Taal',
+    book: 'Aanvraag', menu: 'Menu', close: 'Sluiten', skip: 'Naar de inhoud', language: 'Taal', main: 'Hoofdmenu',
   },
   meta: {
     homeTitle: 'BEAU MOMENTS — catering & private dining in Maldegem',
@@ -50,6 +50,8 @@ const nl = {
     reviewsTitle: 'Mooie woorden',
     reviewSource: 'Klant',
     reviewsAll: 'Bekijk op Instagram',
+    privateLabel: 'Private dining',
+    reviewsNote: '',
     statement: 'Eten is meer dan voeding: het is een ervaring, een herinnering.',
   },
   catering: {
@@ -136,6 +138,7 @@ const nl = {
       ] },
     ],
     call: 'Bel om te bestellen',
+    cardTitle: 'Take away',
     follow: 'Het menu van deze week staat op Instagram',
   },
   gallery: {
@@ -193,27 +196,27 @@ type UI = typeof nl;
 const fr: UI = {
   nav: {
     home: 'Accueil', catering: 'Traiteur', atelier: 'Atelier', takeaway: 'À emporter', gallery: 'Galerie', about: 'À propos',
-    book: 'Demande', menu: 'Menu', close: 'Fermer', skip: 'Aller au contenu', language: 'Langue',
+    book: 'Demande', menu: 'Menu', close: 'Fermer', skip: 'Aller au contenu', language: 'Langue', main: 'Menu principal',
   },
   meta: {
-    homeTitle: 'BEAU MOMENTS — traiteur & private dining à Maldegem',
-    homeDesc: 'BEAU MOMENTS, le traiteur et private dining du chef Bert et d’Aude à Maldegem : chef à domicile, fêtes, mariages, événements d’entreprise et plats à emporter chaque semaine.',
+    homeTitle: 'BEAU MOMENTS — traiteur & dîners privés à Maldegem',
+    homeDesc: 'BEAU MOMENTS, le traiteur et les dîners privés du chef Bert et d’Aude à Maldegem : chef à domicile, fêtes, mariages, événements d’entreprise et plats à emporter chaque semaine.',
     cateringTitle: 'Traiteur à Maldegem, Bruges & Gand — BEAU MOMENTS',
     cateringDesc: 'Un traiteur sur mesure : chef privé à domicile, fêtes, réceptions, mariages et événements d’entreprise, avec service, tables dressées et fleurs.',
-    atelierTitle: 'Private dining dans notre atelier à Maldegem — BEAU MOMENTS',
+    atelierTitle: 'Dîner privé dans notre atelier à Maldegem — BEAU MOMENTS',
     atelierDesc: 'Un dîner privé pour 8 à 18 personnes dans l’atelier BEAU MOMENTS à Maldegem : un espace à vous, une cuisine à vous et un menu sur mesure.',
     takeawayTitle: 'À emporter : un nouveau menu chaque semaine — BEAU MOMENTS',
     takeawayDesc: 'Chaque semaine, un nouveau menu à emporter BEAU MOMENTS : commande par téléphone jusqu’au jeudi, retrait le vendredi à notre atelier de Maldegem.',
     galleryTitle: 'Galerie — plats, tables et moments | BEAU MOMENTS',
     galleryDesc: 'Les photos de @beau_moments_catering : les plats du chef Bert, des tables dressées, l’atelier à Maldegem et les plus beaux moments.',
     aboutTitle: 'À propos — Bert & Aude | BEAU MOMENTS',
-    aboutDesc: 'Bert et Aude se sont rencontrés dans la cuisine d’un restaurant. Ensemble, ils ont créé BEAU MOMENTS : traiteur et private dining, avec passion dans l’assiette et un service de cœur.',
+    aboutDesc: 'Bert et Aude se sont rencontrés dans la cuisine d’un restaurant. Ensemble, ils ont créé BEAU MOMENTS : traiteur et dîners privés, avec passion dans l’assiette et un service de cœur.',
     notFoundTitle: 'Page introuvable — BEAU MOMENTS',
     notFoundDesc: 'Cette page n’existe pas (ou plus).',
   },
   band: { place: 'Atelier · Industrielaan 3/C1, Maldegem', motto: 'Passion dans l’assiette, service de cœur', takeaway: 'Menu à emporter de la semaine' },
   home: {
-    eyebrow: 'Traiteur & private dining · Maldegem',
+    eyebrow: 'Traiteur & dîners privés · Maldegem',
     heroLine1: 'Passion dans l’assiette,',
     heroLine2: 'service de cœur.',
     heroLead: 'Le chef Bert et Aude créent les plus beaux moments culinaires : chez vous, à votre fête ou dans notre atelier à Maldegem.',
@@ -238,6 +241,8 @@ const fr: UI = {
     reviewsTitle: 'De jolis mots',
     reviewSource: 'Client',
     reviewsAll: 'Voir sur Instagram',
+    privateLabel: 'Dîner privé',
+    reviewsNote: 'Avis traduits du néerlandais',
     statement: 'Manger, c’est plus que se nourrir : c’est une expérience, un souvenir.',
   },
   catering: {
@@ -278,7 +283,7 @@ const fr: UI = {
     ideasTitle: 'Idées',
   },
   atelier: {
-    label: 'Private dining',
+    label: 'Dîner privé',
     title: 'Bienvenue dans notre atelier.',
     lead: 'Un espace privé à Maldegem où profiter d’un dîner au calme et en toute convivialité, de 8 à 18 personnes.',
     introTitle: 'Comme à la maison',
@@ -324,6 +329,7 @@ const fr: UI = {
       ] },
     ],
     call: 'Appelez pour commander',
+    cardTitle: 'À emporter',
     follow: 'Le menu de la semaine est sur Instagram',
   },
   gallery: {
@@ -360,7 +366,7 @@ const fr: UI = {
     button: 'Demander une proposition',
   },
   footer: {
-    tagline: 'Traiteur & private dining par Bert & Aude. Passion dans l’assiette, service de cœur.',
+    tagline: 'Traiteur & dîners privés par Bert & Aude. Passion dans l’assiette, service de cœur.',
     explore: 'Découvrir',
     catering: 'Traiteur',
     contact: 'Contact',
@@ -379,7 +385,7 @@ const fr: UI = {
 const en: UI = {
   nav: {
     home: 'Home', catering: 'Catering', atelier: 'Atelier', takeaway: 'Takeaway', gallery: 'Gallery', about: 'About',
-    book: 'Enquire', menu: 'Menu', close: 'Close', skip: 'Skip to content', language: 'Language',
+    book: 'Enquire', menu: 'Menu', close: 'Close', skip: 'Skip to content', language: 'Language', main: 'Main menu',
   },
   meta: {
     homeTitle: 'BEAU MOMENTS — private chef & catering near Bruges, Belgium',
@@ -424,6 +430,8 @@ const en: UI = {
     reviewsTitle: 'Kind words',
     reviewSource: 'Client',
     reviewsAll: 'See on Instagram',
+    privateLabel: 'Private dining',
+    reviewsNote: 'Reviews translated from Dutch',
     statement: 'Food is more than nourishment: it is an experience, a memory.',
   },
   catering: {
@@ -510,6 +518,7 @@ const en: UI = {
       ] },
     ],
     call: 'Call to order',
+    cardTitle: 'Takeaway',
     follow: 'This week’s menu is on Instagram',
   },
   gallery: {

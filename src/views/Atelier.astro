@@ -40,7 +40,7 @@ const ld = [{ '@type': 'FAQPage', mainEntity: a.faq.map((f) => ({ '@type': 'Ques
         <Photo name="atelier-dinner-from-above" lang={lang} sizes="(min-width: 900px) 24vw, 50vw" />
       </div>
       <div class="split-text">
-        <p class="label" data-reveal>Private dining</p>
+        <p class="label" data-reveal>{s.home.privateLabel}</p>
         <h2 data-split>{a.introTitle}</h2>
         {a.intro.map((p) => <p data-reveal>{p}</p>)}
         <p data-reveal style="margin-top:2rem"><a class="btn btn-solid" href={`${pagePath('catering', lang)}#aanvraag`}>{s.catering.cta}</a></p>

@@ -863,3 +863,6 @@ a[href^="tel:"], a[href^="mailto:"] { white-space: nowrap; }
 .formulas .type-card p { margin-bottom: 0; }
 .formulas .ph { margin-bottom: 0.9rem; }
 .formulas .type-card h3 { font-size: clamp(1.4rem, 1.2rem + 0.6vw, 1.85rem); }
+
+.rv-note { font-size: 0.8rem; margin: 1rem 0 0; }
+.quote blockquote { max-width: 38ch; text-wrap: balance; }

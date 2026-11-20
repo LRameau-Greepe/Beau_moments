@@ -91,7 +91,7 @@ export const GET: APIRoute = () => {
     '',
     '## Client reviews (Dutch, original wording)',
     '',
-    ...reviews.map((r) => `- “${r.quote}” — ${r.author}`),
+    ...reviews.map((r) => `- “${r.quote.nl}” — ${r.author}`),
     '',
   ];
   return new Response(parts.join('\n'), { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });

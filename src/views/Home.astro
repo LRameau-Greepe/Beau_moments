@@ -94,7 +94,7 @@ const menu = s.takeaway.past[0];
         <Photo name="atelier-dining-room" lang={lang} sizes="(min-width: 900px) 24vw, 50vw" />
       </div>
       <div class="split-text" style="--col:8 / span 5">
-        <p class="label" data-reveal><span class="n">03</span> Private dining</p>
+        <p class="label" data-reveal><span class="n">03</span> {h.privateLabel}</p>
         <h2 data-split>{h.atelierTitle}</h2>
         <p class="lead" data-reveal>{h.atelierText}</p>
         <dl class="facts" data-reveal>
@@ -115,7 +115,7 @@ const menu = s.takeaway.past[0];
       <div class="split-media" style="--col:7 / span 6">
         <div class="menu-card" data-reveal>
           <p class="mc-label">{s.takeaway.pastLabel}</p>
-          <h3>Take away · {menu.date}</h3>
+          <h3>{s.takeaway.cardTitle} · {menu.date}</h3>
           <ul>
             {menu.items.map((it) => (
               <li><span class="mi-name">{it.name}</span><span class="mi-price">{it.price}</span>{it.note && <span class="mi-note">{it.note}</span>}</li>
@@ -177,7 +177,7 @@ const menu = s.takeaway.past[0];
           {reviews.map((r) => (
             <li class="rv-slide">
               <figure>
-                <blockquote lang="nl">“{r.quote}”</blockquote>
+                <blockquote>“{r.quote[lang]}”</blockquote>
                 <figcaption><span class="stars" aria-label="5/5">★★★★★</span>{r.author} · {h.reviewSource}</figcaption>
               </figure>
             </li>
@@ -195,6 +195,7 @@ const menu = s.takeaway.past[0];
           </div>
         </div>
       </div>
+      {h.reviewsNote && <p class="muted rv-note" data-reveal>{h.reviewsNote}</p>}
       <p data-reveal class="section-foot"><a class="btn" href={reviewsPost} target="_blank" rel="noopener">{h.reviewsAll}</a></p>
     </div>
   </section>
