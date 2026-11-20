@@ -2,7 +2,6 @@
 // Over ons : l'histoire de Bert & Aude, leurs rôles, leurs valeurs.
 import Base from '../layouts/Base.astro';
 import Photo from '../components/Photo.astro';
-import Logo from '../components/Logo.astro';
 import { site, abs } from '../lib/site';
 import { pagePath, allLangs } from '../i18n/routes';
 import { t } from '../i18n/ui';
@@ -27,28 +26,27 @@ const ld = [{
     <div class="wrap g12">
       <div class="hero-text">
         <p class="label rise" style="--d:.05s">{a.label}</p>
-        <h1 style="font-size:clamp(2.6rem,1.4rem + 3.4vw,5rem);line-height:1.05">{a.title}</h1>
+        <h1 class="about-title">{a.title}</h1>
         <p class="lead rise" style="--d:.45s">{a.lead}</p>
       </div>
       <div class="hero-media"><Photo name="bert-and-aude" lang={lang} eager maxh="calc(100svh - var(--header-h) - 8rem)" sizes="(min-width: 900px) 40vw, 100vw" /></div>
     </div>
   </section>
 
-  <section class="section quote bg-2"><div class="wrap">
-    <Logo />
-    <blockquote>{s.home.statement}</blockquote>
-    <cite data-reveal>“{site.motto}”</cite>
-  </div></section>
-
-  <section class="wrap section g12 split">
-    <div class="split-media" style="--col:1 / span 5"><Photo name="apron-details" lang={lang} maxh="var(--ph-max)" sizes="(min-width: 900px) 36vw, 100vw" /></div>
-    <div class="split-text" style="--col:7 / span 6">
-      <p class="label" data-reveal>{a.label}</p>
-      {a.story.map((p, i) => <p class={i === 0 ? 'lead' : ''} data-reveal style={i === 0 ? 'font-family:var(--serif);font-size:clamp(1.5rem,1.15rem + 1.2vw,2.2rem);line-height:1.3;color:var(--ink);max-width:none' : ''}>{p}</p>)}
+  <!-- Notre histoire : texte seul, en deux colonnes -->
+  <section class="section bg-2">
+    <div class="wrap g12 story">
+      <div class="story-intro">
+        <p class="label" data-reveal>{a.label}</p>
+        <p class="story-lead" data-reveal>{a.story[0]}</p>
+      </div>
+      <div class="story-rest">
+        {a.story.slice(1).map((p) => <p data-reveal>{p}</p>)}
+      </div>
     </div>
   </section>
 
-  <section class="section bg-2">
+  <section class="section">
     <!-- Bert puis Aude : photo et texte côte à côte, en alternance ; les deux textes ont la même largeur -->
     <div class="wrap g12 split person">
       <div class="split-media" style="--col:1 / span 5"><Photo name="bert-serving" lang={lang} maxh="var(--ph-max)" sizes="(min-width: 900px) 36vw, 100vw" /></div>
@@ -60,7 +58,7 @@ const ld = [{
     </div>
   </section>
 
-  <section class="section">
+  <section class="section bg-2">
     <div class="wrap g12 split reverse person">
       <div class="split-media" style="--col:6 / span 7"><Photo name="aude-with-guests" lang={lang} sizes="(min-width: 900px) 52vw, 100vw" /></div>
       <div class="split-text" style="--col:1 / span 5">

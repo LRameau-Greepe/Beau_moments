@@ -822,3 +822,11 @@ a[href^="tel:"], a[href^="mailto:"] { white-space: nowrap; }
 .g-flow .g-more { aspect-ratio: 1; height: var(--gh); }
 @media (max-width: 860px) { .g-flow { --gh: calc((100vw - 2 * var(--gutter) - var(--gg)) / 2); } }
 .section-sm { padding-block: clamp(2.25rem, 1.4rem + 2vw, 3.25rem); }
+/* Over ons : notre histoire, texte seul en deux colonnes */
+.story { align-items: end; row-gap: 1.5rem; }
+.story-intro { grid-column: 1 / span 7; }
+.story-rest { grid-column: 9 / span 4; color: var(--ink-2); }
+.story-lead { font-family: var(--serif); font-weight: 300; font-size: clamp(1.5rem, 1.15rem + 1.2vw, 2.25rem); line-height: 1.3; margin: 0; }
+.story-rest p:last-child { margin-bottom: 0; }
+@media (max-width: 860px) { .story-intro, .story-rest { grid-column: 1 / -1; } }
+.hero-text h1.about-title { font-size: clamp(2.4rem, 1.4rem + 2.6vw, 4rem); line-height: 1.08; }
