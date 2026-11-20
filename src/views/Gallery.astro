@@ -18,30 +18,30 @@ const s = t(lang);
 const ig = site.social.instagram;
 const L = Lx(lang);
 
-// layout : « grid » = colonnes régulières (photos de mêmes proportions) ; « row » = une rangée justifiée
-const chapters: { id: string; title: string; lead: string; photos: PhotoKey[]; layout: 'grid' | 'row'; cols?: number; more?: boolean }[] = [
+// Toutes les photos de la galerie ont la même hauteur (5 photos carrées par rangée) ; la largeur suit les proportions.
+const chapters: { id: string; title: string; lead: string; photos: PhotoKey[]; more?: boolean }[] = [
   { id: 'gerechten', title: L('Op het bord', 'Dans l’assiette', 'On the plate'), lead: L('Kreeft, langoustine, hoeve-ei en dame blanche: klassiek Frans, met een moderne toets.', 'Homard, langoustine, œuf fermier et dame blanche : classique français, touche moderne.', 'Lobster, langoustine, farm egg and dame blanche: classic French, with a modern touch.'),
-    photos: ['lobster-caviar', 'lobster-sauce', 'egg-shrimp-tray', 'langoustine'], layout: 'grid', cols: 4 },
+    photos: ['lobster-caviar', 'lobster-sauce', 'egg-shrimp-tray', 'langoustine'] },
   { id: 'voorgerecht-tot-dessert', title: L('Van voorgerecht tot dessert', 'De l’entrée au dessert', 'From starter to dessert'), lead: L('Sint-jakobsvrucht, ceviche, krokante hapjes en een dame blanche.', 'Saint-Jacques, ceviche, bouchées croustillantes et dame blanche.', 'Scallop, ceviche, crisp bites and a dame blanche.'),
-    photos: ['scallop-dish', 'langoustine-ceviche', 'flower-bites', 'dame-blanche'], layout: 'grid', cols: 4 },
+    photos: ['scallop-dish', 'langoustine-ceviche', 'flower-bites', 'dame-blanche'] },
   { id: 'signatuur', title: L('Signatuur', 'Signature', 'Signature'), lead: L('Kaviaar, oesters, hamachi en hazelnoottaart.', 'Caviar, huîtres, hamachi et tarte aux noisettes.', 'Caviar, oysters, hamachi and hazelnut tart.'),
-    photos: ['caviar-dish', 'oysters', 'hamachi', 'hazelnut-tart'], layout: 'row' },
+    photos: ['caviar-dish', 'oysters', 'hamachi', 'hazelnut-tart'] },
   { id: 'atelier', title: L('Het atelier', 'L’atelier', 'The atelier'), lead: L('Industrielaan 3/C1 in Maldegem: private dining voor 8 tot 18 personen.', 'Industrielaan 3/C1 à Maldegem : private dining pour 8 à 18 personnes.', 'Industrielaan 3/C1 in Maldegem: private dining for 8 to 18 guests.'),
-    photos: ['atelier-facade', 'atelier-from-above', 'atelier-dinner-from-above', 'atelier-dining-room', 'atelier-candles'], layout: 'row' },
+    photos: ['atelier-facade', 'atelier-from-above', 'atelier-dinner-from-above', 'atelier-dining-room', 'atelier-candles'] },
   { id: 'tafels', title: L('Gedekte tafels', 'Tables dressées', 'Laid tables'), lead: L('Een prachtig gedekte tafel maakt het plaatje compleet.', 'Une belle table dressée complète le tableau.', 'A beautifully laid table completes the picture.'),
-    photos: ['table-lemons', 'table-long', 'table-room', 'table-flowers', 'table-candles'], layout: 'grid', cols: 5 },
+    photos: ['table-lemons', 'table-long', 'table-room', 'table-flowers', 'table-candles'] },
   { id: 'receptie', title: L('Hapjes & receptie', 'Bouchées & réception', 'Canapés & receptions'), lead: L('Koud geserveerd, warm ontvangen: zo beginnen feesten.', 'Servi froid, accueilli chaleureusement : ainsi commencent les fêtes.', 'Served cold, welcomed warmly: that is how parties begin.'),
-    photos: ['appetizers', 'tartelettes', 'egg-shrimp-garden', 'waiter-tray', 'bites-tray', 'scallops', 'beef-cuts', 'olive-oil-tasting', 'private-dining-bowls', 'flowers', 'apron-field'], layout: 'grid', cols: 6, more: true },
+    photos: ['appetizers', 'tartelettes', 'egg-shrimp-garden', 'waiter-tray', 'bites-tray', 'scallops', 'beef-cuts', 'olive-oil-tasting', 'private-dining-bowls'], more: true },
   { id: 'feesten', title: L('Feesten', 'Fêtes', 'Celebrations'), lead: L('Valentijn in een oude schuur, een tafel in de tuin, bubbels bij de receptie.', 'La Saint-Valentin dans une grange, une table au jardin, des bulles à la réception.', 'Valentine’s in an old barn, a table in the garden, bubbles at the reception.'),
-    photos: ['valentine-barn', 'valentine-table', 'garden-table', 'champagne-bar'], layout: 'row' },
+    photos: ['valentine-barn', 'valentine-table', 'garden-table', 'champagne-bar'] },
   { id: 'details', title: L('Details', 'Détails', 'Details'), lead: L('Een bloem op het bord, een strik, een laatste toets aan de pass.', 'Une fleur dans l’assiette, un nœud papillon, une dernière touche au passe.', 'A flower on the plate, a bow tie, a final touch at the pass.'),
-    photos: ['side-dish', 'strawberry-dessert', 'ready-to-serve', 'chef-plating'], layout: 'grid', cols: 4 },
+    photos: ['side-dish', 'strawberry-dessert', 'ready-to-serve', 'chef-plating'] },
   { id: 'achter-de-schermen', title: L('Achter de schermen', 'En coulisses', 'Behind the scenes'), lead: L('Achter het gordijn worden de mooiste momenten voorbereid.', 'Derrière le rideau se préparent les plus beaux moments.', 'Behind the curtain, the finest moments are prepared.'),
-    photos: ['plating-sauce', 'bert-serving', 'apron-details', 'kitchen-beef', 'behind-the-curtain'], layout: 'row' },
+    photos: ['plating-sauce', 'bert-serving', 'apron-details', 'kitchen-beef', 'behind-the-curtain'] },
   { id: 'bubbels', title: L('Bubbels & details', 'Bulles & détails', 'Bubbles & details'), lead: L('Ook alcoholvrij: AWA Shiso, met Japanse signatuur.', 'Aussi sans alcool : AWA Shiso, d’inspiration japonaise.', 'Alcohol-free too: AWA Shiso, with a Japanese signature.'),
-    photos: ['awa-shiso-ice', 'awa-shiso-bottle', 'serving-bubbles', 'apero', 'croquettes', 'european-lobster'], layout: 'row' },
+    photos: ['awa-shiso-ice', 'awa-shiso-bottle', 'serving-bubbles', 'apero', 'croquettes'] },
   { id: 'momenten', title: L('Momenten', 'Moments', 'Moments'), lead: L('Bert, Aude en hun gasten.', 'Bert, Aude et leurs invités.', 'Bert, Aude and their guests.'),
-    photos: ['bert-and-aude', 'aude-at-work', 'aude-with-guests', 'dinner-served'], layout: 'row' },
+    photos: ['bert-and-aude', 'aude-at-work', 'aude-with-guests'] },
 ];
 
 // Version grand format pour la visionneuse (jusqu'à la pleine résolution de l'original)
@@ -81,18 +81,18 @@ const ui = { close: L('Sluiten', 'Fermer', 'Close'), prev: L('Vorige foto', 'Pho
   {chapters.map((c, ci) => (
     <section class:list={['section-sm', { 'bg-2': ci % 2 === 1 }]} id={c.id}>
       <div class="wrap">
-        <div class="section-head" style="margin-bottom:clamp(2rem,4vw,3rem)">
+        <div class="section-head" style="margin-bottom:clamp(1.25rem,2.5vw,1.75rem)">
           <div><p class="label" data-reveal><span class="n">{String(ci + 1).padStart(2, '0')}</span> {s.nav.gallery}</p><h2>{c.title}</h2></div>
           <p class="lead" data-reveal>{c.lead}</p>
         </div>
-        <div class:list={[c.layout === 'grid' ? 'g-grid' : 'g-row']} style={c.cols ? `--cols:${c.cols}` : undefined}>
+        <div class="g-flow">
           {c.photos.map((k) => (
             <a class="g-item" href={full[k]} style={`--r:${ratio(k)}`} data-lightbox data-caption={getPhoto(k).alt[lang]} data-post={getPhoto(k).post} data-reveal>
-              <Photo name={k} lang={lang} sizes="(min-width: 960px) 30vw, 50vw" />
+              <Photo name={k} lang={lang} sizes={`(min-width: 860px) ${Math.ceil(20 * Number(ratio(k)))}vw, ${Math.ceil(50 * Number(ratio(k)))}vw`} />
             </a>
           ))}
           {c.more && (
-            <a class="g-more" href={ig.url} target="_blank" rel="noopener" data-reveal>
+            <a class="g-more" href={ig.url} target="_blank" rel="noopener" data-reveal style="--r:1">
               <Logo />
               <span>{s.gallery.more}</span>
               <span class="link">@{ig.handle}</span>
