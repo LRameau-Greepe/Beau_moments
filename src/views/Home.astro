@@ -6,6 +6,8 @@ import Photo from '../components/Photo.astro';
 import Logo from '../components/Logo.astro';
 import Icon from '../components/Icon.astro';
 import Sketch from '../components/Sketch.astro';
+import Carousel from '../components/Carousel.astro';
+import { feest, feestSlides } from '../lib/feestdagen';
 import { eventTypes } from '../lib/events';
 import { dishes } from '../lib/dishes';
 import { reviews, reviewsPost } from '../lib/reviews';
@@ -17,11 +19,11 @@ import { L as Lx, type Lang } from '../i18n/locales';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = t(lang);
+const f = feest[lang];
 const h = s.home;
 const L = Lx(lang);
 const gallery: PhotoKey[] = ['table-candles', 'appetizers', 'scallops'];
 const g3 = '(min-width: 1320px) 430px, (min-width: 760px) 32vw, 50vw';
-const menu = s.takeaway.past[0];
 ---
 <Base lang={lang} title={s.meta.homeTitle} description={s.meta.homeDesc} alternates={allLangs((l) => pagePath('home', l))} ogPhoto="table-room" hideCta>
   <section class="hero">
@@ -109,25 +111,25 @@ const menu = s.takeaway.past[0];
     </div>
   </section>
 
-  <!-- 04 · Afhaal : photo + texte, avec la liste du dernier menu -->
+  <!-- 04 · Afhaal Feestdagen 2026 : texte + carrousel des visuels de la publication Instagram -->
   <section class="section bg-2">
-    <div class="wrap g12 split reverse">
-      <div class="split-media" style="--col:8 / span 5"><Photo name="apero" lang={lang} maxh="min(66svh, 38rem)" sizes="(min-width: 900px) 34vw, 100vw" /></div>
-      <div class="split-text" style="--col:1 / span 6">
-        <p class="label" data-reveal><span class="n">04</span> {s.nav.takeaway}</p>
-        <h2 data-split>{h.takeawayTitle}</h2>
-        <p class="lead" data-reveal>{h.takeawayText}</p>
+    <div class="wrap g12 split feest-split">
+      <div class="split-text" style="--col:1 / span 5">
+        <p class="label" data-reveal><span class="n">04</span> {f.label}</p>
+        <h2 data-split>{f.title}</h2>
+        <p class="lead" data-reveal>{f.lead}</p>
         <div class="mini-menu" data-reveal>
-          <p class="mm-title">{s.takeaway.cardTitle} · {menu.date}</p>
           <ul>
-            {menu.items.map((it) => <li><span>{it.name}</span><span>{it.price}</span></li>)}
+            {f.short.map((it) => <li><span>{it.name}</span><span>{it.price}</span></li>)}
           </ul>
+          <p class="mm-note">{f.deadline}</p>
         </div>
         <p class="actions" data-reveal>
-          <a class="btn btn-solid" href={telHref}>{s.takeaway.call}</a>
+          <a class="btn btn-solid" href={`mailto:${site.takeawayEmail}`}>{f.orderCta}</a>
           <a class="link" href={pagePath('takeaway', lang)}>{s.common.moreInfo}</a>
         </p>
       </div>
+      <div class="split-media" style="--col:7 / span 6"><Carousel photos={feestSlides} lang={lang} label={f.label} height="min(62svh, 34rem)" /></div>
     </div>
   </section>
 

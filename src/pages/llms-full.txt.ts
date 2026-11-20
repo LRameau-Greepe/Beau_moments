@@ -3,6 +3,7 @@ import type { APIRoute } from 'astro';
 import { site, abs, addressLine } from '../lib/site';
 import { eventTypes } from '../lib/events';
 import { reviews } from '../lib/reviews';
+import { feest } from '../lib/feestdagen';
 import { ui } from '../i18n/ui';
 import { pagePath, eventPath } from '../i18n/routes';
 
@@ -84,9 +85,21 @@ export const GET: APIRoute = () => {
     '',
     ...s.takeaway.how.map((h, i) => `${i + 1}. **${h.title}**: ${h.text}`),
     '',
-    `### ${s.takeaway.pastTitle}`,
+    `### ${feest.en.label}`,
     '',
-    ...s.takeaway.past.flatMap((m) => [`**${m.date}**`, ...m.items.map((it) => `- ${it.name}: ${it.price}${'note' in it && it.note ? ` (${it.note})` : ''}`), '']),
+    feest.en.lead,
+    '',
+    `**${feest.en.menuTitle}**`,
+    ...feest.en.courses.map((c) => `- ${c.name}: ${c.dish}`),
+    ...feest.en.prices.map((p) => `- ${p.name}: ${p.price}`),
+    feest.en.fourNote,
+    '',
+    `**${feest.en.classicsTitle}**`,
+    ...feest.en.classics.map((c) => `- ${c.name}${c.note ? ` (${c.note})` : ''}: ${c.price}`),
+    '',
+    `**${feest.en.orderTitle}** (by email to afhaal@beau-moments.be): ${feest.en.order.join('; ')}`,
+    `**${feest.en.pickupTitle}**: ${feest.en.pickup.join('; ')}`,
+    '',
     '---',
     '',
     '## Client reviews (Dutch, original wording)',

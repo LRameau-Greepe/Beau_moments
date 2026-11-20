@@ -63,6 +63,11 @@ import p_behind_the_curtain from '../assets/photos/instagram/behind-the-curtain.
 import p_bites_tray from '../assets/photos/instagram/bites-tray.jpg';
 import p_caviar_dish from '../assets/photos/instagram/caviar-dish.jpg';
 
+import p_feest_cover from '../assets/photos/instagram/feest-cover.jpg';
+import p_feest_menu from '../assets/photos/instagram/feest-menu.jpg';
+import p_feest_classics from '../assets/photos/instagram/feest-classics.jpg';
+import p_feest_order from '../assets/photos/instagram/feest-order.jpg';
+
 export interface Photo {
   src: ImageMetadata;
   alt: Record<Lang, string>;
@@ -132,6 +137,10 @@ export const photos = {
   "behind-the-curtain": { src: p_behind_the_curtain, post: p("DH6PyCttrjZ"), alt: { nl: "Linnen gordijn met licht erachter: achter de schermen", fr: "Rideau de lin éclairé : en coulisses", en: "A linen curtain lit from behind: behind the scenes" } },
   "bites-tray": { src: p_bites_tray, post: p("DH5fRirNe2e"), alt: { nl: "Een schaal met hapjes wordt rondgedragen, in zwart-wit", fr: "Un plateau de bouchées porté par un serveur, en noir et blanc", en: "A tray of bites carried by a server, in black and white" } },
   "caviar-dish": { src: p_caviar_dish, post: p("DHyWKket1kd"), alt: { nl: "Visgerecht met kaviaar en saus op een geribd bord, aan een gedekte tafel", fr: "Poisson au caviar et sa sauce sur assiette striée, à une table dressée", en: "Fish with caviar and sauce on a ribbed plate at a laid table" } },
+  "feest-cover": { src: p_feest_cover, post: p("Df9vzkyjThl"), alt: { nl: "Kaart Afhaal Feestdagen 2026 in een bordeaux fluwelen envelop", fr: "Carte « Afhaal Feestdagen 2026 » dans une enveloppe de velours bordeaux", en: "Afhaal Feestdagen 2026 card in a burgundy velvet envelope" } },
+  "feest-menu": { src: p_feest_menu, post: p("Df9vzkyjThl"), alt: { nl: "Menukaart Kerst & Nieuwjaar 2026 van BEAU MOMENTS, met amuses, voorgerecht, tussengerecht, hoofdgerecht en dessert", fr: "Carte du menu de Noël et Nouvel An 2026 de BEAU MOMENTS : mises en bouche, entrée, entrée intermédiaire, plat et dessert", en: "BEAU MOMENTS Christmas & New Year 2026 menu card: amuse-bouches, starter, intermediate course, main and dessert" } },
+  "feest-classics": { src: p_feest_classics, post: p("Df9vzkyjThl"), alt: { nl: "Kaart feestelijke klassiekers: vol-au-vent, stoofpot van hert en extra’s", fr: "Carte des classiques festifs : vol-au-vent, ragoût de cerf et extras", en: "Festive classics card: vol-au-vent, venison stew and extras" } },
+  "feest-order": { src: p_feest_order, post: p("Df9vzkyjThl"), alt: { nl: "Kaart bestellen en afhalen voor Kerst en Nieuwjaar 2026", fr: "Carte commande et retrait pour Noël et Nouvel An 2026", en: "Ordering and collection card for Christmas and New Year 2026" } },
 } satisfies Record<string, Photo>;
 
 export type PhotoKey = keyof typeof photos;
