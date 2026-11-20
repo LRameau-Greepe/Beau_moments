@@ -35,9 +35,12 @@ const ig = site.social.instagram;
       <div class="section-head">
         <div><p class="label" data-reveal><span class="n">01</span> {k.howLabel}</p><h2>{k.howTitle}</h2></div>
       </div>
-      <ol class="steps" style="grid-template-columns:repeat(3,minmax(0,1fr))">
-        {k.how.map((p, i) => <li data-reveal style={`--d:${i * 0.1}s`}><h3>{p.title}</h3><p>{p.text}</p></li>)}
-      </ol>
+      <div class="g12 how-split">
+        <div class="how-photo"><Photo name="croquettes" lang={lang} maxh="min(46svh, 26rem)" sizes="(min-width: 860px) 32vw, 100vw" /></div>
+        <ol class="steps how-steps">
+          {k.how.map((p, i) => <li data-reveal style={`--d:${i * 0.1}s`}><h3>{p.title}</h3><p>{p.text}</p></li>)}
+        </ol>
+      </div>
     </div>
   </section>
 
