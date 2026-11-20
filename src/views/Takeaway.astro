@@ -35,12 +35,18 @@ const ig = site.social.instagram;
       <div class="section-head">
         <div><p class="label" data-reveal><span class="n">01</span> {k.howLabel}</p><h2>{k.howTitle}</h2></div>
       </div>
-      <div class="g12 how-split">
-        <div class="how-photo"><Photo name="croquettes" lang={lang} maxh="min(46svh, 26rem)" sizes="(min-width: 860px) 32vw, 100vw" /></div>
-        <ol class="steps how-steps">
-          {k.how.map((p, i) => <li data-reveal style={`--d:${i * 0.1}s`}><h3>{p.title}</h3><p>{p.text}</p></li>)}
-        </ol>
+      <!-- Schéma : la semaine du menu à emporter (nouveau menu → commande par téléphone jusqu'à jeudi → retrait vendredi) -->
+      <div class="week" data-reveal>
+        <div class="week-days" aria-hidden="true">{k.scheme.days.map((d, i) => <span class:list={{ 'is-fri': i === 4 }}>{d}</span>)}</div>
+        <div class="week-bars">
+          <p class="wk-menu"><span class="wk-pin" aria-hidden="true"></span>{k.scheme.menu}</p>
+          <p class="wk-order"><strong>{k.scheme.order}</strong><a href={telHref}>{site.phone}</a></p>
+          <p class="wk-pick"><strong>{k.scheme.pick}</strong><span>{k.scheme.where}</span></p>
+        </div>
       </div>
+      <ol class="week-steps">
+        {k.how.map((p, i) => <li data-reveal style={`--d:${i * 0.1}s`}><span class="ws-n">{String(i + 1).padStart(2, '0')}</span><h3>{p.title}</h3><p>{p.text}</p></li>)}
+      </ol>
     </div>
   </section>
 

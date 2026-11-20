@@ -17,8 +17,6 @@ const ev = getEventType(eventKey);
 const c = ev.copy[lang];
 const preset = eventTypes.findIndex((x) => x.key === eventKey);
 const faq = [...c.faq, ...s.catering.faq.slice(0, 3)];
-// Photo à côté de la FAQ (différente de celles de la page)
-const faqPhoto = { home: 'private-dining-bowls', celebrations: 'flower-bites', weddings: 'table-flowers', corporate: 'atelier-dining-room' } as const;
 // Trois gerechten carrés, différents selon la formule
 const offset = preset % 2 === 0 ? 0 : 1;
 const shown = dishes.slice(offset, offset + 3);
@@ -86,11 +84,11 @@ const ld = [
   </section>
 
   <section class="wrap section g12 faq-grid" style="padding-top:0">
-    <div><p class="label" data-reveal>{s.common.faq}</p><h2 data-split>{c.name}</h2><Photo name={faqPhoto[eventKey]} lang={lang} class="faq-photo" sizes="(min-width: 860px) 30vw, 100vw" /></div>
+    <div><p class="label" data-reveal>{s.common.faq}</p><h2 data-split>{c.name}</h2></div>
     <Faq items={faq} />
   </section>
 
-  <section class="section bg-sand" id="aanvraag">
+  <section class="section bg-2" id="aanvraag">
     <div class="wrap g12 form-grid">
       <div>
         <p class="label" data-reveal>{s.catering.formLabel}</p>

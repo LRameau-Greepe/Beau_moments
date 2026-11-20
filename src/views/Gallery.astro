@@ -19,32 +19,33 @@ const s = t(lang);
 const ig = site.social.instagram;
 const L = Lx(lang);
 
-type Layout = 'carousel' | 'mosaic' | 'mosaic-r' | 'row';
-const chapters: { id: string; title: string; lead: string; layout: Layout; photos: PhotoKey[]; more?: boolean }[] = [
-  { id: 'gerechten', layout: 'carousel', title: L('Op het bord', 'Dans l’assiette', 'On the plate'),
+// frame = format commun à toutes les photos du chapitre (largeur / hauteur) ; cols = colonnes pour une grille
+type Layout = 'carousel' | 'grid';
+const chapters: { id: string; title: string; lead: string; layout: Layout; frame: [number, number]; cols?: number; photos: PhotoKey[]; more?: boolean }[] = [
+  { id: 'gerechten', layout: 'carousel', frame: [4, 5], title: L('Op het bord', 'Dans l’assiette', 'On the plate'),
     lead: L('Klassiek Frans, met een moderne toets: kreeft, langoustine, hamachi, oesters en desserts.', 'Classique français, touche moderne : homard, langoustine, hamachi, huîtres et desserts.', 'Classic French with a modern touch: lobster, langoustine, hamachi, oysters and desserts.'),
-    photos: ['lobster-caviar', 'caviar-dish', 'egg-shrimp-tray', 'langoustine', 'hamachi', 'scallop-dish', 'lobster-sauce', 'oysters', 'langoustine-ceviche', 'side-dish', 'strawberry-dessert', 'dame-blanche', 'hazelnut-tart'] },
-  { id: 'atelier', layout: 'mosaic', title: L('Het atelier', 'L’atelier', 'The atelier'),
+    photos: ['lobster-caviar', 'caviar-dish', 'egg-shrimp-tray', 'langoustine', 'hamachi', 'scallop-dish', 'lobster-sauce', 'oysters', 'european-lobster', 'langoustine-ceviche', 'side-dish', 'strawberry-dessert', 'dame-blanche', 'hazelnut-tart'] },
+  { id: 'atelier', layout: 'grid', frame: [3, 4], cols: 4, title: L('Het atelier', 'L’atelier', 'The atelier'),
     lead: L('Industrielaan 3/C1 in Maldegem: private dining voor 8 tot 18 personen.', 'Industrielaan 3/C1 à Maldegem : dîners privés pour 8 à 18 personnes.', 'Industrielaan 3/C1 in Maldegem: private dining for 8 to 18 guests.'),
-    photos: ['atelier-facade', 'atelier-from-above', 'atelier-dining-room', 'atelier-dinner-from-above', 'atelier-candles'] },
-  { id: 'tafels', layout: 'carousel', title: L('Gedekte tafels', 'Tables dressées', 'Laid tables'),
+    photos: ['atelier-facade', 'atelier-dinner-from-above', 'atelier-dining-room', 'atelier-candles'] },
+  { id: 'tafels', layout: 'carousel', frame: [1, 1], title: L('Gedekte tafels', 'Tables dressées', 'Laid tables'),
     lead: L('Een prachtig gedekte tafel maakt het plaatje compleet: thuis, in de tuin of in een oude schuur.', 'Une belle table dressée complète le tableau : à la maison, au jardin ou dans une vieille grange.', 'A beautifully laid table completes the picture: at home, in the garden or in an old barn.'),
     photos: ['table-room', 'table-lemons', 'valentine-table', 'table-long', 'garden-table', 'table-flowers', 'valentine-barn', 'table-candles', 'flowers'] },
-  { id: 'receptie', layout: 'mosaic-r', title: L('Hapjes & receptie', 'Bouchées & réception', 'Canapés & receptions'),
+  { id: 'receptie', layout: 'grid', frame: [1, 1], cols: 5, title: L('Hapjes & receptie', 'Bouchées & réception', 'Canapés & receptions'),
     lead: L('Koud geserveerd, warm ontvangen: zo beginnen feesten.', 'Servi froid, accueilli chaleureusement : ainsi commencent les fêtes.', 'Served cold, welcomed warmly: that is how parties begin.'),
-    photos: ['flower-bites', 'appetizers', 'egg-shrimp-garden', 'tartelettes', 'waiter-tray'] },
-  { id: 'producten', layout: 'row', title: L('Producten', 'Les produits', 'The produce'),
-    lead: L('Coquilles Saint-Jacques, Europese kreeft, gemarmerd rundvlees: alleen het beste.', 'Saint-Jacques, homard européen, bœuf persillé : seulement le meilleur.', 'Scallops, European lobster, marbled beef: only the best.'),
-    photos: ['scallops', 'european-lobster', 'beef-cuts', 'olive-oil-tasting'] },
-  { id: 'achter-de-schermen', layout: 'carousel', title: L('Achter de schermen', 'En coulisses', 'Behind the scenes'),
+    photos: ['appetizers', 'flower-bites', 'egg-shrimp-garden', 'tartelettes', 'waiter-tray'] },
+  { id: 'producten', layout: 'grid', frame: [3, 2], cols: 3, title: L('Producten', 'Les produits', 'The produce'),
+    lead: L('Coquilles Saint-Jacques, gemarmerd rundvlees, olijfolie: alleen het beste.', 'Saint-Jacques, bœuf persillé, huile d’olive : seulement le meilleur.', 'Scallops, marbled beef, olive oil: only the best.'),
+    photos: ['scallops', 'beef-cuts', 'olive-oil-tasting'] },
+  { id: 'achter-de-schermen', layout: 'carousel', frame: [3, 4], title: L('Achter de schermen', 'En coulisses', 'Behind the scenes'),
     lead: L('Achter het gordijn worden de mooiste momenten voorbereid.', 'Derrière le rideau se préparent les plus beaux moments.', 'Behind the curtain, the finest moments are prepared.'),
     photos: ['plating-sauce', 'chef-plating', 'kitchen-beef', 'bert-serving', 'apron-details', 'ready-to-serve', 'bites-tray', 'champagne-bar', 'behind-the-curtain', 'amuse-spoons'] },
-  { id: 'bubbels', layout: 'row', title: L('Bubbels & aperitief', 'Bulles & apéritif', 'Bubbles & aperitif'),
+  { id: 'bubbels', layout: 'grid', frame: [4, 5], cols: 4, title: L('Bubbels & aperitief', 'Bulles & apéritif', 'Bubbles & aperitif'),
     lead: L('Ook alcoholvrij: AWA Shiso, met Japanse signatuur.', 'Aussi sans alcool : AWA Shiso, d’inspiration japonaise.', 'Alcohol-free too: AWA Shiso, with a Japanese signature.'),
     photos: ['awa-shiso-ice', 'awa-shiso-bottle', 'apero', 'croquettes'] },
-  { id: 'momenten', layout: 'mosaic', title: L('Momenten', 'Moments', 'Moments'),
+  { id: 'momenten', layout: 'grid', frame: [4, 5], cols: 4, title: L('Momenten', 'Moments', 'Moments'),
     lead: L('Bert, Aude en hun gasten.', 'Bert, Aude et leurs invités.', 'Bert, Aude and their guests.'),
-    photos: ['bert-and-aude', 'aude-with-guests', 'serving-bubbles', 'aude-at-work'], more: true },
+    photos: ['bert-and-aude', 'aude-with-guests', 'serving-bubbles'], more: true },
 ];
 
 // Version grand format pour la visionneuse (jusqu'à la pleine résolution de l'original)
@@ -93,11 +94,11 @@ const ui = {
         </div>
 
         {c.layout === 'carousel' && (
-          <div class="g-carousel" data-gcarousel data-reveal>
+          <div class="g-carousel" data-gcarousel data-reveal style={`--frame:${c.frame[0]} / ${c.frame[1]};--fr:${(c.frame[0] / c.frame[1]).toFixed(4)}`}>
             <div class="g-track" tabindex="0" aria-label={c.title}>
               {c.photos.map((k) => (
-                <a class="g-item" href={full[k]} style={`--r:${ratio(k)}`} data-lightbox data-caption={getPhoto(k).alt[lang]} data-post={getPhoto(k).post}>
-                  <Photo name={k} lang={lang} sizes={`(min-width: 860px) ${Math.ceil(42 * Number(ratio(k)))}vw, ${Math.ceil(70 * Number(ratio(k)))}vw`} />
+                <a class="g-item g-frame" href={full[k]} data-lightbox data-caption={getPhoto(k).alt[lang]} data-post={getPhoto(k).post}>
+                  <Photo name={k} lang={lang} sizes="(min-width: 860px) 34vw, 70vw" />
                 </a>
               ))}
             </div>
@@ -116,30 +117,20 @@ const ui = {
           </div>
         )}
 
-        {(c.layout === 'mosaic' || c.layout === 'mosaic-r') && (
-          <div class:list={['g-mosaic', { 'is-right': c.layout === 'mosaic-r' }]} data-reveal>
-            {c.photos.map((k, i) => (
-              <a class:list={['g-item', { 'is-big': i === 0 }]} href={full[k]} data-lightbox data-caption={getPhoto(k).alt[lang]} data-post={getPhoto(k).post}>
-                <Photo name={k} lang={lang} sizes={i === 0 ? '(min-width: 860px) 50vw, 100vw' : '(min-width: 860px) 25vw, 50vw'} />
+        {c.layout === 'grid' && (
+          <div class="g-fgrid" data-reveal style={`--frame:${c.frame[0]} / ${c.frame[1]};--fr:${(c.frame[0] / c.frame[1]).toFixed(4)}` + `;--cols:${c.cols}`}>
+            {c.photos.map((k) => (
+              <a class="g-item g-frame" href={full[k]} data-lightbox data-caption={getPhoto(k).alt[lang]} data-post={getPhoto(k).post}>
+                <Photo name={k} lang={lang} sizes={`(min-width: 860px) ${Math.ceil(100 / (c.cols ?? 3))}vw, 50vw`} />
               </a>
             ))}
             {c.more && (
-              <a class="g-more" href={ig.url} target="_blank" rel="noopener">
+              <a class="g-more g-frame" href={ig.url} target="_blank" rel="noopener">
                 <Logo />
                 <span>{s.gallery.more}</span>
                 <span class="link">@{ig.handle}</span>
               </a>
             )}
-          </div>
-        )}
-
-        {c.layout === 'row' && (
-          <div class="g-row" data-reveal>
-            {c.photos.map((k) => (
-              <a class="g-item" href={full[k]} style={`--r:${ratio(k)}`} data-lightbox data-caption={getPhoto(k).alt[lang]} data-post={getPhoto(k).post}>
-                <Photo name={k} lang={lang} sizes="(min-width: 860px) 30vw, 50vw" />
-              </a>
-            ))}
           </div>
         )}
       </div>

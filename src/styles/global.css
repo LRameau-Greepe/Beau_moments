@@ -941,3 +941,85 @@ a[href^="tel:"], a[href^="mailto:"] { white-space: nowrap; }
 .how-steps li::before { grid-row: span 2; margin: 0; font-size: 2rem; }
 .how-steps h3 { margin-bottom: 0.25rem; }
 .head-side .rating { margin: 0; }
+
+/* ---------- Catering : « Zo werken we » en ligne du temps ---------- */
+.timeline { --dot: 3.5rem; position: relative; list-style: none; margin: clamp(0.5rem, 2vw, 1.5rem) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--gap); }
+.timeline::before, .timeline::after { content: ''; position: absolute; left: calc(var(--dot) / 2); right: 0; top: calc(var(--dot) / 2); height: 1px; background: var(--line-2); }
+.timeline::after { background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform 1.8s var(--ease-io) 0.2s; }
+.timeline li { position: relative; padding-right: 1rem; }
+.tl-dot {
+  position: relative; z-index: 1; display: grid; place-items: center; width: var(--dot); height: var(--dot); margin-bottom: 1.5rem;
+  border: 1px solid var(--ink); border-radius: 50%; background: var(--sand); font-family: var(--serif); font-style: italic; font-size: 1.3rem;
+}
+.timeline h3 { font-size: clamp(1.45rem, 1.25rem + 0.6vw, 1.9rem); margin-bottom: 0.5rem; }
+.timeline p { color: var(--ink-2); margin: 0; font-size: 0.97rem; }
+/* Apparition : la ligne se dessine, les étapes suivent une à une */
+.js .timeline[data-reveal] { opacity: 1; transform: none; }
+.js .timeline li { opacity: 0; transform: translateY(14px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); transition-delay: calc(0.35s + var(--i) * 0.35s); }
+.js .timeline.is-in li { opacity: 1; transform: none; }
+.timeline.is-in::after { transform: scaleX(1); }
+/* Téléphone et tablette : ligne du temps verticale */
+@media (max-width: 860px) {
+  .timeline { grid-template-columns: 1fr; row-gap: 2rem; }
+  .timeline::before, .timeline::after { left: calc(var(--dot) / 2); right: auto; top: calc(var(--dot) / 2); bottom: calc(var(--dot) / 2); width: 1px; height: auto; }
+  .timeline::after { transform: scaleY(0); transform-origin: top; }
+  .timeline.is-in::after { transform: scaleY(1); }
+  .timeline li { display: grid; grid-template-columns: var(--dot) 1fr; column-gap: 1.25rem; padding-right: 0; }
+  .tl-dot { grid-row: span 2; margin-bottom: 0; }
+  .timeline h3 { align-self: center; margin: 0.6rem 0 0.25rem; }
+}
+
+/* FAQ : intro, contacts, accordéon plus compact (11 questions tiennent dans un écran) */
+.faq-intro { color: var(--ink-2); margin: 0.5rem 0 1rem; max-width: 26rem; }
+.faq-contacts { display: grid; gap: 0.3rem; margin: 0; font-size: 0.95rem; }
+.faq-contacts a:hover { color: var(--rouge-text); }
+.faq summary { padding: 1.05rem 0; font-size: clamp(1.15rem, 1.05rem + 0.35vw, 1.4rem); }
+.faq-a { padding-bottom: 1.25rem; }
+.faq-grid .faq-photo { width: min(100%, calc(min(30svh, 17rem) * var(--r))); }
+
+/* ---------- Afhaal : schéma de la semaine ---------- */
+.week { --cols: repeat(5, minmax(0, 1fr)); margin-top: clamp(0.5rem, 2vw, 1.25rem); }
+.week-days { display: grid; grid-template-columns: var(--cols); border-bottom: 1px solid var(--line-2); }
+.week-days span { padding: 0 0 0.7rem; font-family: var(--serif); font-style: italic; font-size: clamp(1.2rem, 1rem + 0.6vw, 1.6rem); color: var(--ink-2); border-left: 1px solid var(--line); padding-left: 0.75rem; }
+.week-days span.is-fri { color: var(--rouge-text); }
+.week-bars { display: grid; grid-template-columns: var(--cols); row-gap: 0.6rem; padding-top: 0.9rem; }
+.week-bars p { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 1rem; padding: 0.85rem 1rem; font-size: 0.9rem; }
+.wk-menu { grid-column: 1 / span 2; padding-left: 0 !important; color: var(--ink-2); justify-content: flex-start !important; align-items: center !important; }
+.wk-pin { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--rouge); box-shadow: 0 0 0 4px rgba(160, 105, 90, 0.18); flex: none; }
+.wk-order { grid-column: 1 / span 4; grid-row: 2; background: var(--ink); color: var(--paper); position: relative; margin-right: 1.1rem !important; }
+.wk-order::after { content: ''; position: absolute; right: -1.1rem; top: 0; bottom: 0; width: 1.1rem; background: var(--ink); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.wk-order a { color: var(--paper); white-space: nowrap; }
+.wk-pick { grid-column: 5; grid-row: 2; background: var(--rouge-text); color: var(--paper); flex-direction: column; justify-content: center !important; }
+.week-bars strong { font-weight: 450; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.7rem; }
+/* Barres : se remplissent de gauche à droite à l'apparition */
+.js .week .wk-order, .js .week .wk-pick { clip-path: inset(0 100% 0 0); transition: clip-path 1.1s var(--ease-io); }
+.js .week .wk-pick { transition-delay: 0.9s; }
+.js .week.is-in .wk-order, .js .week.is-in .wk-pick { clip-path: inset(0 0 0 0); }
+.week-steps { list-style: none; padding: 0; margin: clamp(2rem, 4vw, 3rem) 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--gap); }
+.week-steps li { padding-top: 1.25rem; border-top: 1px solid var(--line-2); }
+.ws-n { display: block; font-size: 0.68rem; letter-spacing: 0.26em; color: var(--muted); margin-bottom: 0.75rem; }
+.week-steps h3 { font-size: clamp(1.35rem, 1.2rem + 0.5vw, 1.7rem); margin-bottom: 0.35rem; }
+.week-steps p { color: var(--ink-2); margin: 0; font-size: 0.95rem; }
+@media (max-width: 760px) {
+  .week-bars p { padding: 0.7rem 0.6rem; font-size: 0.8rem; }
+  .wk-menu { grid-column: 1 / -1; }
+  .wk-pick strong + span { display: none; }
+  .week-steps { grid-template-columns: 1fr; row-gap: 1.5rem; }
+}
+
+/* ---------- Galerie : un seul format par chapitre ----------
+   .g-frame impose le format du chapitre (--frame) ; la photo remplit le cadre (la visionneuse montre la photo entière). */
+.g-frame { display: block; aspect-ratio: var(--frame); overflow: hidden; }
+.g-frame .ph { aspect-ratio: auto !important; width: 100%; height: 100%; }
+.g-frame.g-more { height: auto; }
+.g-track .g-item.g-frame { width: calc(var(--ch) * var(--fr)); }
+.g-fgrid { --gg: calc(var(--gap) / 1.5); display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: var(--gg); }
+@media (max-width: 860px) {
+  .g-fgrid { grid-template-columns: 1fr 1fr; }
+  .g-fgrid > :last-child:nth-child(odd) { grid-column: 1 / -1; aspect-ratio: calc(var(--fr) * 2 + 0.05); }
+}
+/* FAQ du catering : deux colonnes de questions */
+.faq-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 clamp(2rem, 4vw, 4rem); align-items: start; }
+.faq-wide .faq-intro { margin: 0; }
+@media (max-width: 860px) { .faq-cols { grid-template-columns: 1fr; } .faq-cols .faq + .faq { border-top: 0; } }
+.g-frame.g-more { display: flex; flex-direction: column; align-items: center; justify-content: center; }

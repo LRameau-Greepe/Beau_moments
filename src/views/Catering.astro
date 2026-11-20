@@ -83,21 +83,35 @@ const ld = [
       <div class="section-head">
         <div><p class="label" data-reveal><span class="n">03</span> {c.processLabel}</p><h2>{c.processTitle}</h2></div>
       </div>
-      <div class="g12 process-split">
-        <div class="process-photo"><Photo name="chef-plating" lang={lang} maxh="min(54svh, 28rem)" sizes="(min-width: 900px) 30vw, 100vw" /></div>
-        <ol class="steps">
-          {c.process.map((p, i) => <li data-reveal style={`--d:${i * 0.1}s`}><h3>{p.title}</h3><p>{p.text}</p></li>)}
-        </ol>
-      </div>
+      <!-- Ligne du temps : la ligne se dessine, puis chaque étape apparaît -->
+      <ol class="timeline" data-reveal>
+        {c.process.map((p, i) => (
+          <li style={`--i:${i}`}>
+            <span class="tl-dot" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+          </li>
+        ))}
+      </ol>
     </div>
   </section>
 
-  <section class="wrap section g12 faq-grid">
-    <div><p class="label" data-reveal><span class="n">04</span> {s.common.faq}</p><h2 data-split>{c.faqTitle}</h2><Photo name="table-lemons" lang={lang} class="faq-photo" sizes="(min-width: 860px) 30vw, 100vw" /></div>
-    <Faq items={c.faq} />
+  <!-- FAQ : en-tête sur toute la largeur, questions sur deux colonnes -->
+  <section class="wrap section faq-wide">
+    <div class="section-head">
+      <div><p class="label" data-reveal><span class="n">04</span> {s.common.faq}</p><h2>{c.faqTitle}</h2></div>
+      <div class="head-side" data-reveal>
+        <p class="faq-intro">{c.faqIntro}</p>
+        <p class="faq-contacts">{site.contacts.map((x) => <a href={tel(x.phone)}>{x.name} · {x.phone}</a>)}<a href={mailHref}>{site.email}</a></p>
+      </div>
+    </div>
+    <div class="faq-cols">
+      <Faq items={c.faq.slice(0, Math.ceil(c.faq.length / 2))} />
+      <Faq items={c.faq.slice(Math.ceil(c.faq.length / 2))} />
+    </div>
   </section>
 
-  <section class="section bg-sand" id="aanvraag">
+  <section class="section bg-2" id="aanvraag">
     <div class="wrap g12 form-grid">
       <div>
         <p class="label" data-reveal><span class="n">05</span> {c.formLabel}</p>
