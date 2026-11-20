@@ -10,6 +10,7 @@ import '@fontsource-variable/jost';
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
 import Wordmark from '../components/Wordmark.astro';
+import Sketch from '../components/Sketch.astro';
 import { getImage } from 'astro:assets';
 import { site, abs, tel, mailHref } from '../lib/site';
 import { getPhoto, type PhotoKey } from '../lib/photos';
@@ -232,7 +233,7 @@ const year = new Date().getFullYear();
     {!hideCta && (
       <section class="cta section" aria-labelledby="cta-title">
         <div class="wrap">
-          <Logo />
+          <Sketch name="cloche" />
           <p class="label center" data-reveal>{s.cta.label}</p>
           <h2 id="cta-title" data-split>{s.cta.title}</h2>
           <p data-reveal>{s.cta.text}</p>

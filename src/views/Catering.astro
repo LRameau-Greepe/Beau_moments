@@ -6,6 +6,7 @@ import Photo from '../components/Photo.astro';
 import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
+import Sketch from '../components/Sketch.astro';
 import { eventTypes } from '../lib/events';
 import { site, abs, tel, mailHref } from '../lib/site';
 import { pagePath, eventPath, allLangs } from '../i18n/routes';
@@ -41,7 +42,7 @@ const ld = [
     <div class="wrap g12">
       <div class="hero-text">
         <p class="label rise" style="--d:.05s">{c.label}</p>
-        <h1 style="font-size:clamp(3rem,1.5rem + 5vw,7rem);line-height:.98">{c.title}</h1>
+        <h1 style="font-size:clamp(2.8rem,1.5rem + 3.8vw,5.5rem);line-height:1">{c.title}</h1>
         <p class="lead rise" style="--d:.45s">{c.lead}</p>
         <p class="actions rise" style="--d:.6s"><a class="btn btn-solid" href="#aanvraag">{c.cta}</a></p>
       </div>
@@ -53,7 +54,6 @@ const ld = [
     <div class="wrap">
       <div class="section-head">
         <div><p class="label" data-reveal><span class="n">01</span> {c.typesLabel}</p><h2>{c.typesTitle}</h2></div>
-        <p class="lead" data-reveal>{s.home.cateringText}</p>
       </div>
       <div class="grid-4 formulas">
         {eventTypes.map((e, i) => (
@@ -68,22 +68,20 @@ const ld = [
     </div>
   </section>
 
-  <section class="wrap section">
+  <section class="wrap section g12 included-split">
+    <div class="included-art"><Sketch name="cloche" label={c.includedTitle} /></div>
+    <div>
     <div class="section-head">
       <div><p class="label" data-reveal><span class="n">02</span> {c.includedLabel}</p><h2>{c.includedTitle}</h2></div>
     </div>
     <ul class="included">
-      {c.included.map((it, i) => <li data-reveal style={`--d:${(i % 3) * 0.1}s`}><h3>{it.title}</h3><p>{it.text}</p></li>)}
+      {c.included.map((it, i) => <li data-reveal style={`--d:${(i % 2) * 0.1}s`}><h3>{it.title}</h3><p>{it.text}</p></li>)}
     </ul>
+    </div>
   </section>
 
   <section class="section bg-sand">
     <div class="wrap">
-      <div class="trio" data-reveal style="margin-bottom:clamp(4rem,7vw,6rem)">
-        <Photo name="table-lemons" lang={lang} sizes="(min-width: 760px) 32vw, 50vw" />
-        <Photo name="flower-bites" lang={lang} sizes="(min-width: 760px) 32vw, 50vw" />
-        <Photo name="table-flowers" lang={lang} sizes="(min-width: 760px) 32vw, 50vw" />
-      </div>
       <div class="section-head">
         <div><p class="label" data-reveal><span class="n">03</span> {c.processLabel}</p><h2>{c.processTitle}</h2></div>
       </div>
