@@ -2,7 +2,7 @@
 import type { APIRoute } from 'astro';
 import { site, abs, addressLine } from '../lib/site';
 import { eventTypes } from '../lib/events';
-import { reviews } from '../lib/reviews';
+import { reviews, googleRating } from '../lib/reviews';
 import { feest } from '../lib/feestdagen';
 import { ui } from '../i18n/ui';
 import { pagePath, eventPath } from '../i18n/routes';
@@ -102,9 +102,9 @@ export const GET: APIRoute = () => {
     '',
     '---',
     '',
-    '## Client reviews (Dutch, original wording)',
+    `## Google reviews (${googleRating.score}/5, ${googleRating.count} reviews; Dutch, original wording)`,
     '',
-    ...reviews.map((r) => `- “${r.quote.nl}” — ${r.author}`),
+    ...reviews.map((r) => `- “${r.quote.nl}” — ${r.author} (${r.stars}/5)`),
     '',
   ];
   return new Response(parts.join('\n'), { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });

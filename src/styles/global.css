@@ -1048,3 +1048,9 @@ a[href^="tel:"], a[href^="mailto:"] { white-space: nowrap; }
 .feest-block p { margin: 0 0 0.25rem; font-size: 0.9rem; }
 @media (max-width: 960px) { .feest-carousel, .feest-info { grid-column: 1 / -1; } }
 @media (max-width: 600px) { .feest-info { grid-template-columns: 1fr; row-gap: 1.5rem; } }
+/* Galerie : sommaire des chapitres en grille (noms alignés en colonnes) */
+.g-chapters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.7rem var(--gap); }
+.g-chapters a { gap: 0; }
+.g-chapters a span { display: inline-block; width: 2.1rem; flex: none; }
+@media (max-width: 860px) { .g-chapters { grid-template-columns: 1fr 1fr; gap: 0.7rem 1rem; } }
+.g-chapters a { display: grid; grid-template-columns: 2.1rem 1fr; align-items: baseline; }

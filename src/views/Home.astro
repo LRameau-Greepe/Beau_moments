@@ -10,12 +10,12 @@ import Carousel from '../components/Carousel.astro';
 import { feest, feestSlides } from '../lib/feestdagen';
 import { eventTypes } from '../lib/events';
 import { dishes } from '../lib/dishes';
-import { reviews, reviewsPost } from '../lib/reviews';
+import { reviews, googleRating, googleReviewsUrl } from '../lib/reviews';
 import { type PhotoKey } from '../lib/photos';
 import { site, telHref } from '../lib/site';
 import { pagePath, eventPath, allLangs } from '../i18n/routes';
 import { t } from '../i18n/ui';
-import { L as Lx, type Lang } from '../i18n/locales';
+import { L as Lx, localeInfo, type Lang } from '../i18n/locales';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = t(lang);
@@ -161,12 +161,12 @@ const g3 = '(min-width: 1320px) 430px, (min-width: 760px) 32vw, 50vw';
     </div>
   </section>
 
-  <!-- Avis des clients (en néerlandais, langue d'origine) -->
+  <!-- Avis Google (néerlandais d'origine ; traduits en FR/EN) -->
   <section class="section">
     <div class="wrap">
       <div class="section-head">
         <div><p class="label" data-reveal>{h.reviewsLabel}</p><h2>{h.reviewsTitle}</h2></div>
-        <div class="head-side" data-reveal><p class="rating"><span class="stars" aria-hidden="true">★★★★★</span></p><a class="link" href={reviewsPost} target="_blank" rel="noopener">{h.reviewsAll}</a></div>
+        <div class="head-side" data-reveal><p class="rating"><span class="rating-score">{googleRating.score.toLocaleString(localeInfo[lang].html)}</span><span><span class="stars" aria-hidden="true">★★★★★</span><br />{h.googleCount.replace('{n}', String(googleRating.count))}</span></p><a class="link" href={googleReviewsUrl} target="_blank" rel="noopener">{h.reviewsAll}</a></div>
       </div>
       <div class="rv-carousel" data-carousel data-reveal>
         <ul class="rv-track" role="list" aria-label={h.reviewsTitle} tabindex="0">
@@ -174,7 +174,7 @@ const g3 = '(min-width: 1320px) 430px, (min-width: 760px) 32vw, 50vw';
             <li class="rv-slide">
               <figure>
                 <blockquote>“{r.quote[lang]}”</blockquote>
-                <figcaption><span class="stars" aria-label="5/5">★★★★★</span>{r.author} · {h.reviewSource}</figcaption>
+                <figcaption><span class="stars" aria-label={r.stars + '/5'}>{'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}</span>{r.author} · {h.reviewSource}</figcaption>
               </figure>
             </li>
           ))}

@@ -1,59 +1,44 @@
-// Avis de clients publiés par BEAU MOMENTS sur Instagram (publication du 17 juin 2025).
-// Néerlandais : mot pour mot (langue d'origine ; les plus longs sont des extraits). Français et anglais : traductions fidèles.
-// Auteurs : prénom seul, comme sur les cartes.
+// Avis Google de la fiche « Beau Moments » (Industrielaan 3/C1, Maldegem), relevés le 23 novembre 2026 :
+// note 4,8 sur 5 avis (dont un sans texte). Néerlandais = texte d'origine, mot pour mot (le plus long est un extrait) ;
+// français et anglais = traductions fidèles. Auteurs : prénom + initiale du nom.
 import type { Lang } from '../i18n/locales';
 
-export const reviewsPost = 'https://www.instagram.com/p/DLA4A_fNlTr/';
+export const googleRating = { score: 4.8, count: 5 };
+export const googleReviewsUrl = 'https://www.google.com/maps/place/Beau+Moments/@51.1976681,3.4653947,17z/data=!4m8!3m7!1s0x47c367d3d21b71b3:0x73b62ceaea1bd83!8m2!3d51.1976681!4d3.4653947!9m1!1b1!16s%2Fg%2F11zx0xzb08';
 
-export interface Review { quote: Record<Lang, string>; author: string }
+export interface Review { quote: Record<Lang, string>; author: string; stars: number }
 
 export const reviews: Review[] = [
   {
-    author: 'Nicole',
+    author: 'Isabelle D.', stars: 5,
     quote: {
-      nl: 'Absoluut tevreden! Bert zeer fijne kookkunst en Aude vlotte, gedistingeerde bediening! Aanraders!!',
-      fr: 'Une satisfaction totale ! Une cuisine très raffinée de Bert et un service fluide et distingué d’Aude ! À recommander !!',
-      en: 'Absolutely delighted! Bert’s cooking is so refined and Aude’s service smooth and distinguished! Highly recommended!!',
+      nl: 'In één woord: Bert en Aude zijn fantastisch! Zowel culinair als in menselijk contact zijn Bert en Aude een topkoppel! Enorm lekkere keuken, zeer hartelijke bediening. Moesten we kunnen, we nemen beide in huis 😍',
+      fr: 'En un mot : Bert et Aude sont fantastiques ! Tant en cuisine que dans le contact humain, Bert et Aude forment un couple au top ! Une cuisine délicieuse, un service très chaleureux. Si nous le pouvions, nous les garderions tous les deux à la maison 😍',
+      en: 'In one word: Bert and Aude are fantastic! Both in the kitchen and in personal contact, Bert and Aude are a top couple! Incredibly delicious food, very warm service. If we could, we would keep them both at home 😍',
     },
   },
   {
-    author: 'Axelle',
+    author: 'Kimberly H.', stars: 5,
     quote: {
-      nl: 'We hebben enorm genoten van een fantastische avond dankzij dit geweldige duo. Hij toverde de ene smaakvolle creatie na de andere uit de keuken, terwijl zij alles met een glimlach en oog voor detail verzorgde. Een echte aanrader voor wie thuis wil genieten van een gastronomische avond zonder zorgen.',
-      fr: 'Nous avons adoré cette soirée fantastique grâce à ce duo formidable. Il a fait sortir de la cuisine une création savoureuse après l’autre, pendant qu’elle s’occupait de tout avec le sourire et le souci du détail. Vraiment à recommander pour profiter d’une soirée gastronomique chez soi, sans le moindre souci.',
-      en: 'We thoroughly enjoyed a fantastic evening thanks to this wonderful duo. He conjured one delicious creation after another from the kitchen, while she took care of everything with a smile and an eye for detail. A real must for anyone who wants a carefree fine-dining evening at home.',
+      nl: 'Voor een verrassingsetentje met 26 gasten deed ik beroep op Aude en Bert. Het eten was top en verzorgd tot in de puntjes. Ook de bediening was heel vriendelijk, vlot en professioneel. De gasten waren enorm lovend over de gerechten én de service. Dankzij Aude, Bert & het team werd het een geslaagde avond! Een echte aanrader!',
+      fr: 'J’ai fait appel à Aude et Bert pour un dîner surprise de 26 invités. La cuisine était excellente et soignée jusque dans les moindres détails. Le service était lui aussi très aimable, fluide et professionnel. Les invités ont été unanimes sur les plats comme sur le service. Grâce à Aude, Bert et l’équipe, la soirée a été une réussite ! À recommander vivement !',
+      en: 'I called on Aude and Bert for a surprise dinner with 26 guests. The food was excellent and perfect down to the last detail. The service was also very friendly, smooth and professional. The guests were full of praise for both the dishes and the service. Thanks to Aude, Bert & the team it was a wonderful evening! Highly recommended!',
     },
   },
   {
-    author: 'Jessica',
+    author: 'Lies B.', stars: 5,
     quote: {
-      nl: 'Een geweldige ervaring!!! Het eten op de communie van onze dochter was niet alleen erg lekker, maar ook mooi gepresenteerd en met zorg bereid. Je merkt dat er aandacht, passie en liefde in zit.',
-      fr: 'Une expérience formidable !!! Le repas de la communion de notre fille était non seulement délicieux, mais aussi joliment présenté et préparé avec soin. On sent l’attention, la passion et l’amour qui y sont mis.',
-      en: 'A wonderful experience!!! The food at our daughter’s communion was not only delicious, but also beautifully presented and prepared with care. You can tell there is attention, passion and love in it.',
+      nl: 'Beste traiteurervaring van het voorbije jaar! Recent 2 dineetjes, en het was echt fantastisch! We namen de week nadien zelfs opnieuw hetzelfde menu, omdat het zo goed was. Bediening onder leiding van Aude is top, de lekkere gerechten van Bert maken het natuurlijk helemaal af. Alle gasten waren laaiend enthousiast!',
+      fr: 'La meilleure expérience traiteur de l’année ! Deux dîners récemment, et c’était vraiment fantastique ! La semaine suivante, nous avons même repris le même menu tant il était bon. Le service mené par Aude est au top, et les délicieux plats de Bert font le reste. Tous les invités étaient enthousiastes !',
+      en: 'Best catering experience of the past year! Two dinners recently, and it was truly fantastic! The following week we even ordered the same menu again because it was so good. The service led by Aude is top-notch, and Bert’s delicious dishes complete it all. Every guest was thrilled!',
     },
   },
   {
-    author: 'Marie',
+    author: 'Katrine B.', stars: 4,
     quote: {
-      nl: 'Super super merci voor vandaag. Het was heel dik in orde & we voelden ons heel op ons gemak om onze keuken aan andere mensen over te geven, de eerste keer! En wat een ervaring!',
-      fr: 'Un super super merci pour aujourd’hui. Tout était parfait et nous nous sommes sentis très à l’aise de confier notre cuisine à d’autres personnes, pour la première fois ! Et quelle expérience !',
-      en: 'A huge thank you for today. Everything was spot on & we felt completely at ease handing our kitchen over to other people, for the first time! And what an experience!',
-    },
-  },
-  {
-    author: 'Nele',
-    quote: {
-      nl: 'Wat deze ervaring echt speciaal maakte, was de vriendelijke en relaxte sfeer die het koppel creëerde. Wij kunnen niet wachten om hen opnieuw uit te nodigen voor een nieuwe kookervaring!',
-      fr: 'Ce qui a rendu cette expérience vraiment spéciale, c’est l’ambiance chaleureuse et détendue que le couple a créée. Nous avons hâte de les inviter à nouveau pour une nouvelle expérience culinaire !',
-      en: 'What made this experience truly special was the friendly, relaxed atmosphere the couple created. We can’t wait to invite them again for another cooking experience!',
-    },
-  },
-  {
-    author: 'Griet',
-    quote: {
-      nl: 'Een culinaire en gezellige beleving in onze eigen omgeving. Alles mooi gedecoreerd en nadien was onze keuken volledig spic en span. Onze gasten waren vol lof over hoe jullie het aanpakken en alles tot in de puntjes brengen.',
-      fr: 'Une expérience culinaire et conviviale, chez nous. Tout était joliment décoré et, après, notre cuisine était impeccable. Nos invités n’ont pas tari d’éloges sur votre façon de faire et le soin apporté à chaque détail.',
-      en: 'A culinary and convivial experience in our own home. Everything beautifully decorated, and afterwards our kitchen was spotless. Our guests were full of praise for how you go about it and get every detail just right.',
+      nl: 'Op vrijdag 28 augustus hebben wij kunnen genieten van de culinaire kookkunsten van Beau Moments. Het was een fijne ervaring. Het was super lekker, vlekkeloze en vriendelijke bediening! En na het diner was onze keuken tip top in orde.',
+      fr: 'Le vendredi 28 août, nous avons pu profiter du savoir-faire culinaire de Beau Moments. Une très belle expérience. C’était délicieux, avec un service impeccable et aimable ! Et après le dîner, notre cuisine était parfaitement en ordre.',
+      en: 'On Friday 28 August we enjoyed the culinary skills of Beau Moments. It was a lovely experience. Super delicious, with flawless and friendly service! And after dinner our kitchen was spotless.',
     },
   },
 ];
