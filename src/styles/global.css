@@ -1075,3 +1075,4 @@ a[href^="tel:"], a[href^="mailto:"] { white-space: nowrap; }
 @media (max-width: 1280px) and (min-width: 1081px) { .site-nav ul { gap: 1.35rem; } .bar { gap: 1.5rem; } .wm-sub { display: none; } }
 
 .week-allergens { margin-top: 1rem; }
+#feestdagen .section-head h2 { max-width: 24ch; text-wrap: balance; }
