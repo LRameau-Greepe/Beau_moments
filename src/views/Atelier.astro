@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Photo from '../components/Photo.astro';
 import Faq from '../components/Faq.astro';
 import ContactBlock from '../components/ContactBlock.astro';
+import { site, tel, mailHref } from '../lib/site';
 import { pagePath, allLangs } from '../i18n/routes';
 import { t } from '../i18n/ui';
 import type { Lang } from '../i18n/locales';
@@ -56,8 +57,18 @@ const ld = [{ '@type': 'FAQPage', mainEntity: a.faq.map((f) => ({ '@type': 'Ques
     </div>
   </section>
 
-  <section class="wrap section g12 faq-grid" style="padding-top:0">
-    <div><p class="label" data-reveal>{s.common.faq}</p><h2 data-split>{s.nav.atelier}</h2></div>
-    <Faq items={a.faq} />
+  <!-- FAQ : en-tête pleine largeur, questions sur deux colonnes -->
+  <section class="wrap section faq-wide" style="padding-top:0">
+    <div class="section-head">
+      <div><p class="label" data-reveal>{s.common.faq}</p><h2>{s.nav.atelier}</h2></div>
+      <div class="head-side" data-reveal>
+        <p class="faq-intro">{a.faqIntro}</p>
+        <p class="faq-contacts">{site.contacts.map((x) => <a href={tel(x.phone)}>{x.name} · {x.phone}</a>)}<a href={mailHref}>{site.email}</a></p>
+      </div>
+    </div>
+    <div class="faq-cols">
+      <Faq items={a.faq.slice(0, Math.ceil(a.faq.length / 2))} />
+      <Faq items={a.faq.slice(Math.ceil(a.faq.length / 2))} />
+    </div>
   </section>
 </Base>

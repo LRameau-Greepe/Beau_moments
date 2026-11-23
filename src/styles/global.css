@@ -1088,3 +1088,5 @@ a[href^="tel:"], a[href^="mailto:"] { white-space: nowrap; }
 .legal-block h2 { align-self: start; }
 .feest-title { text-wrap: balance; }
 .section-head > .lead, .section-head > .head-side { flex: 0 1 auto; max-width: 34rem; min-width: 0; }
+/* ---------- Titre principal (h1) : une seule taille sur toutes les pages ---------- */
+main h1, main h1[style], .hero-text h1[style], .hero-text h1.about-title, .page-head h1.legal-title, .page-head h1, .hero h1 { font-size: clamp(2.6rem, 1.4rem + 3.2vw, 4.75rem) !important; line-height: 1.02 !important; }
