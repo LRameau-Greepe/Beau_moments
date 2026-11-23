@@ -123,6 +123,7 @@ const g3 = '(min-width: 1320px) 430px, (min-width: 760px) 32vw, 50vw';
             {f.short.map((it) => <li><span>{it.name}</span><span>{it.price}</span></li>)}
           </ul>
           <p class="mm-note">{f.deadline}</p>
+          <p class="mm-note">{f.allergens}</p>
         </div>
         <p class="actions" data-reveal>
           <a class="btn btn-solid" href={`mailto:${site.takeawayEmail}`}>{f.orderCta}</a>

@@ -167,15 +167,16 @@ const year = new Date().getFullYear();
     <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
     <script type="application/ld+json" set:html={JSON.stringify(ld)} />
     <!-- Animations seulement si JavaScript tourne (sinon tout reste visible).
-         Intro : une seule fois par session, jamais si l'utilisateur limite les animations. -->
+         Intro : seulement à l'arrivée sur le site (depuis un autre site ou en direct), jamais si l'utilisateur
+         limite les animations. Aucun stockage dans le navigateur (ni cookie, ni sessionStorage). -->
     <script is:inline>
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
         try {
-          if (!sessionStorage.getItem('bm-intro') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          var fromSite = document.referrer && new URL(document.referrer).origin === location.origin;
+          if (!fromSite && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
             d.classList.add('has-intro');
-            sessionStorage.setItem('bm-intro', '1');
             setTimeout(function () { d.classList.remove('has-intro'); }, 1700);
           }
         } catch (e) {}

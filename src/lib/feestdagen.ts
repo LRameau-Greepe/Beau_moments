@@ -23,6 +23,7 @@ interface FeestCopy {
   orderCta: string;
   short: { name: string; price: string }[];
   deadline: string;
+  allergens: string;
 }
 
 export const feest: Record<Lang, FeestCopy> = {
@@ -55,6 +56,7 @@ export const feest: Record<Lang, FeestCopy> = {
     orderCta: 'Bestel per mail',
     short: [{ name: 'Feestmenu 3 gangen', price: '€ 85 p.p.' }, { name: 'Feestmenu 4 gangen', price: '€ 110 p.p.' }, { name: 'Vol-au-vent, Mechelse koekoek', price: '€ 30 / kg' }, { name: 'Stoofpot van hert', price: '€ 40 / kg' }],
     deadline: 'Bestellen tot 20/12 (Kerst) en 27/12 (Nieuwjaar), afhalen op 24/12 en 31/12.',
+    allergens: 'Allergenen: informatie op aanvraag, vóór je bestelling (info@beau-moments.be of telefonisch).',
   },
   fr: {
     label: 'À emporter pour les fêtes 2026',
@@ -85,6 +87,7 @@ export const feest: Record<Lang, FeestCopy> = {
     orderCta: 'Commander par e-mail',
     short: [{ name: 'Menu de fête 3 services', price: '85 € p.p.' }, { name: 'Menu de fête 4 services', price: '110 € p.p.' }, { name: 'Vol-au-vent au coucou de Malines', price: '30 € / kg' }, { name: 'Ragoût de cerf', price: '40 € / kg' }],
     deadline: 'Commande jusqu’au 20/12 (Noël) et au 27/12 (Nouvel An), retrait les 24/12 et 31/12.',
+    allergens: 'Allergènes : informations sur demande, avant votre commande (info@beau-moments.be ou par téléphone).',
   },
   en: {
     label: 'Holiday takeaway 2026',
@@ -115,5 +118,6 @@ export const feest: Record<Lang, FeestCopy> = {
     orderCta: 'Order by email',
     short: [{ name: 'Festive menu, 3 courses', price: '€85 pp' }, { name: 'Festive menu, 4 courses', price: '€110 pp' }, { name: 'Vol-au-vent, Mechelen cuckoo', price: '€30 / kg' }, { name: 'Venison stew', price: '€40 / kg' }],
     deadline: 'Order by 20/12 (Christmas) and 27/12 (New Year), collect on 24/12 and 31/12.',
+    allergens: 'Allergens: information on request, before you order (info@beau-moments.be or by phone).',
   },
 };

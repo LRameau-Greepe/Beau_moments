@@ -1073,3 +1073,5 @@ a[href^="tel:"], a[href^="mailto:"] { white-space: nowrap; }
 /* En-tête : jamais de retour à la ligne entre 1080 et 1280 px */
 .site-nav a, .wm-sub, .wm-name { white-space: nowrap; }
 @media (max-width: 1280px) and (min-width: 1081px) { .site-nav ul { gap: 1.35rem; } .bar { gap: 1.5rem; } .wm-sub { display: none; } }
+
+.week-allergens { margin-top: 1rem; }
