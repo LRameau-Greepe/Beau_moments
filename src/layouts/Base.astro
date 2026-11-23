@@ -368,6 +368,28 @@ const year = new Date().getFullYear();
       };
       toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
       addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
+
+      // ---- Titres de section sur une seule ligne : si un titre ne tient pas dans sa colonne,
+      // sa taille est réduite juste assez (au plus de 40 %) ; au-delà, il passe sur deux lignes. ----
+      const titles = [...document.querySelectorAll<HTMLElement>('main h2:not(.wrap-ok)')].filter((h) => !h.closest('.legal-block'));
+      const fitTitles = () => {
+        for (const h of titles) {
+          h.style.fontSize = '';
+          h.style.whiteSpace = 'nowrap';
+          const base = parseFloat(getComputedStyle(h).fontSize);
+          const room = h.parentElement!.clientWidth;
+          const need = h.scrollWidth;
+          if (need > room) {
+            const size = Math.max(base * 0.6, (base * room) / need - 0.5);
+            h.style.fontSize = size + 'px';
+            if (h.scrollWidth > h.parentElement!.clientWidth) h.style.whiteSpace = '';
+          }
+        }
+      };
+      let fitTimer = 0;
+      addEventListener('resize', () => { clearTimeout(fitTimer); fitTimer = window.setTimeout(fitTitles, 120); });
+      document.fonts?.ready.then(fitTitles);
+      fitTitles();
       document.querySelectorAll('#site-nav a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
     </script>
   </body>

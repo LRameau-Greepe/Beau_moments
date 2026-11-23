@@ -278,7 +278,7 @@ a:hover .ph img { opacity: 0.86; }
 
 /* ---------- En-têtes de section ---------- */
 .section-head { display: flex; justify-content: space-between; align-items: end; gap: 2rem; flex-wrap: wrap; margin-bottom: clamp(1.75rem, 3vw, 2.75rem); }
-.section-head h2 { margin: 0; max-width: 14ch; }
+.section-head h2 { margin: 0; max-width: none; text-wrap: balance; }
 .section-head .lead { margin: 0; }
 
 /* ---------- Cartes cocktail ---------- */
@@ -1076,3 +1076,15 @@ a[href^="tel:"], a[href^="mailto:"] { white-space: nowrap; }
 
 .week-allergens { margin-top: 1rem; }
 #feestdagen .section-head h2 { max-width: 24ch; text-wrap: balance; }
+/* Titres de section : sur une ligne dès que la place le permet */
+.section-head > div:first-child { flex: 1 1 auto; min-width: 0; }
+.section-head > .lead, .section-head > .head-side { flex: 0 1 34rem; }
+
+/* Formulaire de demande : colonne du titre plus large */
+.form-grid > :first-child { grid-column: 1 / span 5; }
+.form-grid > .enquiry { grid-column: 7 / span 6; }
+@media (max-width: 860px) { .form-grid > :first-child, .form-grid > .enquiry { grid-column: 1 / -1; } }
+/* Pages légales : intitulés alignés en haut de leur bloc */
+.legal-block h2 { align-self: start; }
+.feest-title { text-wrap: balance; }
+.section-head > .lead, .section-head > .head-side { flex: 0 1 auto; max-width: 34rem; min-width: 0; }
