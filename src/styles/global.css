@@ -1054,3 +1054,22 @@ a[href^="tel:"], a[href^="mailto:"] { white-space: nowrap; }
 .g-chapters a span { display: inline-block; width: 2.1rem; flex: none; }
 @media (max-width: 860px) { .g-chapters { grid-template-columns: 1fr 1fr; gap: 0.7rem 1rem; } }
 .g-chapters a { display: grid; grid-template-columns: 2.1rem 1fr; align-items: baseline; }
+
+/* ---------- Pages légales ---------- */
+.hero-text h1.legal-title, .page-head h1.legal-title { font-size: clamp(2.4rem, 1.5rem + 2.6vw, 4rem); }
+.legal { max-width: 56rem; }
+.legal-block { display: grid; grid-template-columns: 14rem 1fr; gap: 0.5rem var(--gap); padding: 1.5rem 0; border-top: 1px solid var(--line-2); }
+.legal-block h2 { font-size: clamp(1.3rem, 1.15rem + 0.4vw, 1.6rem); margin: 0; }
+.legal-block p, .legal-block li { color: var(--ink-2); font-size: 0.97rem; }
+.legal-block p:last-child { margin-bottom: 0; }
+.legal-block ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.3rem; }
+.legal-updated { margin-top: 1.5rem; font-size: 0.85rem; color: var(--muted); }
+@media (max-width: 700px) { .legal-block { grid-template-columns: 1fr; } }
+.footer-bottom a { text-decoration: underline; text-underline-offset: 0.25em; }
+.consent-link { text-decoration: underline; text-underline-offset: 0.2em; }
+/* Pages légales : texte aligné sur le titre */
+.legal { max-width: none; }
+.legal > * { max-width: 56rem; }
+/* En-tête : jamais de retour à la ligne entre 1080 et 1280 px */
+.site-nav a, .wm-sub, .wm-name { white-space: nowrap; }
+@media (max-width: 1280px) and (min-width: 1081px) { .site-nav ul { gap: 1.35rem; } .bar { gap: 1.5rem; } .wm-sub { display: none; } }

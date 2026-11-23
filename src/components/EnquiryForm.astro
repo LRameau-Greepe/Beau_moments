@@ -3,6 +3,8 @@
 // Netlify détecte le formulaire au déploiement ; les demandes arrivent dans Netlify > Forms,
 // où l'on peut activer une notification par e-mail).
 import { t } from '../i18n/ui';
+import { pagePath } from '../i18n/routes';
+import { privacyPolicy } from '../lib/legal';
 import type { Lang } from '../i18n/locales';
 interface Props { lang: Lang; preset?: number }
 const { lang, preset } = Astro.props;
@@ -27,7 +29,7 @@ const f = t(lang).form;
   <div class="field"><label for="f-guests">{f.guests}</label><input id="f-guests" name="guests" type="number" min="1" inputmode="numeric" /></div>
   <div class="field full"><label for="f-place">{f.place}</label><input id="f-place" name="venue" /></div>
   <div class="field full"><label for="f-msg">{f.message}</label><textarea id="f-msg" name="message" rows="3"></textarea></div>
-  <label class="consent"><input type="checkbox" name="consent" required /> <span>{f.consent}</span></label>
+  <label class="consent"><input type="checkbox" name="consent" required /> <span>{f.consent} <a class="consent-link" href={pagePath('privacy', lang)}>{privacyPolicy[lang].title}</a></span></label>
   <div class="form-foot">
     <button class="btn btn-solid" type="submit">{f.send}</button>
     <p class="form-status" role="status" aria-live="polite"></p>

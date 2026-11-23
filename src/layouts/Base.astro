@@ -15,6 +15,7 @@ import { getImage } from 'astro:assets';
 import { site, abs, tel, mailHref } from '../lib/site';
 import { getPhoto, type PhotoKey } from '../lib/photos';
 import { eventTypes } from '../lib/events';
+import { company, legalNotice, privacyPolicy } from '../lib/legal';
 import { langs, localeInfo, defaultLang, type Lang } from '../i18n/locales';
 import { pagePath, eventPath, allLangs } from '../i18n/routes';
 import { t } from '../i18n/ui';
@@ -270,7 +271,7 @@ const year = new Date().getFullYear();
         </div>
       </div>
       <div class="wrap footer-bottom">
-        <span>© {year} BEAU MOMENTS · Maldegem · {site.motto}</span>
+        <span>© {year} BEAU MOMENTS VOF · {company.vat} · <a href={pagePath('legal', lang)}>{legalNotice[lang].title}</a> · <a href={pagePath('privacy', lang)}>{privacyPolicy[lang].title}</a></span>
         <nav class="lang" aria-label={s.nav.language}>
           {langs.map((l) => <a href={alts[l]} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>{localeInfo[l].name}</a>)}
         </nav>

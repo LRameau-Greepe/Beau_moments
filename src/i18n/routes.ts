@@ -9,6 +9,8 @@ export const pages = {
   takeaway: { nl: '/afhaal/', fr: '/fr/a-emporter/', en: '/en/takeaway/' },
   gallery: { nl: '/galerij/', fr: '/fr/galerie/', en: '/en/gallery/' },
   about: { nl: '/over-ons/', fr: '/fr/a-propos/', en: '/en/about/' },
+  legal: { nl: '/juridische-informatie/', fr: '/fr/mentions-legales/', en: '/en/legal-notice/' },
+  privacy: { nl: '/privacy/', fr: '/fr/confidentialite/', en: '/en/privacy/' },
 } satisfies Record<string, Record<Lang, string>>;
 
 export type PageKey = keyof typeof pages;
