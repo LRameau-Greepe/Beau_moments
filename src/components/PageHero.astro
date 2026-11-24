@@ -1,0 +1,15 @@
+---
+// Ouverture d'une page intérieure : photo pleine largeur et titre, puis une phrase centrée ; deux photos en dessous (facultatif).
+import Photo from './Photo.astro';
+import type { PhotoKey } from '../lib/photos';
+import type { Lang } from '../i18n/locales';
+interface Props { lang: Lang; title: string; sub: string; photos: PhotoKey[]; pos?: string }
+const { lang, title, sub, photos, pos = '50% 50%' } = Astro.props;
+const [cover, ...rest] = photos;
+---
+<section class="hero inner" style={`--pos:${pos}`}>
+  <Photo name={cover} lang={lang} eager class="cover" sizes="100vw" />
+  <h1>{title}</h1>
+</section>
+<section class="pad wrap intro"><p class="say">{sub}</p><slot /></section>
+{rest.length > 0 && <div class="wrap pair">{rest.map((k) => <Photo name={k} lang={lang} ratio="4/5" sizes="(min-width: 800px) 44vw, 50vw" />)}</div>}

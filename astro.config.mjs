@@ -6,8 +6,8 @@ import site from './src/data/site.json' with { type: 'json' };
 export default defineConfig({
   site: site.siteUrl,
   trailingSlash: 'always',
-  // Port fixe, différent de Vyana (4340), TINI (4341) et les aperçus déjà ouverts (4342-4349), pour lancer les sites en même temps
-  server: { port: 4350, strictPort: true },
+  // V2 : port 4351 (la V1 reste sur 4350). Port fixe, différent de Vyana (4340), TINI (4341) et les aperçus déjà ouverts (4342-4349), pour lancer les sites en même temps
+  server: { port: 4351, strictPort: true },
   build: { format: 'directory' },
   integrations: [
     sitemap({

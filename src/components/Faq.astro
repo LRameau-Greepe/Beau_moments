@@ -4,8 +4,8 @@ interface Props { items: { q: string; a: string }[] }
 const { items } = Astro.props;
 ---
 <div class="faq">
-  {items.map((it, i) => (
-    <details data-reveal style={`--d:${i * 0.06}s`}>
+  {items.map((it) => (
+    <details>
       <summary>{it.q}<i aria-hidden="true"></i></summary>
       <div class="faq-a"><p>{it.a}</p></div>
     </details>

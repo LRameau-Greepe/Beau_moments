@@ -1,0 +1,19 @@
+---
+// Bloc « Aanvraag » : titre, contacts et formulaire.
+import EnquiryForm from './EnquiryForm.astro';
+import { site, tel, mailHref } from '../lib/site';
+import { t } from '../i18n/ui';
+import type { Lang } from '../i18n/locales';
+interface Props { lang: Lang; preset?: number }
+const { lang, preset } = Astro.props;
+const c = t(lang).catering;
+---
+<section class="pad stone" id="aanvraag">
+  <div class="wrap duo">
+    <div>
+      <h2>{c.formTitle}</h2>
+      <p class="contacts">{site.contacts.map((x) => <a href={tel(x.phone)}>{x.name} {x.phone}</a>)}<a href={mailHref}>{site.email}</a></p>
+    </div>
+    <EnquiryForm lang={lang} preset={preset} />
+  </div>
+</section>

@@ -14,8 +14,8 @@ const desc = kind === 'legal'
 ---
 <Base lang={lang} title={`${doc.title} — BEAU MOMENTS`} description={desc} alternates={allLangs((l) => pagePath(kind, l))}
   breadcrumbs={[{ name: doc.title, path: pagePath(kind, lang) }]} hideCta>
-  <section class="page-head">
-    <div class="wrap g12">
+  <section class="lhead">
+    <div class="wrap">
       <div class="page-head-title">
         <p class="label">{doc.label}</p>
         <h1 class="legal-title">{doc.title}</h1>
@@ -23,7 +23,7 @@ const desc = kind === 'legal'
       <div class="page-head-lead"><p class="lead">{doc.intro}</p></div>
     </div>
   </section>
-  <section class="wrap section legal" style="padding-top:0">
+  <section class="wrap pad legal">
     {doc.blocks.map((b) => (
       <div class="legal-block">
         <h2>{b.h}</h2>

@@ -1,22 +1,16 @@
 ---
-// Gabarit HTML commun : référencement (hreflang, données structurées), intro (le monogramme BA
-// se dessine), en-tête (logo, menu, langues), bandeau final, pied de page
-// et animations (apparitions, titres mot à mot, photos qui se révèlent).
+// Gabarit HTML commun (V2) : référencement, en-tête, menu plein écran, visionneuse photo, pied de page.
 import '@fontsource/cormorant-garamond/300.css';
-import '@fontsource/cormorant-garamond/300-italic.css';
 import '@fontsource/cormorant-garamond/400.css';
-import '@fontsource/cormorant-garamond/400-italic.css';
 import '@fontsource-variable/jost';
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
-import Wordmark from '../components/Wordmark.astro';
-import Sketch from '../components/Sketch.astro';
 import { getImage } from 'astro:assets';
 import { site, abs, tel, mailHref } from '../lib/site';
 import { getPhoto, type PhotoKey } from '../lib/photos';
 import { eventTypes } from '../lib/events';
 import { company, legalNotice, privacyPolicy } from '../lib/legal';
-import { langs, localeInfo, defaultLang, type Lang } from '../i18n/locales';
+import { langs, localeInfo, defaultLang, L as L3x, type Lang } from '../i18n/locales';
 import { pagePath, eventPath, allLangs } from '../i18n/routes';
 import { t } from '../i18n/ui';
 
@@ -121,12 +115,13 @@ const ld = {
   ],
 };
 
+const L3 = L3x(lang);
 const nav = [
+  { key: 'about', href: pagePath('about', lang), label: s.nav.about },
   { key: 'catering', href: pagePath('catering', lang), label: s.nav.catering },
   { key: 'atelier', href: pagePath('atelier', lang), label: s.nav.atelier },
   { key: 'takeaway', href: pagePath('takeaway', lang), label: s.nav.takeaway },
   { key: 'gallery', href: pagePath('gallery', lang), label: s.nav.gallery },
-  { key: 'about', href: pagePath('about', lang), label: s.nav.about },
 ];
 const enquire = `${pagePath('catering', lang)}#aanvraag`;
 const year = new Date().getFullYear();
@@ -166,231 +161,101 @@ const year = new Date().getFullYear();
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
     <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
     <script type="application/ld+json" set:html={JSON.stringify(ld)} />
-    <!-- Animations seulement si JavaScript tourne (sinon tout reste visible).
-         Intro : seulement à l'arrivée sur le site (depuis un autre site ou en direct), jamais si l'utilisateur
-         limite les animations. Aucun stockage dans le navigateur (ni cookie, ni sessionStorage). -->
-    <script is:inline>
-      (function () {
-        var d = document.documentElement;
-        d.classList.add('js');
-        try {
-          var fromSite = document.referrer && new URL(document.referrer).origin === location.origin;
-          if (!fromSite && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            d.classList.add('has-intro');
-            setTimeout(function () { d.classList.remove('has-intro'); }, 1700);
-          }
-        } catch (e) {}
-      })();
-    </script>
+    <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
-    <div class="intro" aria-hidden="true">
-      <Logo />
-      <span class="intro-city">Catering &amp; private dining</span>
-    </div>
-
     <a class="skip" href="#main">{s.nav.skip}</a>
-    <header class="site-header" data-header>
-      <div class="topband">
-        <div class="wrap topband-inner">
-          <a href={site.mapUrl} target="_blank" rel="noopener">{s.band.place}</a>
-          <span class="tb-hours">{s.band.motto}</span>
-          <a class="tb-events" href={pagePath('takeaway', lang)}>{s.band.takeaway}</a>
-        </div>
+    <header class="top">
+      <a class="brand" href={pagePath('home', lang)} aria-label={`BEAU MOMENTS — ${s.nav.home}`}>Beau Moments</a>
+      <div class="top-right">
+      <nav class="lang" aria-label={s.nav.language}>
+        {langs.map((l) => <a href={alts[l]} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} title={localeInfo[l].name}>{localeInfo[l].short}</a>)}
+      </nav>
+      <a class="btn top-cta second" href={pagePath('takeaway', lang)}>{s.nav.takeaway}</a>
+      <a class="btn top-cta" href={enquire}>{s.nav.book}</a>
       </div>
-      <div class="wrap bar">
-        <a class="brand" href={pagePath('home', lang)} aria-label={`BEAU MOMENTS — ${s.nav.home}`}>
-          <Logo />
-          <Wordmark />
-        </a>
-        <nav id="site-nav" class="site-nav" aria-label={s.nav.main}>
-          <ul>
-            {nav.map((l, i) => (
-              <li><a href={l.href} style={`--i:${i}`} aria-current={section === l.key ? 'page' : undefined}>{l.label}</a></li>
-            ))}
-            <li class="nav-cta"><a class="btn btn-solid" href={enquire}>{s.nav.book}</a></li>
-          </ul>
-          <div class="nav-foot">
-            <nav class="lang" aria-label={s.nav.language}>
-              {langs.map((l) => <a href={alts[l]} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>{localeInfo[l].short}</a>)}
-            </nav>
-            <a href={ig.url} target="_blank" rel="noopener">@{ig.handle}</a>
-          </div>
-        </nav>
-        <nav class="lang" aria-label={s.nav.language}>
-          {langs.map((l) => (
-            <a href={alts[l]} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} title={localeInfo[l].name}>{localeInfo[l].short}</a>
-          ))}
-        </nav>
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
-          <span data-open={s.nav.menu} data-close={s.nav.close}>{s.nav.menu}</span><i aria-hidden="true"></i>
-        </button>
-      </div>
+      <button class="menu-btn" type="button" aria-haspopup="dialog" data-menu-open><i aria-hidden="true"></i><span>{s.nav.menu}</span></button>
     </header>
 
-    <main id="main">
-      <slot />
-    </main>
+    <dialog class="menu" aria-label={s.nav.main} data-menu>
+      <button class="menu-close" type="button" data-menu-close>{s.nav.close}</button>
+      <nav aria-label={s.nav.main}>
+        <ul role="list">
+          {nav.map((l, i) => (
+            <li style={`--i:${i}`}><a href={l.href} aria-current={section === l.key ? 'page' : undefined}>{l.label}</a>
+              {l.key === 'catering' && <p class="sub">{eventTypes.map((e) => <a href={eventPath(e.key, lang)}>{e.copy[lang].name}</a>)}</p>}</li>
+          ))}
+        </ul>
+      </nav>
+      <p class="menu-foot"><a href={enquire}>{s.nav.book}</a><a href={`${pagePath('home', lang)}#contact`}>{s.footer.contact}</a><a href={tel(site.phone)}>{site.phone}</a><a href={ig.url} target="_blank" rel="noopener">@{ig.handle}</a></p>
+    </dialog>
+    <noscript><nav class="nojs">{nav.map((l) => <a href={l.href}>{l.label}</a>)}</nav></noscript>
+
+    <main id="main"><slot /></main>
 
     {!hideCta && (
-      <section class="cta section" aria-labelledby="cta-title">
-        <div class="wrap">
-          <Sketch name="cloche" />
-          <p class="label center" data-reveal>{s.cta.label}</p>
-          <h2 id="cta-title" data-split>{s.cta.title}</h2>
-          <p data-reveal>{s.cta.text}</p>
-          <p data-reveal><a class="btn btn-solid" href={enquire}>{s.cta.button}</a></p>
-        </div>
-      </section>
+      <section class="cta pad stone"><div class="wrap"><h2>{s.catering.formTitle}</h2><a class="btn" href={enquire}>{s.nav.book}</a></div></section>
     )}
 
-    <footer class="site-footer">
-      <div class="wrap g12 footer-top">
-        <div class="footer-brand">
-          <Logo title="BEAU MOMENTS" />
-          <p>{s.footer.tagline}</p>
-        </div>
-        <div class="footer-col">
-          <h2>{s.footer.explore}</h2>
-          <ul>
-            <li><a href={pagePath('home', lang)}>{s.nav.home}</a></li>
-            {nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h2>{s.footer.catering}</h2>
-          <ul>
-            {eventTypes.map((e) => <li><a href={eventPath(e.key, lang)}>{e.copy[lang].name}</a></li>)}
-          </ul>
-        </div>
-        <div class="footer-col wide">
-          <h2>{s.footer.contact}</h2>
-          <p>BEAU MOMENTS · {site.address.street}<br />{site.address.postalCode} {site.address.city}</p>
-          {site.contacts.map((c) => <p>{c.name} · <a href={tel(c.phone)}>{c.phone}</a></p>)}
-          <p><a href={mailHref}>{site.email}</a></p>
-          <p><a href={ig.url} target="_blank" rel="noopener">@{ig.handle}</a></p>
-        </div>
+    <footer class="foot">
+      <div class="wrap foot-grid">
+        <div class="foot-brand"><Logo title="BEAU MOMENTS" /></div>
+        <ul role="list">{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+        <ul role="list">{eventTypes.map((e) => <li><a href={eventPath(e.key, lang)}>{e.copy[lang].name}</a></li>)}</ul>
+        <ul role="list">
+          <li><a href={site.mapUrl} target="_blank" rel="noopener">{site.address.street}, {site.address.postalCode} {site.address.city}</a></li>
+          {site.contacts.map((c) => <li><a href={tel(c.phone)}>{c.name} {c.phone}</a></li>)}
+          <li><a href={mailHref}>{site.email}</a></li>
+          <li><a href={ig.url} target="_blank" rel="noopener">@{ig.handle}</a></li>
+        </ul>
       </div>
-      <div class="wrap footer-bottom">
-        <span>© {year} BEAU MOMENTS VOF · {company.vat} · <a href={pagePath('legal', lang)}>{legalNotice[lang].title}</a> · <a href={pagePath('privacy', lang)}>{privacyPolicy[lang].title}</a></span>
-        <nav class="lang" aria-label={s.nav.language}>
-          {langs.map((l) => <a href={alts[l]} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>{localeInfo[l].name}</a>)}
-        </nav>
-      </div>
+      <p class="wrap foot-legal"><span>© {year} BEAU MOMENTS VOF</span><span>{company.vat}</span><a href={pagePath('legal', lang)}>{legalNotice[lang].title}</a><a href={pagePath('privacy', lang)}>{privacyPolicy[lang].title}</a></p>
     </footer>
 
+    <dialog class="lb" aria-label={s.nav.gallery} data-lb>
+      <figure><img alt="" data-lb-img /><figcaption><span data-lb-cap></span><a data-lb-post target="_blank" rel="noopener">{s.gallery.open}</a></figcaption></figure>
+      <button class="lb-x" type="button" data-lb-close aria-label={s.nav.close}>×</button>
+      <button class="lb-p" type="button" data-lb-prev aria-label={L3('Vorige foto', 'Photo précédente', 'Previous photo')}>←</button>
+      <button class="lb-n" type="button" data-lb-next aria-label={L3('Volgende foto', 'Photo suivante', 'Next photo')}>→</button>
+    </dialog>
+
     <script>
-      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // ---- Menu plein écran ----
+      const menu = document.querySelector<HTMLDialogElement>('[data-menu]')!;
+      document.querySelector('[data-menu-open]')!.addEventListener('click', () => menu.showModal());
+      document.querySelector('[data-menu-close]')!.addEventListener('click', () => menu.close());
+      menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => menu.close()));
 
-      // ---- Titres : découpage en mots pour une apparition ligne par ligne ----
-      const splitWords = (el: HTMLElement) => {
-        let n = 0;
-        const walk = (node: Node) => {
-          for (const child of [...node.childNodes]) {
-            if (child.nodeType === Node.TEXT_NODE) {
-              const frag = document.createDocumentFragment();
-              for (const part of (child.textContent ?? '').split(/(\s+)/)) {
-                if (!part) continue;
-                if (/^\s+$/.test(part)) { frag.append(' '); continue; }
-                const w = document.createElement('span');
-                w.className = 'w';
-                const inner = document.createElement('span');
-                inner.textContent = part;
-                inner.style.setProperty('--wi', String(n++));
-                w.append(inner);
-                frag.append(w);
-              }
-              child.replaceWith(frag);
-            } else if (child.nodeType === Node.ELEMENT_NODE) {
-              walk(child);
-            }
-          }
-        };
-        walk(el);
-        el.classList.add('is-split');
+      // ---- Visionneuse (galerie) ----
+      const dlg = document.querySelector<HTMLDialogElement>('[data-lb]')!;
+      const big = dlg.querySelector<HTMLImageElement>('[data-lb-img]')!;
+      const cap = dlg.querySelector<HTMLElement>('[data-lb-cap]')!;
+      const post = dlg.querySelector<HTMLAnchorElement>('[data-lb-post]')!;
+      const items = [...document.querySelectorAll<HTMLAnchorElement>('[data-lightbox]')];
+      let cur = 0;
+      const show = (n: number) => {
+        cur = (n + items.length) % items.length;
+        const a = items[cur];
+        big.src = a.href;
+        big.alt = cap.textContent = a.dataset.caption ?? '';
+        post.href = a.dataset.post ?? '#';
       };
-      const splits = [...document.querySelectorAll<HTMLElement>('.section-head h2, [data-split], .quote blockquote')];
-      splits.forEach(splitWords);
-
-      // ---- Apparitions au défilement (textes, titres, photos) ----
-      const items = [...document.querySelectorAll<HTMLElement>('[data-reveal]'), ...splits];
-      if (still || !('IntersectionObserver' in window)) {
-        items.forEach((el) => el.classList.add('is-in'));
-      } else {
-        const io = new IntersectionObserver(
-          (entries) => {
-            for (const e of entries) {
-              if (e.isIntersecting) {
-                e.target.classList.add('is-in');
-                io.unobserve(e.target);
-              }
-            }
-          },
-          { rootMargin: '0px 0px 15% 0px', threshold: 0 },
-        );
-        items.forEach((el) => io.observe(el));
-      }
-
-      // ---- Photos : fondu seulement une fois l'image chargée ----
-      document.querySelectorAll<HTMLImageElement>('figure.ph img').forEach((img) => {
-        const fig = img.closest('figure')!;
-        const done = () => fig.classList.add('loaded');
-        if (img.complete && img.naturalWidth) done();
-        else { img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true }); }
+      items.forEach((a, n) => a.addEventListener('click', (e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+        e.preventDefault();
+        show(n);
+        dlg.showModal();
+      }));
+      const close = () => dlg.close();
+      dlg.addEventListener('close', () => items[cur]?.focus({ preventScroll: true }));
+      dlg.addEventListener('click', (e) => { if (!(e.target as HTMLElement).closest('img, button, a')) close(); });
+      dlg.querySelector('[data-lb-close]')!.addEventListener('click', close);
+      dlg.querySelector('[data-lb-prev]')!.addEventListener('click', () => show(cur - 1));
+      dlg.querySelector('[data-lb-next]')!.addEventListener('click', () => show(cur + 1));
+      dlg.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') show(cur + 1);
+        if (e.key === 'ArrowLeft') show(cur - 1);
       });
-
-      // ---- En-tête : fond après défilement, masqué en descendant ----
-      const header = document.querySelector<HTMLElement>('[data-header]');
-      let lastY = scrollY;
-      const onScroll = () => {
-        const y = scrollY;
-        header?.classList.toggle('is-scrolled', y > 24);
-        const d = y - lastY;
-        if (y < 320 || document.body.classList.contains('nav-open')) {
-          header?.classList.remove('is-hidden');
-          lastY = y;
-        } else if (Math.abs(d) > 6) {
-          header?.classList.toggle('is-hidden', d > 0);
-          lastY = y;
-        }
-      };
-      let ticking = false;
-      addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { onScroll(); ticking = false; }); } }, { passive: true });
-      onScroll();
-
-      // ---- Menu mobile ----
-      const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
-      const toggleText = toggle?.querySelector<HTMLElement>('span');
-      const setOpen = (open: boolean) => {
-        toggle?.setAttribute('aria-expanded', String(open));
-        document.body.classList.toggle('nav-open', open);
-        if (toggleText) toggleText.textContent = (open ? toggleText.dataset.close : toggleText.dataset.open) ?? '';
-      };
-      toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
-      addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
-
-      // ---- Titres de section sur une seule ligne : si un titre ne tient pas dans sa colonne,
-      // sa taille est réduite juste assez (au plus de 40 %) ; au-delà, il passe sur deux lignes. ----
-      const titles = [...document.querySelectorAll<HTMLElement>('main h2:not(.wrap-ok)')].filter((h) => !h.closest('.legal-block'));
-      const fitTitles = () => {
-        for (const h of titles) {
-          h.style.fontSize = '';
-          h.style.whiteSpace = 'nowrap';
-          const base = parseFloat(getComputedStyle(h).fontSize);
-          const room = h.parentElement!.clientWidth;
-          const need = h.scrollWidth;
-          if (need > room) {
-            const size = Math.max(base * 0.6, (base * room) / need - 0.5);
-            h.style.fontSize = size + 'px';
-            if (h.scrollWidth > h.parentElement!.clientWidth) h.style.whiteSpace = '';
-          }
-        }
-      };
-      let fitTimer = 0;
-      addEventListener('resize', () => { clearTimeout(fitTimer); fitTimer = window.setTimeout(fitTitles, 120); });
-      document.fonts?.ready.then(fitTitles);
-      fitTitles();
-      document.querySelectorAll('#site-nav a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
     </script>
   </body>
 </html>

@@ -1,0 +1,17 @@
+---
+// Les quatre formules : une photo, un nom.
+import Photo from './Photo.astro';
+import { eventTypes } from '../lib/events';
+import { eventPath } from '../i18n/routes';
+import type { Lang } from '../i18n/locales';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<ul class="formulas" role="list">
+  {eventTypes.map((e) => (
+    <li><a href={eventPath(e.key, lang)}>
+      <Photo name={e.hero} lang={lang} ratio="3/4" sizes="(min-width: 900px) 24vw, 48vw" />
+      <h3>{e.copy[lang].name}</h3>
+    </a></li>
+  ))}
+</ul>
