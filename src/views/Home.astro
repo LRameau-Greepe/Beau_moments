@@ -1,8 +1,8 @@
 ---
-// Accueil : deux actions, la maison, la catering (une section par formule), l'atelier, les plats, les offres, la galerie, les avis, le contact.
+// Accueil, structure « hôtel de maison » : photo plein écran, phrase d'accueil, quatre portes d'entrée,
+// la maison (photo + texte), mosaïque de photos, phrase sous le monogramme, deux grandes cartes, trois avis, contact.
 import Base from '../layouts/Base.astro';
 import { feest } from '../lib/feestdagen';
-import { dishes } from '../lib/dishes';
 import { reviews, googleRating, googleReviewsUrl } from '../lib/reviews';
 import { type PhotoKey } from '../lib/photos';
 import { site, tel, mailHref } from '../lib/site';
@@ -10,6 +10,7 @@ import { pagePath, eventPath, allLangs } from '../i18n/routes';
 import { t } from '../i18n/ui';
 import { L as Lx, localeInfo, type Lang } from '../i18n/locales';
 import Photo from '../components/Photo.astro';
+import Logo from '../components/Logo.astro';
 import { eventTypes } from '../lib/events';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -17,65 +18,87 @@ const s = t(lang);
 const f = feest[lang];
 const h = s.home;
 const L = Lx(lang);
-const gallery: PhotoKey[] = ['valentine-table', 'hamachi', 'table-room', 'bert-serving'];
-const plates = dishes.filter((d) => d.photo !== 'croquettes');
+const chef = eventTypes.find((e) => e.key === 'home')!;
+const wedding = eventTypes.find((e) => e.key === 'weddings')!;
+
+const doors: { photo: PhotoKey; title: string; cta: string; href: string }[] = [
+  { photo: 'dinner-served', title: h.cateringTitle, cta: L('Vraag een voorstel', 'Demander une proposition', 'Request a proposal'), href: pagePath('catering', lang) },
+  { photo: 'atelier-dining-room', title: L('Private dining in ons atelier', 'Dîner privé dans notre atelier', 'Private dining in our atelier'), cta: L('Ontdek het atelier', 'Découvrir l’atelier', 'Discover the atelier'), href: pagePath('atelier', lang) },
+  { photo: 'egg-shrimp-garden', title: L('Afhaal van de week', 'À emporter de la semaine', 'Takeaway of the week'), cta: L('Bekijk het menu', 'Voir le menu', 'See the menu'), href: pagePath('takeaway', lang) },
+  { photo: wedding.hero, title: L('Huwelijken & events', 'Mariages & événements', 'Weddings & events'), cta: L('Plan je feest', 'Organiser votre fête', 'Plan your celebration'), href: eventPath('weddings', lang) },
+];
+const mosaic: PhotoKey[] = ['champagne-bar', 'garden-table', 'flowers', 'behind-the-curtain', 'table-long', 'aude-with-guests'];
+const wide: { photo: PhotoKey; title: string; cta: string; href: string }[] = [
+  { photo: 'feest-cover', title: f.label, cta: L('Bestel voor de feestdagen', 'Commander pour les fêtes', 'Order for the holidays'), href: `${pagePath('takeaway', lang)}#feestdagen` },
+  { photo: chef.hero, title: chef.copy[lang].name, cta: L('Boek je chef', 'Réserver votre chef', 'Book your chef'), href: eventPath('home', lang) },
+];
 ---
 <Base lang={lang} title={s.meta.homeTitle} description={s.meta.homeDesc} alternates={allLangs((l) => pagePath('home', l))} ogPhoto="table-room">
-  <section class="hero">
+  <section class="hero hero-home">
     <Photo name="table-room" lang={lang} eager class="cover" sizes="100vw" />
-    <div><h1>Beau Moments</h1><p>{h.heroLine1} {h.heroLine2}</p>
-      <p class="acts"><a class="btn" href={`${pagePath('catering', lang)}#aanvraag`}>{h.ctaPrimary}</a><a class="btn" href={pagePath('takeaway', lang)}>{s.nav.takeaway}</a></p></div>
+    <h1 class="hero-mark"><Logo /><span class="sr">Beau Moments — </span><small>{h.eyebrow}</small></h1>
   </section>
 
-  <section class="pad wrap intro"><p class="say">{h.statement}</p></section>
-
-  <section class="half flip">
-    <Photo name="bert-and-aude" lang={lang} sizes="(min-width: 800px) 50vw, 100vw" />
-    <div><h2>{h.aboutTitle}</h2><a class="btn" href={pagePath('about', lang)}>{h.aboutMore}</a></div>
+  <section class="pad wrap welcome">
+    <p class="lede">{L('Welkom bij Beau Moments.', 'Bienvenue chez Beau Moments.', 'Welcome to Beau Moments.')} {h.heroLead}</p>
   </section>
 
-  <section class="pad intro stone"><h2>{h.cateringTitle}</h2><a class="btn" href={pagePath('catering', lang)}>{h.ctaSecondary}</a></section>
-  {eventTypes.map((e, i) => (
-    <section class:list={['half', 'stone', { flip: i % 2 === 1 }]}>
-      <Photo name={e.hero} lang={lang} sizes="(min-width: 800px) 50vw, 100vw" />
-      <div><h3 class="big">{e.copy[lang].name}</h3><a class="btn" href={eventPath(e.key, lang)}>{s.common.moreInfo}</a></div>
-    </section>
-  ))}
-
-  <section class="half sand">
-    <Photo name="atelier-dinner-from-above" lang={lang} sizes="(min-width: 800px) 50vw, 100vw" />
-    <div><h2>{h.atelierTitle}</h2><p>{s.atelier.guestsText}</p><a class="btn" href={pagePath('atelier', lang)}>{L('Ontdek het atelier', 'Découvrir l’atelier', 'Discover the atelier')}</a></div>
-  </section>
-
-  <section class="pad">
-    <h2 class="mid">{h.dishesTitle}</h2>
-    <ul class="plates" role="list" tabindex="0" aria-label={h.dishesTitle}>
-      {plates.map((d) => <li><Photo name={d.photo} lang={lang} ratio="4/5" sizes="(min-width: 800px) 30vw, 70vw" /><h3>{d.name[lang]}</h3><p>{d.notes[lang]}</p></li>)}
+  <section class="wrap doors" aria-label={L('Wat we doen', 'Ce que nous faisons', 'What we do')}>
+    <ul role="list">
+      {doors.map((d) => (
+        <li>
+          <a href={d.href}><Photo name={d.photo} lang={lang} ratio="7/8" sizes="(min-width: 900px) 23vw, (min-width: 560px) 46vw, 92vw" /></a>
+          <h2>{d.title}</h2>
+          <a class="more" href={d.href}>{d.cta}</a>
+        </li>
+      ))}
     </ul>
   </section>
 
-  <section class="pad" id="momenten"><div class="wrap">
-    <h2 class="mid">{L('Nu bij Beau Moments', 'En ce moment', 'Now at Beau Moments')}</h2>
-    <ul class="offers" role="list">
-      <li><a href={`${pagePath('takeaway', lang)}#feestdagen`}><Photo name="feest-cover" lang={lang} ratio="4/5" sizes="(min-width: 800px) 30vw, 90vw" /><h3>{f.label}</h3></a><p>{f.deadline}</p><p class="small">{f.allergens}</p></li>
-      <li><a href={pagePath('takeaway', lang)}><Photo name="egg-shrimp-garden" lang={lang} ratio="4/5" sizes="(min-width: 800px) 30vw, 90vw" /><h3>{h.takeawayTitle}</h3></a></li>
-      <li><a href={pagePath('atelier', lang)}><Photo name="atelier-dining-room" lang={lang} ratio="4/5" sizes="(min-width: 800px) 30vw, 90vw" /><h3>{h.privateLabel}</h3></a><p>{s.atelier.guestsText}</p></li>
-    </ul>
-  </div></section>
-
-  <section class="strip" style="padding-top:clamp(5rem,9vw,9rem)" aria-label={s.nav.gallery}>
-    {gallery.map((k) => <Photo name={k} lang={lang} ratio="4/5" sizes="(min-width: 800px) 24vw, 46vw" />)}
-    <a class="btn" href={pagePath('gallery', lang)}>{h.galleryAll}</a>
+  <section class="pad wrap split">
+    <Photo name="bert-and-aude" lang={lang} ratio="16/10" sizes="(min-width: 900px) 45vw, 92vw" />
+    <div>
+      <h2>{h.aboutTitle}</h2>
+      <p>{h.aboutText}</p>
+      <p>{h.dishesLead}</p>
+      <a class="btn fill" href={pagePath('about', lang)}>{h.aboutMore}</a>
+    </div>
   </section>
 
-  <section class="pad stone">
-    <div class="wrap rev-head"><h2 class="sr">{h.reviewsTitle}</h2>
-      <p class="num">{googleRating.score.toLocaleString(localeInfo[lang].html)}</p>
-      <a href={googleReviewsUrl} target="_blank" rel="noopener">{h.googleCount.replace('{n}', String(googleRating.count))}</a></div>
-    <ul class="revs" role="list" tabindex="0" aria-label={h.reviewsTitle}>
-      {reviews.map((r) => <li><blockquote>{r.quote[lang]}</blockquote><cite><span role="img" aria-label={`${r.stars}/5`}>{'★'.repeat(r.stars)}</span>{r.author}</cite></li>)}
+  <section class="wrap mosaic" aria-label={s.nav.gallery}>
+    {mosaic.map((k) => <Photo name={k} lang={lang} zoom sizes="(min-width: 900px) 33vw, 50vw" />)}
+  </section>
+
+  <section class="pad wrap emblem">
+    <Logo />
+    <p class="say">{h.statement}</p>
+  </section>
+
+  <section class="wrap wide">
+    <ul role="list">
+      {wide.map((d) => (
+        <li>
+          <a href={d.href}><Photo name={d.photo} lang={lang} ratio="15/7" sizes="(min-width: 900px) 46vw, 92vw" /></a>
+          <h2>{d.title}</h2>
+          <a class="more" href={d.href}>{d.cta}</a>
+        </li>
+      ))}
     </ul>
-    {h.reviewsNote && <p class="wrap small">{h.reviewsNote}</p>}
+  </section>
+
+  <section class="pad wrap guests">
+    <h2>{h.reviewsTitle}</h2>
+    <p class="rating">{googleRating.score.toLocaleString(localeInfo[lang].html)} / 5 · {h.googleCount.replace('{n}', String(googleRating.count))}</p>
+    <ul role="list">
+      {reviews.slice(0, 3).map((r) => (
+        <li>
+          <Logo />
+          <h3>{r.author}</h3>
+          <blockquote>{r.quote[lang]}</blockquote>
+        </li>
+      ))}
+    </ul>
+    <a class="btn fill" href={googleReviewsUrl} target="_blank" rel="noopener">{h.reviewsAll}</a>
   </section>
 
   <section class="half flip sand" id="contact">

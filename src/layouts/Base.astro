@@ -166,15 +166,23 @@ const year = new Date().getFullYear();
   <body>
     <a class="skip" href="#main">{s.nav.skip}</a>
     <header class="top">
-      <a class="brand" href={pagePath('home', lang)} aria-label={`BEAU MOMENTS — ${s.nav.home}`}>Beau Moments</a>
-      <div class="top-right">
-      <nav class="lang" aria-label={s.nav.language}>
-        {langs.map((l) => <a href={alts[l]} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} title={localeInfo[l].name}>{localeInfo[l].short}</a>)}
-      </nav>
-      <a class="btn top-cta second" href={pagePath('takeaway', lang)}>{s.nav.takeaway}</a>
-      <a class="btn top-cta" href={enquire}>{s.nav.book}</a>
+      <div class="top-row">
+        <div class="top-left">
+          <button class="menu-btn" type="button" aria-haspopup="dialog" data-menu-open><i aria-hidden="true"></i><span>{s.nav.menu}</span></button>
+          <nav class="lang" aria-label={s.nav.language}>
+            {langs.map((l) => <a href={alts[l]} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} title={localeInfo[l].name}>{localeInfo[l].short}</a>)}
+          </nav>
+        </div>
+        <a class="brand" href={pagePath('home', lang)} aria-label={`BEAU MOMENTS — ${s.nav.home}`}>Beau Moments<small aria-hidden="true">Catering · Maldegem</small></a>
+        <div class="top-right">
+          <a class="top-link" href={pagePath('takeaway', lang)}>{s.nav.takeaway}</a>
+          <a class="btn fill top-cta" href={enquire}>{s.nav.book}</a>
+        </div>
       </div>
-      <button class="menu-btn" type="button" aria-haspopup="dialog" data-menu-open><i aria-hidden="true"></i><span>{s.nav.menu}</span></button>
+      <nav class="top-nav" aria-label={s.nav.main}>
+        <a href={pagePath('home', lang)} aria-current={Astro.url.pathname === pagePath('home', lang) ? 'page' : undefined}>{s.nav.home}</a>
+        {nav.map((l) => <a href={l.href} aria-current={section === l.key ? 'page' : undefined}>{l.label}</a>)}
+      </nav>
     </header>
 
     <dialog class="menu" aria-label={s.nav.main} data-menu>
