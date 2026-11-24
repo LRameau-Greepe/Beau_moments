@@ -2,7 +2,7 @@
 // Atelier : private dining à Maldegem (8 à 18 personnes), adresse, contact, FAQ.
 import Base from '../layouts/Base.astro';
 import Faq from '../components/Faq.astro';
-import { site, tel, mailHref } from '../lib/site';
+import { site } from '../lib/site';
 import { pagePath, allLangs } from '../i18n/routes';
 import { t } from '../i18n/ui';
 import type { Lang } from '../i18n/locales';
@@ -15,16 +15,17 @@ const a = s.atelier;
 const ld = [{ '@type': 'FAQPage', mainEntity: a.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }];
 ---
 <Base lang={lang} title={s.meta.atelierTitle} description={s.meta.atelierDesc} alternates={allLangs((l) => pagePath('atelier', l))}
-  section="atelier" breadcrumbs={[{ name: s.nav.atelier, path: pagePath('atelier', lang) }]} extraLd={ld} ogPhoto="atelier-dinner-from-above">
-  <PageHero lang={lang} title={s.nav.atelier} sub={`${a.title} ${a.guestsText}.`} photos={['atelier-dinner-from-above', 'atelier-facade', 'atelier-dining-room']}>
-    <a class="btn" href={`${pagePath('catering', lang)}#aanvraag`}>{s.catering.cta}</a>
+  section="atelier" breadcrumbs={[{ name: s.nav.atelier, path: pagePath('atelier', lang) }]} extraLd={ld} ogPhoto="atelier-dinner-from-above" enquiry={{ look: 'd', photo: 'atelier-facade', preset: 4 }}>
+  <PageHero lang={lang} label={s.nav.atelier} title={a.title} lead={a.lead} cover="atelier-dinner-from-above" photo="atelier-from-above">
+    <a class="btn fill" href="#aanvraag">{s.catering.cta}</a>
   </PageHero>
-  <section class="pad stone">
-    <div class="wrap duo">
-      <div><h2>{a.contact}</h2>
-        <p class="contacts"><a href={site.mapUrl} target="_blank" rel="noopener">{site.address.street}, {site.address.postalCode} {site.address.city}</a>{site.contacts.map((x) => <a href={tel(x.phone)}>{x.name} {x.phone}</a>)}<a href={mailHref}>{site.email}</a></p></div>
-      <div class="three"><Photo name="plating-sauce" lang={lang} ratio="3/4" sizes="30vw" /><Photo name="apron-details" lang={lang} ratio="3/4" sizes="30vw" /><Photo name="ready-to-serve" lang={lang} ratio="3/4" sizes="30vw" /></div>
-    </div>
-  </section>
+  <section class="pad stone"><div class="wrap">
+  <div class="duo">
+    <h2>{a.introTitle}</h2>
+    <div>{a.intro.map((p) => <p class="para">{p}</p>)}
+      <p class="contacts"><a href={site.mapUrl} target="_blank" rel="noopener">{site.address.street}, {site.address.postalCode} {site.address.city}</a></p></div>
+  </div>
+    <ul class="grid after" role="list" style="--n:4">{(['atelier-dining-room', 'chef-plating', 'apron-details', 'ready-to-serve'] as const).map((k) => <li><Photo name={k} lang={lang} ratio="3/4" sizes="(min-width: 1300px) 285px, (min-width: 800px) 23vw, 46vw" /></li>)}</ul>
+  </div></section>
   <section class="pad wrap duo"><h2>{s.catering.faqTitle}</h2><Faq items={a.faq} /></section>
 </Base>

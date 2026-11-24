@@ -1,10 +1,12 @@
 ---
 // Gabarit HTML commun (V2) : référencement, en-tête, menu plein écran, visionneuse photo, pied de page.
-import '@fontsource/cormorant-garamond/300.css';
 import '@fontsource/cormorant-garamond/400.css';
 import '@fontsource-variable/jost';
 import '../styles/global.css';
+import cormorant from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-400-normal.woff2?url';
+import jost from '@fontsource-variable/jost/files/jost-latin-wght-normal.woff2?url';
 import Logo from '../components/Logo.astro';
+import Enquiry, { type Look } from '../components/Enquiry.astro';
 import { getImage } from 'astro:assets';
 import { site, abs, tel, mailHref } from '../lib/site';
 import { getPhoto, type PhotoKey } from '../lib/photos';
@@ -27,12 +29,12 @@ interface Props {
   ogPhoto?: PhotoKey;
   /** Fil d'Ariane (l'accueil est ajouté automatiquement) */
   breadcrumbs?: { name: string; path: string }[];
-  /** Masquer le bandeau « demande » en bas de page */
-  hideCta?: boolean;
+  /** Présentation du bloc « aanvraag » en bas de page (absent : pas de bloc) */
+  enquiry?: Look;
   /** Section active du menu */
   section?: 'catering' | 'atelier' | 'takeaway' | 'gallery' | 'about';
 }
-const { lang, title, description, alternates, noindex = false, extraLd = [], ogPhoto, breadcrumbs = [], hideCta = false, section } = Astro.props;
+const { lang, title, description, alternates, noindex = false, extraLd = [], ogPhoto, breadcrumbs = [], enquiry, section } = Astro.props;
 const s = t(lang);
 const L = localeInfo[lang];
 const ig = site.social.instagram;
@@ -75,6 +77,8 @@ const ld = {
         postalCode: site.address.postalCode,
         addressCountry: site.address.country,
       },
+      geo: { '@type': 'GeoCoordinates', latitude: 51.1976681, longitude: 3.4653947 },
+      contactPoint: site.contacts.map((c) => ({ '@type': 'ContactPoint', name: c.name, telephone: c.phone, email: site.email, contactType: 'customer service' })),
       hasMap: site.mapUrl,
       areaServed: ['Maldegem', 'Meetjesland', 'Brugge', 'Gent', 'Oost-Vlaanderen', 'West-Vlaanderen'].map((name) => ({ '@type': 'Place', name })),
       sameAs: [ig.url],
@@ -116,14 +120,15 @@ const ld = {
 };
 
 const L3 = L3x(lang);
-const nav = [
+// Menu : quatre pages ; Afhaal figure dans « Ons aanbod », sur l’accueil et dans le pied de page
+const menu = [
   { key: 'about', href: pagePath('about', lang), label: s.nav.about },
   { key: 'catering', href: pagePath('catering', lang), label: s.nav.catering },
-  { key: 'atelier', href: pagePath('atelier', lang), label: s.nav.atelier },
-  { key: 'takeaway', href: pagePath('takeaway', lang), label: s.nav.takeaway },
   { key: 'gallery', href: pagePath('gallery', lang), label: s.nav.gallery },
+  { key: 'atelier', href: pagePath('atelier', lang), label: s.nav.atelier },
 ];
-const enquire = `${pagePath('catering', lang)}#aanvraag`;
+const nav = [...menu, { key: 'takeaway', href: pagePath('takeaway', lang), label: s.nav.takeaway }];
+const enquire = enquiry ? '#aanvraag' : `${pagePath('catering', lang)}#aanvraag`;
 const year = new Date().getFullYear();
 ---
 <!doctype html>
@@ -161,7 +166,9 @@ const year = new Date().getFullYear();
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
     <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
     <script type="application/ld+json" set:html={JSON.stringify(ld)} />
-    <script is:inline>document.documentElement.classList.add('js');</script>
+    <link rel="preload" href={cormorant} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={jost} as="font" type="font/woff2" crossorigin />
+    <noscript><style is:inline>.top-nav{display:flex!important;flex-wrap:wrap}.menu-btn{display:none!important}</style></noscript>
   </head>
   <body>
     <a class="skip" href="#main">{s.nav.skip}</a>
@@ -173,15 +180,13 @@ const year = new Date().getFullYear();
             {langs.map((l) => <a href={alts[l]} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} title={localeInfo[l].name}>{localeInfo[l].short}</a>)}
           </nav>
         </div>
-        <a class="brand" href={pagePath('home', lang)} aria-label={`BEAU MOMENTS — ${s.nav.home}`}>Beau Moments<small aria-hidden="true">Catering · Maldegem</small></a>
+        <a class="brand" href={pagePath('home', lang)} aria-label={`BEAU MOMENTS — ${s.nav.home}`}>Beau Moments<small aria-hidden="true">Catering &amp; private dining</small></a>
         <div class="top-right">
-          <a class="top-link" href={pagePath('takeaway', lang)}>{s.nav.takeaway}</a>
-          <a class="btn fill top-cta" href={enquire}>{s.nav.book}</a>
+          <a class="btn fill top-cta" href={enquire}>{s.home.ctaPrimary}</a>
         </div>
       </div>
       <nav class="top-nav" aria-label={s.nav.main}>
-        <a href={pagePath('home', lang)} aria-current={Astro.url.pathname === pagePath('home', lang) ? 'page' : undefined}>{s.nav.home}</a>
-        {nav.map((l) => <a href={l.href} aria-current={section === l.key ? 'page' : undefined}>{l.label}</a>)}
+        {menu.map((l) => <a href={l.href} aria-current={section === l.key ? 'page' : undefined}>{l.label}</a>)}
       </nav>
     </header>
 
@@ -189,21 +194,21 @@ const year = new Date().getFullYear();
       <button class="menu-close" type="button" data-menu-close>{s.nav.close}</button>
       <nav aria-label={s.nav.main}>
         <ul role="list">
-          {nav.map((l, i) => (
-            <li style={`--i:${i}`}><a href={l.href} aria-current={section === l.key ? 'page' : undefined}>{l.label}</a>
+          {menu.map((l) => (
+            <li><a href={l.href} aria-current={section === l.key ? 'page' : undefined}>{l.label}</a>
               {l.key === 'catering' && <p class="sub">{eventTypes.map((e) => <a href={eventPath(e.key, lang)}>{e.copy[lang].name}</a>)}</p>}</li>
           ))}
         </ul>
       </nav>
-      <p class="menu-foot"><a href={enquire}>{s.nav.book}</a><a href={`${pagePath('home', lang)}#contact`}>{s.footer.contact}</a><a href={tel(site.phone)}>{site.phone}</a><a href={ig.url} target="_blank" rel="noopener">@{ig.handle}</a></p>
+      <div>
+      <nav class="lang" aria-label={s.nav.language}>{langs.map((l) => <a href={alts[l]} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>{localeInfo[l].name}</a>)}</nav>
+      <p class="menu-foot"><a href={enquire}>{s.home.ctaPrimary}</a><a href={pagePath('takeaway', lang)}>{s.nav.takeaway}</a><a href={tel(site.phone)}>{site.phone}</a><a href={ig.url} target="_blank" rel="noopener">@{ig.handle}</a></p>
+      </div>
     </dialog>
-    <noscript><nav class="nojs">{nav.map((l) => <a href={l.href}>{l.label}</a>)}</nav></noscript>
 
     <main id="main"><slot /></main>
 
-    {!hideCta && (
-      <section class="cta pad stone"><div class="wrap"><h2>{s.catering.formTitle}</h2><a class="btn" href={enquire}>{s.nav.book}</a></div></section>
-    )}
+    {enquiry && <Enquiry lang={lang} {...enquiry} />}
 
     <footer class="foot">
       <div class="wrap foot-grid">
@@ -228,6 +233,36 @@ const year = new Date().getFullYear();
     </dialog>
 
     <script>
+      // ---- Titres et libellés sur une seule ligne : la taille baisse juste assez, la même pour toute une rangée ----
+      const groups = [
+        ...[...document.querySelectorAll('.grid, .steps, .guests ul')].flatMap((g) => ['h3', 'h4', '.one'].map((q) => [...g.querySelectorAll<HTMLElement>(`:scope > li > ${q}`)])),
+        ...[...document.querySelectorAll('.faq')].map((f) => [...f.querySelectorAll<HTMLElement>('summary span')]),
+        ...[...document.querySelectorAll<HTMLElement>('.line, .under, .phead .lead')].map((h) => [h]),
+        ...[...document.querySelectorAll<HTMLElement>('h1:not(.sr), h2:not(.sr), .sub-title, .split h3, .feest h3, .legal-block h3')].map((h) => [h]),
+      ].filter((g) => g.length);
+      const fit = () => {
+        for (const g of groups) {
+          let k = 1;
+          for (const e of g) { e.style.fontSize = ''; e.style.whiteSpace = 'nowrap'; }
+          for (const e of g) {
+            const r = document.createRange(); r.selectNodeContents(e);
+            const need = r.getBoundingClientRect().width, room = e.parentElement!.getBoundingClientRect().width - parseFloat(getComputedStyle(e.parentElement!).paddingLeft) * 2;
+            k = Math.min(k, (room - 1) / need);
+          }
+          // En dessous de 12 px on repasse sur deux lignes plutôt que de rendre le texte illisible
+          const size = parseFloat(getComputedStyle(g[0]).fontSize);
+          const long = g[0].matches('.line, .under, .lead');
+          if (k * size < (long ? 15.5 : 12)) { for (const e of g) { e.style.whiteSpace = ''; } continue; }
+          for (const e of g) if (k < 1) e.style.fontSize = `${k * parseFloat(getComputedStyle(e).fontSize)}px`;
+        }
+      };
+      let wait = 0;
+      addEventListener('resize', () => { clearTimeout(wait); wait = window.setTimeout(fit, 80); });
+      document.fonts?.ready.then(fit);
+      document.fonts?.addEventListener('loadingdone', fit);
+      addEventListener('load', fit);
+      fit();
+
       // ---- Menu plein écran ----
       const menu = document.querySelector<HTMLDialogElement>('[data-menu]')!;
       document.querySelector('[data-menu-open]')!.addEventListener('click', () => menu.showModal());
@@ -241,8 +276,10 @@ const year = new Date().getFullYear();
       const post = dlg.querySelector<HTMLAnchorElement>('[data-lb-post]')!;
       const items = [...document.querySelectorAll<HTMLAnchorElement>('[data-lightbox]')];
       let cur = 0;
+      const seen = () => items.map((a, n) => (a.offsetParent ? n : -1)).filter((n) => n >= 0);
+      const step = (d: number) => { const v = seen(); show(v[(v.indexOf(cur) + d + v.length) % v.length]); };
       const show = (n: number) => {
-        cur = (n + items.length) % items.length;
+        cur = n;
         const a = items[cur];
         big.src = a.href;
         big.alt = cap.textContent = a.dataset.caption ?? '';
@@ -258,11 +295,11 @@ const year = new Date().getFullYear();
       dlg.addEventListener('close', () => items[cur]?.focus({ preventScroll: true }));
       dlg.addEventListener('click', (e) => { if (!(e.target as HTMLElement).closest('img, button, a')) close(); });
       dlg.querySelector('[data-lb-close]')!.addEventListener('click', close);
-      dlg.querySelector('[data-lb-prev]')!.addEventListener('click', () => show(cur - 1));
-      dlg.querySelector('[data-lb-next]')!.addEventListener('click', () => show(cur + 1));
+      dlg.querySelector('[data-lb-prev]')!.addEventListener('click', () => step(-1));
+      dlg.querySelector('[data-lb-next]')!.addEventListener('click', () => step(1));
       dlg.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight') show(cur + 1);
-        if (e.key === 'ArrowLeft') show(cur - 1);
+        if (e.key === 'ArrowRight') step(1);
+        if (e.key === 'ArrowLeft') step(-1);
       });
     </script>
   </body>

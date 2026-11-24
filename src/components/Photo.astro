@@ -8,8 +8,10 @@ interface Props {
   /** Format du cadre (ex. « 4/5 ») ; par défaut, celui de la photo */
   ratio?: string;
   href?: string; zoom?: boolean;
+  /** Qualité d’encodage (bandeaux : plus haute) */
+  quality?: number;
 }
-const { name, lang, sizes = '50vw', class: cls, style = '', eager = false, ratio, href, zoom = false } = Astro.props;
+const { name, lang, sizes = '50vw', class: cls, style = '', eager = false, ratio, href, zoom = false, quality = 80 } = Astro.props;
 const p = getPhoto(name);
 const widths = [...new Set([320, 480, 720, 960, 1200, p.src.width].filter((w) => w <= p.src.width))];
 const box = zoom;
@@ -18,6 +20,6 @@ const Tag = box || href ? 'a' : 'span';
 const attrs = box ? { 'data-lightbox': '', 'data-caption': p.alt[lang], 'data-post': p.post } : {};
 ---
 <Tag class:list={['ph', cls]} href={full} style={`--ar:${ratio ?? `${p.src.width}/${p.src.height}`};${style}`} {...attrs}>
-  <Picture src={p.src} alt={p.alt[lang]} widths={widths} sizes={sizes} formats={['avif', 'webp']} fallbackFormat="jpg" quality={76}
+  <Picture src={p.src} alt={p.alt[lang]} widths={widths} sizes={sizes} formats={['avif', 'webp']} fallbackFormat="jpg" quality={quality}
     loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} decoding="async" />
 </Tag>

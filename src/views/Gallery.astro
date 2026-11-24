@@ -1,5 +1,5 @@
 ---
-// Galerie : toutes les photos Instagram en mosaïque ; filtre par chapitre, clic = visionneuse.
+// Galerie : toutes les photos Instagram en rangées justifiées, sans recadrage ; filtre par chapitre, clic = visionneuse.
 import Base from '../layouts/Base.astro';
 import Photo from '../components/Photo.astro';
 import { getImage } from 'astro:assets';
@@ -51,16 +51,17 @@ const ld = [{
 }];
 ---
 <Base lang={lang} title={s.meta.galleryTitle} description={s.meta.galleryDesc} alternates={allLangs((l) => pagePath('gallery', l))}
-  section="gallery" breadcrumbs={[{ name: s.nav.gallery, path: pagePath('gallery', lang) }]} extraLd={ld} ogPhoto="table-candles">
-  <section class="ghead"><div class="wrap">
+  section="gallery" breadcrumbs={[{ name: s.nav.gallery, path: pagePath('gallery', lang) }]} extraLd={ld} ogPhoto="table-candles" enquiry={{ look: 'c', photo: 'table-long' }}>
+  <section class="phead"><div class="wrap">
     <h1>{s.gallery.title}</h1>
+    <p class="lead">{s.gallery.lead}</p>
     <div class="chips" data-chips hidden>
       <button type="button" aria-pressed="true" data-f="">{L('Alles', 'Tout', 'All')}</button>
       {chapters.map((c) => <button type="button" aria-pressed="false" data-f={c.id}>{c.title}</button>)}
     </div>
   </div></section>
-  <section class="gwall"><h2 class="sr">{s.nav.gallery}</h2><div class="wall">
-    {chapters.flatMap((c) => c.photos.map((k) => <div class="brick" data-ch={c.id}><Photo zoom name={k} lang={lang} sizes="(min-width: 760px) 32vw, 50vw" /></div>))}
+  <section class="wrap"><h2 class="sr">{s.nav.gallery}</h2><div class="wall">
+    {chapters.flatMap((c) => c.photos.map((k) => <div class="brick" data-ch={c.id} style={`--k:${(getPhoto(k).src.width / getPhoto(k).src.height).toFixed(4)}`}><Photo zoom name={k} lang={lang} sizes="(min-width: 900px) 30vw, 48vw" /></div>))}
   </div></section>
 </Base>
 <script>

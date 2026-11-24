@@ -1,12 +1,12 @@
 ---
-// Over ons : l'histoire de Bert & Aude, leurs rôles, leurs valeurs.
+// Over ons : Bert & Aude, leur histoire et leurs rôles.
 import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import PageHero from '../components/PageHero.astro';
 import { site, abs } from '../lib/site';
 import { pagePath, allLangs } from '../i18n/routes';
 import { t } from '../i18n/ui';
 import type { Lang } from '../i18n/locales';
-import Photo from '../components/Photo.astro';
-import PageHero from '../components/PageHero.astro';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = t(lang);
@@ -22,13 +22,14 @@ const ld = [{
 }];
 ---
 <Base lang={lang} title={s.meta.aboutTitle} description={s.meta.aboutDesc} alternates={allLangs((l) => pagePath('about', l))}
-  section="about" breadcrumbs={[{ name: s.nav.about, path: pagePath('about', lang) }]} extraLd={ld} ogPhoto="bert-and-aude">
-  <PageHero lang={lang} title="Bert & Aude" sub={a.lead} pos="50% 45%" photos={['chef-plating', 'bert-and-aude', 'serving-bubbles']} />
-  <section class="pad wrap"><p class="say">{s.home.statement}</p></section>
-  <section class="pad stone"><div class="wrap who">
-    <Photo name="bert-serving" lang={lang} ratio="4/5" sizes="(min-width: 800px) 45vw, 90vw" /><div><h2>{a.bertTitle}</h2><p>{a.values[0].text}</p></div>
+  section="about" breadcrumbs={[{ name: s.nav.about, path: pagePath('about', lang) }]} extraLd={ld} ogPhoto="bert-and-aude" enquiry={{ look: 'b', photo: 'serving-bubbles' }}>
+  <PageHero lang={lang} label={a.label} title="Bert & Aude" lead={a.lead} cover="chef-plating" photo="bert-and-aude" pos="50% 45%">
+    {a.story.slice(0, 2).map((p) => <p>{p}</p>)}
+  </PageHero>
+  <section class="pad"><div class="wrap split">
+    <Photo name="bert-serving" lang={lang} sizes="(min-width: 640px) 44vw, 92vw" /><div><h2>{a.bertTitle}</h2><p>{a.bert}</p></div>
   </div></section>
-  <section class="pad"><div class="wrap who flip">
-    <Photo name="aude-with-guests" lang={lang} sizes="(min-width: 800px) 45vw, 90vw" /><div><h2>{a.audeTitle}</h2><p>{a.values[1].text}</p></div>
+  <section class="pad stone"><div class="wrap split flip">
+    <Photo name="aude-with-guests" lang={lang} sizes="(min-width: 640px) 44vw, 92vw" /><div><h2>{a.audeTitle}</h2><p>{a.aude}</p></div>
   </div></section>
 </Base>

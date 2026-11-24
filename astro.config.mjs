@@ -15,7 +15,6 @@ export default defineConfig({
       serialize(item) {
         const path = new URL(item.url).pathname;
         const depth = path.split('/').filter(Boolean).filter((s) => !['fr', 'en'].includes(s)).length;
-        item.lastmod = new Date().toISOString();
         item.changefreq = depth === 0 ? 'weekly' : 'monthly';
         item.priority = depth === 0 ? 1.0 : /\/(catering|traiteur)\//.test(path) ? 0.9 : 0.7;
         return item;

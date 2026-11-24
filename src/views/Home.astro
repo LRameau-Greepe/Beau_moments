@@ -1,111 +1,112 @@
 ---
-// Accueil, structure « hôtel de maison » : photo plein écran, phrase d'accueil, quatre portes d'entrée,
-// la maison (photo + texte), mosaïque de photos, phrase sous le monogramme, deux grandes cartes, trois avis, contact.
+// Accueil : ouverture en boucle, puis l'ordre du menu (Over ons, Ons aanbod, Galerij, Atelier, Afhaal), les avis et la demande.
 import Base from '../layouts/Base.astro';
 import { feest } from '../lib/feestdagen';
 import { reviews, googleRating, googleReviewsUrl } from '../lib/reviews';
-import { type PhotoKey } from '../lib/photos';
-import { site, tel, mailHref } from '../lib/site';
+import { getPhoto, type PhotoKey } from '../lib/photos';
 import { pagePath, eventPath, allLangs } from '../i18n/routes';
 import { t } from '../i18n/ui';
 import { L as Lx, localeInfo, type Lang } from '../i18n/locales';
 import Photo from '../components/Photo.astro';
 import Logo from '../components/Logo.astro';
 import { eventTypes } from '../lib/events';
+import { nbsp } from '../lib/nbsp';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = t(lang);
 const f = feest[lang];
 const h = s.home;
 const L = Lx(lang);
-const chef = eventTypes.find((e) => e.key === 'home')!;
-const wedding = eventTypes.find((e) => e.key === 'weddings')!;
-
-const doors: { photo: PhotoKey; title: string; cta: string; href: string }[] = [
-  { photo: 'dinner-served', title: h.cateringTitle, cta: L('Vraag een voorstel', 'Demander une proposition', 'Request a proposal'), href: pagePath('catering', lang) },
-  { photo: 'atelier-dining-room', title: L('Private dining in ons atelier', 'Dîner privé dans notre atelier', 'Private dining in our atelier'), cta: L('Ontdek het atelier', 'Découvrir l’atelier', 'Discover the atelier'), href: pagePath('atelier', lang) },
-  { photo: 'egg-shrimp-garden', title: L('Afhaal van de week', 'À emporter de la semaine', 'Takeaway of the week'), cta: L('Bekijk het menu', 'Voir le menu', 'See the menu'), href: pagePath('takeaway', lang) },
-  { photo: wedding.hero, title: L('Huwelijken & events', 'Mariages & événements', 'Weddings & events'), cta: L('Plan je feest', 'Organiser votre fête', 'Plan your celebration'), href: eventPath('weddings', lang) },
+// Ouverture : trois panneaux verticaux (photos en couleur et en hauteur : plats, tables, décor) ; dans chacun, trois photos en boucle
+const panels: PhotoKey[][] = [
+  ['caviar-dish', 'garden-table', 'hamachi'],
+  ['valentine-table', 'strawberry-dessert', 'atelier-dining-room'],
+  ['side-dish', 'atelier-from-above', 'table-candles'],
 ];
-const mosaic: PhotoKey[] = ['champagne-bar', 'garden-table', 'flowers', 'behind-the-curtain', 'table-long', 'aude-with-guests'];
-const wide: { photo: PhotoKey; title: string; cta: string; href: string }[] = [
-  { photo: 'feest-cover', title: f.label, cta: L('Bestel voor de feestdagen', 'Commander pour les fêtes', 'Order for the holidays'), href: `${pagePath('takeaway', lang)}#feestdagen` },
-  { photo: chef.hero, title: chef.copy[lang].name, cta: L('Boek je chef', 'Réserver votre chef', 'Book your chef'), href: eventPath('home', lang) },
+// Galerie : sujets variés, en rangées justifiées sans recadrage
+const gallery: PhotoKey[] = ['aude-at-work', 'kitchen-beef', 'croquettes', 'apero', 'valentine-barn', 'hazelnut-tart', 'oysters', 'awa-shiso-ice'];
+const offers = [
+  ...eventTypes.map((e) => ({ name: e.copy[lang].name, href: eventPath(e.key, lang) })),
+  { name: h.privateLabel, href: pagePath('atelier', lang) },
+  { name: s.nav.takeaway, href: pagePath('takeaway', lang) },
 ];
+const half = '(min-width: 640px) 46vw, 92vw';
+// Trois avis Google, sans celui qui contient un emoji
+const shownReviews = reviews.filter((r) => !/\p{Extended_Pictographic}/u.test(r.quote.nl)).slice(0, 3);
 ---
-<Base lang={lang} title={s.meta.homeTitle} description={s.meta.homeDesc} alternates={allLangs((l) => pagePath('home', l))} ogPhoto="table-room">
-  <section class="hero hero-home">
-    <Photo name="table-room" lang={lang} eager class="cover" sizes="100vw" />
-    <h1 class="hero-mark"><Logo /><span class="sr">Beau Moments — </span><small>{h.eyebrow}</small></h1>
-  </section>
-
-  <section class="pad wrap welcome">
-    <p class="lede">{L('Welkom bij Beau Moments.', 'Bienvenue chez Beau Moments.', 'Welcome to Beau Moments.')} {h.heroLead}</p>
-  </section>
-
-  <section class="wrap doors" aria-label={L('Wat we doen', 'Ce que nous faisons', 'What we do')}>
-    <ul role="list">
-      {doors.map((d) => (
-        <li>
-          <a href={d.href}><Photo name={d.photo} lang={lang} ratio="7/8" sizes="(min-width: 900px) 23vw, (min-width: 560px) 46vw, 92vw" /></a>
-          <h2>{d.title}</h2>
-          <a class="more" href={d.href}>{d.cta}</a>
-        </li>
+<Base lang={lang} title={s.meta.homeTitle} description={s.meta.homeDesc} alternates={allLangs((l) => pagePath('home', l))} ogPhoto="table-room" enquiry={{ look: 'b' }}>
+  <section class="hero hero-home" data-loop>
+    <div class="panels">
+      {panels.map((col, c) => (
+        <div class="panel">{col.map((k, i) => <Photo name={k} lang={lang} eager={c === 0 && i === 0} class="slide" quality={90} style={`--i:${i};--c:${c}`} sizes="(max-aspect-ratio: 1/1) max(100vw, 62vh), (max-aspect-ratio: 17/10) max(50vw, 78vh), max(34vw, 78vh)" />)}</div>
       ))}
-    </ul>
+    </div>
+    <Logo />
+    <h1 class="sr">Beau Moments — {L('Catering & private dining in Maldegem', 'Catering & private dining à Maldegem', 'Catering & private dining in Maldegem')}</h1>
+    <button class="loop-btn" type="button" data-loop-btn aria-pressed="false" aria-label={L('Diavoorstelling pauzeren', 'Mettre le diaporama en pause', 'Pause the slideshow')}><i aria-hidden="true"></i></button>
   </section>
 
-  <section class="pad wrap split">
-    <Photo name="bert-and-aude" lang={lang} ratio="16/10" sizes="(min-width: 900px) 45vw, 92vw" />
-    <div>
-      <h2>{h.aboutTitle}</h2>
-      <p>{h.aboutText}</p>
-      <p>{h.dishesLead}</p>
-      <a class="btn fill" href={pagePath('about', lang)}>{h.aboutMore}</a>
+  <!-- Over ons -->
+  <section class="pad wrap">
+    <p class="lede line head">{nbsp(h.heroLead)}</p>
+    <div class="split">
+      <Photo name="bert-and-aude" lang={lang} sizes={half} />
+      <div><h2>{s.nav.about}</h2><p>{h.aboutText}</p><p class="acts"><a class="btn" href={pagePath('about', lang)}>{h.aboutMore}</a></p></div>
     </div>
   </section>
 
-  <section class="wrap mosaic" aria-label={s.nav.gallery}>
-    {mosaic.map((k) => <Photo name={k} lang={lang} zoom sizes="(min-width: 900px) 33vw, 50vw" />)}
+  <!-- Ons aanbod -->
+  <section class="pad stone"><div class="wrap split flip">
+    <Photo name="ready-to-serve" lang={lang} sizes={half} />
+    <div>
+      <h2>{s.nav.catering}</h2>
+      <p>{L('Catering, private dining en events, met klassieke Franse keuken.', 'Traiteur, private dining et événements, en cuisine française classique.', 'Catering, private dining and events, with classic French cooking.')}</p>
+      <ul class="offer-list" role="list">{offers.map((o) => <li><a href={o.href}>{o.name}<span aria-hidden="true">→</span></a></li>)}</ul>
+      <p class="acts"><a class="btn" href={pagePath('catering', lang)}>{L('Ontdek ons aanbod', 'Voir nos services', 'See what we do')}</a></p>
+    </div>
+  </div></section>
+
+  <!-- Galerij -->
+  <section class="pad wrap">
+    <div class="head"><h2>{s.nav.gallery}</h2><p class="under">{h.galleryLead}</p></div>
+    <div class="rows">{[0, 4].map((r) => (
+      <div class="row">{[r, r + 2].map((q) => (
+        <div class="two-up">{gallery.slice(q, q + 2).map((k) => <div style={`flex:${(getPhoto(k).src.width / getPhoto(k).src.height).toFixed(4)} 1 0`}><Photo name={k} lang={lang} zoom sizes="(min-width: 640px) 32vw, 60vw" /></div>)}</div>
+      ))}</div>
+    ))}</div>
+    <p class="acts"><a class="btn" href={pagePath('gallery', lang)}>{h.galleryAll}</a></p>
   </section>
 
-  <section class="pad wrap emblem">
-    <Logo />
-    <p class="say">{h.statement}</p>
-  </section>
+  <!-- Atelier -->
+  <section class="pad stone"><div class="wrap split">
+    <Photo name="atelier-facade" lang={lang} sizes={half} />
+    <div><h2>{s.nav.atelier}</h2><p>{h.atelierText}</p><p class="acts"><a class="btn" href={pagePath('atelier', lang)}>{L('Ontdek het atelier', 'Découvrir l’atelier', 'Discover the atelier')}</a></p></div>
+  </div></section>
 
-  <section class="wrap wide">
+  <!-- Afhaal -->
+  <section class="pad wrap"><div class="split flip">
+    <Photo name="feest-cover" lang={lang} sizes={half} />
+    <div><h2>{f.label}</h2><p>{f.lead}</p><p class="small">{f.deadline}</p><p class="small">{f.allergens}</p><p class="acts"><a class="btn" href={`${pagePath('takeaway', lang)}#feestdagen`}>{L('Bekijk het menu', 'Voir le menu', 'See the menu')}</a></p></div>
+  </div></section>
+
+  <section class="pad stone guests"><div class="wrap">
+    <div class="head"><h2>{h.reviewsTitle}</h2><p>{googleRating.score.toLocaleString(localeInfo[lang].html)} / 5 · {h.googleCount.replace('{n}', String(googleRating.count))}</p></div>
     <ul role="list">
-      {wide.map((d) => (
-        <li>
-          <a href={d.href}><Photo name={d.photo} lang={lang} ratio="15/7" sizes="(min-width: 900px) 46vw, 92vw" /></a>
-          <h2>{d.title}</h2>
-          <a class="more" href={d.href}>{d.cta}</a>
-        </li>
+      {shownReviews.map((r) => (
+        <li><h3>{r.author}</h3><span class="stars" role="img" aria-label={`${r.stars}/5`}>{'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}</span><p>{r.quote[lang]}</p></li>
       ))}
     </ul>
-  </section>
+    <a class="btn" href={googleReviewsUrl} target="_blank" rel="noopener">{h.reviewsAll}</a>
+  </div></section>
 
-  <section class="pad wrap guests">
-    <h2>{h.reviewsTitle}</h2>
-    <p class="rating">{googleRating.score.toLocaleString(localeInfo[lang].html)} / 5 · {h.googleCount.replace('{n}', String(googleRating.count))}</p>
-    <ul role="list">
-      {reviews.slice(0, 3).map((r) => (
-        <li>
-          <Logo />
-          <h3>{r.author}</h3>
-          <blockquote>{r.quote[lang]}</blockquote>
-        </li>
-      ))}
-    </ul>
-    <a class="btn fill" href={googleReviewsUrl} target="_blank" rel="noopener">{h.reviewsAll}</a>
-  </section>
-
-  <section class="half flip sand" id="contact">
-    <Photo name="atelier-facade" lang={lang} sizes="(min-width: 800px) 50vw, 100vw" />
-    <div><h2>Contact</h2>
-      <p>{site.address.street}<br />{site.address.postalCode} {site.address.city}</p>
-      <p>{site.contacts.map((x) => <><a href={tel(x.phone)}>{x.name} {x.phone}</a><br /></>)}<a href={mailHref}>{site.email}</a></p>
-      <a class="btn" href={site.mapUrl} target="_blank" rel="noopener">{s.common.openMap}</a></div>
-  </section>
 </Base>
+
+<script>
+  // Pause / lecture de la boucle d'ouverture
+  const hero = document.querySelector<HTMLElement>('[data-loop]');
+  const btn = document.querySelector<HTMLButtonElement>('[data-loop-btn]');
+  btn?.addEventListener('click', () => {
+    const paused = hero!.classList.toggle('is-paused');
+    btn.setAttribute('aria-pressed', String(paused));
+  });
+</script>

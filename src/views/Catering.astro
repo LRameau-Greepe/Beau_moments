@@ -1,22 +1,23 @@
 ---
 // Catering : les formules (privé chef aan huis, feesten, huwelijk, bedrijfsevents), ce qui est inclus,
-// la méthode, la FAQ et le formulaire de demande.
+// la FAQ et le formulaire de demande.
 import Base from '../layouts/Base.astro';
 import Faq from '../components/Faq.astro';
+import { dishes } from '../lib/dishes';
 import { eventTypes } from '../lib/events';
 import { site, abs } from '../lib/site';
 import { pagePath, eventPath, allLangs } from '../i18n/routes';
-import { localeInfo, type Lang } from '../i18n/locales';
+import { L as Lx, localeInfo, type Lang } from '../i18n/locales';
 import { t } from '../i18n/ui';
 import Photo from '../components/Photo.astro';
 import PageHero from '../components/PageHero.astro';
 import Formulas from '../components/Formulas.astro';
-import Enquiry from '../components/Enquiry.astro';
 import type { PhotoKey } from '../lib/photos';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = t(lang);
 const c = s.catering;
+const L = Lx(lang);
 const ld = [
   {
     '@type': 'Service',
@@ -36,25 +37,21 @@ const ld = [
   },
   { '@type': 'FAQPage', mainEntity: c.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
 ];
-const inclPhotos: PhotoKey[] = ['hamachi', 'european-lobster', 'dinner-served', 'table-flowers', 'flowers', 'olive-oil-tasting'];
+const inclPhotos: PhotoKey[] = ['langoustine-ceviche', 'scallops', 'waiter-tray', 'table-lemons', 'flowers', 'table-flowers'];
 ---
 <Base lang={lang} title={s.meta.cateringTitle} description={s.meta.cateringDesc} alternates={allLangs((l) => pagePath('catering', l))}
-  section="catering" breadcrumbs={[{ name: s.nav.catering, path: pagePath('catering', lang) }]} extraLd={ld} ogPhoto="table-long" hideCta>
-  <PageHero lang={lang} title={s.nav.catering} sub={c.title} photos={['dinner-served']}>
-    <a class="btn" href="#aanvraag">{c.cta}</a>
+  section="catering" breadcrumbs={[{ name: s.nav.catering, path: pagePath('catering', lang) }]} extraLd={ld} ogPhoto="table-long" enquiry={{ look: 'a', photo: 'table-candles' }}>
+  <PageHero lang={lang} label={s.nav.catering} title={L('Catering, private dining & events', 'Traiteur, private dining & événements', 'Catering, private dining & events')} lead={c.lead} cover="dinner-served" photo="plating-sauce">
+    <a class="btn fill" href="#aanvraag">{c.cta}</a>
   </PageHero>
-  <section class="pad"><div class="wrap"><h2 class="mid">{c.typesTitle}</h2><Formulas lang={lang} /></div></section>
-  <section class="pad stone">
-    <div class="wrap">
-      <h2 class="mid">{c.includedTitle}</h2>
-      <ul class="incl" role="list">{c.included.map((it, i) => <li><Photo name={inclPhotos[i]} lang={lang} ratio="4/5" sizes="(min-width: 800px) 30vw, 46vw" /><h3>{it.title}</h3></li>)}</ul>
-    </div>
+  <section class="pad wrap"><h2 class="head">{c.typesTitle}</h2><Formulas lang={lang} /></section>
+  <section class="pad stone"><div class="wrap">
+    <h2 class="head">{c.includedTitle}</h2>
+    <ul class="grid" role="list" style="--n:3">{c.included.map((it, i) => <li><Photo name={inclPhotos[i]} lang={lang} ratio="1" sizes="(min-width: 1300px) 390px, (min-width: 800px) 30vw, 46vw" /><h3>{it.title}</h3><p>{it.text}</p></li>)}</ul>
+  </div></section>
+  <section class="pad wrap">
+    <div class="head"><h2>{s.home.dishesTitle}</h2><p class="under">{s.home.dishesLead}</p></div>
+    <ul class="grid" role="list">{dishes.slice(0, 4).map((d) => <li><Photo name={d.photo} lang={lang} ratio="1" sizes="(min-width: 1300px) 285px, (min-width: 720px) 23vw, 46vw" /><h3>{d.name[lang]}</h3><p class="one">{d.notes[lang]}</p></li>)}</ul>
   </section>
-  <section class="pad sand">
-    <div class="wrap"><h2>{c.processTitle}</h2>
-      <ol class="steps" role="list">{c.process.map((p, i) => <li><span class="num">{i + 1}</span><h3>{p.title}</h3></li>)}</ol>
-    </div>
-  </section>
-  <section class="pad wrap duo"><h2>{c.faqTitle}</h2><Faq items={c.faq} /></section>
-  <Enquiry lang={lang} />
+  <section class="pad wrap duo"><h2>{s.catering.faqTitle}</h2><Faq items={c.faq} /></section>
 </Base>
