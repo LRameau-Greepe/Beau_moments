@@ -30,12 +30,16 @@ const offers = [
   { name: h.privateLabel, href: pagePath('atelier', lang) },
   { name: s.nav.takeaway, href: pagePath('takeaway', lang) },
 ];
+// Ons aanbod : le service, une table dressée chez le client et des bouchées de réception
+const ar = (k: PhotoKey) => getPhoto(k).src.width / getPhoto(k).src.height;
+const offerSide: PhotoKey[] = ['table-room', 'appetizers'];
+const trioSizes = '(min-width: 1000px) 34vw, 62vw';
 const half = '(min-width: 640px) 46vw, 92vw';
 // Trois avis Google, sans celui qui contient un emoji
 const shownReviews = reviews.filter((r) => !/\p{Extended_Pictographic}/u.test(r.quote.nl)).slice(0, 3);
 ---
 <Base lang={lang} title={s.meta.homeTitle} description={s.meta.homeDesc} alternates={allLangs((l) => pagePath('home', l))} ogPhoto="table-room" enquiry={{ look: 'b' }}>
-  <section class="hero hero-home" data-loop>
+  <section class="hero hero-home">
     <div class="panels">
       {panels.map((col, c) => (
         <div class="panel">{col.map((k, i) => <Photo name={k} lang={lang} eager={c === 0 && i === 0} class="slide" quality={90} style={`--i:${i};--c:${c}`} sizes="(max-aspect-ratio: 1/1) max(100vw, 62vh), (max-aspect-ratio: 17/10) max(50vw, 78vh), max(34vw, 78vh)" />)}</div>
@@ -43,7 +47,6 @@ const shownReviews = reviews.filter((r) => !/\p{Extended_Pictographic}/u.test(r.
     </div>
     <Logo />
     <h1 class="sr">Beau Moments — {L('Catering & private dining in Maldegem', 'Catering & private dining à Maldegem', 'Catering & private dining in Maldegem')}</h1>
-    <button class="loop-btn" type="button" data-loop-btn aria-pressed="false" aria-label={L('Diavoorstelling pauzeren', 'Mettre le diaporama en pause', 'Pause the slideshow')}><i aria-hidden="true"></i></button>
   </section>
 
   <!-- Over ons -->
@@ -57,7 +60,10 @@ const shownReviews = reviews.filter((r) => !/\p{Extended_Pictographic}/u.test(r.
 
   <!-- Ons aanbod -->
   <section class="pad stone"><div class="wrap split flip">
-    <Photo name="ready-to-serve" lang={lang} sizes={half} />
+    <div class="trio">
+      <div style={`--k:${ar('ready-to-serve')}`}><Photo name="ready-to-serve" lang={lang} sizes={trioSizes} /></div>
+      <div style={`--k:${1 / offerSide.reduce((n, k) => n + 1 / ar(k), 0)}`}>{offerSide.map((k) => <Photo name={k} lang={lang} sizes={trioSizes} />)}</div>
+    </div>
     <div>
       <h2>{s.nav.catering}</h2>
       <p>{L('Catering, private dining en events, met klassieke Franse keuken.', 'Traiteur, private dining et événements, en cuisine française classique.', 'Catering, private dining and events, with classic French cooking.')}</p>
@@ -66,8 +72,14 @@ const shownReviews = reviews.filter((r) => !/\p{Extended_Pictographic}/u.test(r.
     </div>
   </div></section>
 
+  <!-- Atelier -->
+  <section class="pad wrap"><div class="split">
+    <Photo name="atelier-facade" lang={lang} sizes={half} />
+    <div><h2>{s.nav.atelier}</h2><p>{h.atelierText}</p><p class="acts"><a class="btn" href={pagePath('atelier', lang)}>{L('Ontdek het atelier', 'Découvrir l’atelier', 'Discover the atelier')}</a></p></div>
+  </div></section>
+
   <!-- Galerij -->
-  <section class="pad wrap">
+  <section class="pad stone"><div class="wrap">
     <div class="head"><h2>{s.nav.gallery}</h2><p class="under">{h.galleryLead}</p></div>
     <div class="rows">{[0, 4].map((r) => (
       <div class="row">{[r, r + 2].map((q) => (
@@ -75,12 +87,6 @@ const shownReviews = reviews.filter((r) => !/\p{Extended_Pictographic}/u.test(r.
       ))}</div>
     ))}</div>
     <p class="acts"><a class="btn" href={pagePath('gallery', lang)}>{h.galleryAll}</a></p>
-  </section>
-
-  <!-- Atelier -->
-  <section class="pad stone"><div class="wrap split">
-    <Photo name="atelier-facade" lang={lang} sizes={half} />
-    <div><h2>{s.nav.atelier}</h2><p>{h.atelierText}</p><p class="acts"><a class="btn" href={pagePath('atelier', lang)}>{L('Ontdek het atelier', 'Découvrir l’atelier', 'Discover the atelier')}</a></p></div>
   </div></section>
 
   <!-- Afhaal -->
@@ -100,13 +106,3 @@ const shownReviews = reviews.filter((r) => !/\p{Extended_Pictographic}/u.test(r.
   </div></section>
 
 </Base>
-
-<script>
-  // Pause / lecture de la boucle d'ouverture
-  const hero = document.querySelector<HTMLElement>('[data-loop]');
-  const btn = document.querySelector<HTMLButtonElement>('[data-loop-btn]');
-  btn?.addEventListener('click', () => {
-    const paused = hero!.classList.toggle('is-paused');
-    btn.setAttribute('aria-pressed', String(paused));
-  });
-</script>

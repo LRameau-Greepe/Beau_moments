@@ -167,10 +167,6 @@ ul.prices { margin: 1.25rem 0; } .prices li { display: flex; justify-content: sp
 @media (max-aspect-ratio: 17/10) { .panel:nth-child(2) { display: none; } }
 @media (max-aspect-ratio: 1/1) { .panel:nth-child(3) { display: none; } .hero-home { min-height: min(100svh, 165vw); } }
 .hero-home .logo { background: #4a302766; border-radius: 50%; }
-.is-paused .slide { animation-play-state: paused !important; }
-.loop-btn { position: absolute; right: var(--gut); bottom: 1.5rem; width: 2.75rem; height: 2.75rem; border: 1px solid #f5f0ea99; border-radius: 50%; background: none; color: inherit; cursor: pointer; display: grid; place-items: center; }
-.loop-btn i { width: 10px; height: 13px; border-inline: 3px solid; } .loop-btn[aria-pressed='true'] i { width: 0; height: 0; border: solid transparent; border-width: 7px 0 7px 11px; border-left-color: currentColor; margin-left: 3px; }
-@media (prefers-reduced-motion: reduce) { .loop-btn { display: none; } }
 .sub-title { margin: clamp(2.5rem, 5vw, 4rem) 0 1.5rem; font-size: clamp(1.5rem, 1.3rem + 0.8vw, 1.95rem); }
 h4 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.2rem, 1.12rem + 0.3vw, 1.4rem); line-height: 1.25; margin: 0; } .grid h4 { margin-top: 0.9rem; }
 
@@ -193,3 +189,9 @@ h4 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.2rem, 1.12r
 .rows, .row { display: grid; gap: var(--gap); } .row { display: flex; } .two-up { display: contents; } .row > .two-up > div { min-width: 0; }
 @media (max-width: 639px) { .rows, .row { gap: 0.6rem; } .row { display: grid; } .two-up { display: flex; gap: 0.6rem; } }
 .grid.after { margin-top: clamp(1.75rem, 3.5vw, 3rem); }
+/* Trois photos de même hauteur totale, sans recadrage : une grande, deux empilées */
+.trio { --g: clamp(0.5rem, 1vw, 0.9rem); display: flex; gap: var(--g); }
+.trio > div { flex: var(--k) 1 0; min-width: 0; display: grid; gap: var(--g); align-content: start; }
+.trio > div:first-child { flex-basis: calc(var(--k) * var(--g)); }
+.split > .trio { flex: 1.35; order: 2; }
+@media (max-width: 999px) { .split:has(> .trio) { flex-direction: column; align-items: stretch; } .split > .trio { order: 0; flex: none; } }
